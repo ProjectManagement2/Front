@@ -86,7 +86,7 @@
                     data: this.data,    
                     password: this.password    
                 }    
-                axios.post("/auth/register", data)    //POST-запрос на эндпоинт /api/register с данными
+                axios.post("/api/auth/register", data)    //POST-запрос на эндпоинт /api/register с данными
                     .then((response) => {
                         localStorage.access_token = response.data.access_token    
                         console.log("Registered successfully")    
@@ -146,8 +146,8 @@
 
 <style>
     #signin{
-        margin-top: 12%;
-        font-size: 20px;
+        margin-top: 10%;
+        font-size: 17px;
     }
     .form-group.required .control-label:after {
         content:" *";

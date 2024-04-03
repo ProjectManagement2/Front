@@ -2,8 +2,8 @@
     <div id='signin' class="w-25 mx-auto border p-3 rounded">
       <b-form @submit="login">
         <div class="form-group">
-          <label for="username">Логин:</label>
-          <b-input v-model="username" type="text" id="username" placeholder="ваш никнейм"></b-input>
+          <label for="email">Email:</label>
+          <b-input v-model="email" type="text" id="email" placeholder="ваш никнейм"></b-input>
         </div>
         <div class="form-group">
           <label for="password">Пароль:</label>
@@ -24,7 +24,7 @@
     name: "SignIn",
     data() {
       return {
-        username: "",
+        email: "",
         password: ""
       };
     },
@@ -33,10 +33,10 @@
                 e.preventDefault()      
                 let login = () => {    
                     let data = {    
-                        username: this.username,    
+                        email: this.email,    
                         password: this.password    
                     }    
-                    axios.post("/auth/login", data)    //POST-запрос на эндпоинт /api/login с данными
+                    axios.post("/api/auth/login", data)    //POST-запрос на эндпоинт /api/login с данными
                         .then((response) => { 
                             localStorage.access_token = response.data.access_token   
                             console.log("Logged in")    
@@ -56,13 +56,13 @@
 <style>
 
   #signin{
-      margin-top: 12%;
-      font-size: 20px;
+    margin-top: 10%;
+    font-size: 15px;
 
   }
   .btn{
     background-color: lightpink;
-    font-size: 20px;
+    font-size: 15px;
   } 
   .form-group, .btn, .mt-3{
       margin-left:15px;
@@ -78,6 +78,6 @@
   } 
   button{
     background-color: lightpink;
-    font-size: 20px;
+    font-size: 15px;
   } 
 </style>

@@ -35,7 +35,7 @@
     color:black;
     text-align: center;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 17px;
     font-family: 'Avantgarde', 'TeX Gyre Adventor', 'URW Gothic L', sans-serif;
     font-weight: 500;
     border: 1px solid black;
@@ -48,7 +48,7 @@
     color:black;
     text-align: center;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 17px;
     font-family: 'Avantgarde', 'TeX Gyre Adventor', 'URW Gothic L', sans-serif;
     font-weight: 500;
     

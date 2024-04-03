@@ -1,16 +1,27 @@
 <template>
-    <table id="table-org">
-        <thead>
-            <tr>
-            <th v-for="col in columns">{{col}}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="row in rows">
-            <td v-for="col in columns">{{row[col]}}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div>
+        <div id="btns">
+            <b-button class="btn"  type="add">Добавить</b-button>
+            <b-button class="btn"  type="add">Редактировать</b-button>
+            <b-button class="btn"  type="add">Удалить</b-button>
+        </div>
+        <div>
+        <table id="table-org">
+                <thead>
+                    <tr>
+                    <th v-for="col in columns">{{col}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="row in rows">
+                    <td v-for="col in columns">{{row[col]}}</td>
+                    </tr>
+                </tbody>
+            </table> 
+        </div> 
+    </div>
+    
+    
 </template>
 
 <script>
@@ -43,12 +54,20 @@
 </script>
 
 <style>
+    #btns{
+        margin-left: 10%; 
+        margin-top: 5%;
+        
+    }
+    .btn{
+        color: yellow;
+    }
     table {
     font-family: 'Avantgarde', 'TeX Gyre Adventor', 'URW Gothic L', sans-serif;
     width: 1550px;
     border-collapse: collapse;
     border: 3px solid #6e5562;
-    margin: 100px 100px 0 150px;
+    margin: 2% 100px 0 10%;
     }
 
     table th {
