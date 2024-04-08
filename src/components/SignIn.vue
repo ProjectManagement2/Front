@@ -3,11 +3,11 @@
       <b-form @submit="login">
         <div class="form-group">
           <label for="email">Email:</label>
-          <b-input v-model="email" type="text" id="email" placeholder="ваш никнейм"></b-input>
+          <b-input v-model="email" type="text" id="email" placeholder="Адрес электронной почты..."></b-input>
         </div>
         <div class="form-group">
           <label for="password">Пароль:</label>
-          <b-input v-model="password" type="password" id="password" placeholder="ваш пароль"></b-input>
+          <b-input v-model="password" type="password" id="password" placeholder="Пароль"></b-input>
         </div>
         <form action="#">
           <button class="btn">Войти</button>
@@ -40,7 +40,7 @@
                         .then((response) => { 
                             localStorage.access_token = response.data.access_token   
                             console.log("Logged in")    
-                            router.push("/admin/profile")    
+                            router.push("/user/profile")    
                         })    
                         .catch((errors) => {    
                             console.log("Cannot log in")    
@@ -58,7 +58,7 @@
   #signin{
     margin-top: 10%;
     font-size: 15px;
-
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
   }
   .btn{
     background-color: lightpink;

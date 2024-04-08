@@ -1,26 +1,34 @@
 <template>
-    <div id="signup" class="w-50 border rounded p-3 mx-auto">
-      <b-form @submit="register">
-            <div class="form-group required">
-                <label class="control-label" for="username">Имя:</label>
-                <b-input v-model="form.username" type="text" id="username" placeholder="Имя"/>
-            </div>
-
+    <div id="signup" class=" border rounded p-3 mx-auto">
+      <b-form @submit="register" class="fg">
+        <div class="form-group part">
             <div class="form-group required">
                 <label class="control-label" for="surname">Фамилия:</label>
                 <b-input v-model="form.surname" type="text" id="surname" placeholder="Фамилия"/>
             </div>
 
             <div class="form-group required">
-                <label class="control-label" for="email">Почта:</label>
-                <b-input v-model="form.data" type="text" id="email" placeholder="email@email.com"/>
-                <p><small class="text-muted">Введите почту в формате: email@email.com</small></p>
+                <label class="control-label" for="username">Имя:</label>
+                <b-input v-model="form.username" type="text" id="username" placeholder="Имя"/>
+            </div>
+
+            <div class="form-group required">
+                <label class="control-label" for="secname">Отчество:</label>
+                <b-input v-model="form.secname" type="text" id="secname" placeholder="Отчество"/>
             </div>
 
             <div class="form-group required">
                 <label class="control-label" for="data">Дата рождения:</label>
                 <b-input v-model="form.email" type="text" id="data" v-imask="dataMask" placeholder="12.12.2000" @keypress="isNumber" @accept="onAccept" @complete="onComplete" maxlength="10"/>
-                <p><small class="text-muted">Введите дату в формате: 12.12.2000</small></p>
+                <p><small class="text-muted">Введите дату в формате: 00.00.0000</small></p>
+            </div>
+
+        </div>
+        <div class="form-group part">
+            <div class="form-group required">
+                <label class="control-label" for="email">Почта:</label>
+                <b-input v-model="form.data" type="text" id="email" placeholder="email@email.com"/>
+                <p><small class="text-muted">Введите почту в формате: email@email.com</small></p>
             </div>
 
             <div class="form-group required">
@@ -44,7 +52,10 @@
                 </small>
             </p>
 
-            <p class="mt-3">Уже есть аккаунт? <router-link to="/signin">Вход</router-link></p>
+            <p class="mt-3">Уже есть аккаунт? <router-link class="link" to="/signin">Вход</router-link></p>
+        </div>    
+
+            
         </b-form>
     </div>
 </template>
@@ -58,10 +69,11 @@
     data() {
       return {
         form: {
-            username: "",
             surname: "",
-            email: "",
+            username: "",
+            secname: "",
             data: "",
+            email: "",
             password: "",
             repeatPassword: "", 
         },
@@ -80,17 +92,18 @@
             e.preventDefault()      
             let register = () => {    
                 let data = {
+                    surname:this.surname, 
                     username: this.username,
-                    surname:this.surname,    
-                    email: this.email,
+                    secname: this.secname,
                     data: this.data,    
+                    email: this.email,
                     password: this.password    
                 }    
                 axios.post("/api/auth/register", data)    //POST-запрос на эндпоинт /api/register с данными
                     .then((response) => {
                         localStorage.access_token = response.data.access_token    
                         console.log("Registered successfully")    
-                        //router.push("/admin/profile")    
+                        router.push("/user/profile")    
                     })    
                     .catch((errors) => {    
                         console.log("Registration failed")    
@@ -145,9 +158,17 @@
 </script>
 
 <style>
-    #signin{
-        margin-top: 10%;
-        font-size: 17px;
+    #signup{
+        width: 900px;
+        font-size: 15px;
+        box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%) ;
+    }
+    .fg{
+        display: flex;
+        flex-direction: row;
+    }
+    .form-group.part{
+        width: 50%;
     }
     .form-group.required .control-label:after {
         content:" *";
@@ -165,5 +186,9 @@
     label{
         margin-bottom: 10px;
     }
+    .link{
+        text-decoration: none;
+        color:rgb(157, 34, 96);
+    } 
 </style>
    

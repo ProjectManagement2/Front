@@ -2,8 +2,9 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import SignIn from '@/components/SignIn.vue';
 import SignUp from '@/components/SignUp.vue';
-import LoginAdmin from "@/components/LoginAdmin.vue"
-import ProfileAdmin from "@/components/ProfileAdmin.vue"
+import LoginAdmin from "@/components/LoginAdmin.vue";
+import ProfileAdmin from "@/components/ProfileAdmin.vue";
+import UserProfile from "@/components/UserProfile.vue";
 
 Vue.use(Router);
 
@@ -29,6 +30,11 @@ export default new Router({
     path: "/adm/profile",
     name: "ProfileAdmin",
     component: ProfileAdmin
+  },
+  {
+    path: "/user/profile",
+    name: "UserProfile",
+    component: UserProfile
   }
  ],
 });

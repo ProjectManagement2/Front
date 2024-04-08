@@ -54,7 +54,7 @@
 
   #adm-login{
       margin-top: 12%;
-
+      box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
   }
   .form-group, .btn{
       margin-left:15px;
