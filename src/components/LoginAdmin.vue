@@ -27,24 +27,21 @@
             }
         },   
         methods: {    
-            login: (e) => {    
-                e.preventDefault()      
-                let login = () => {    
-                    let data = {    
-                        email: this.email,    
-                        password: this.password    
-                    }    
-                    axios.post("/api/admin/auth", data)    //POST-запрос на эндпоинт /api/login с данными, содержащими электронную почту и пароль
-                        .then((response) => { 
-                            localStorage.access_token = response.data.access_token   
-                            console.log("Logged in")    
-                            router.push("/adm/profile")    
-                        })    
-                        .catch((errors) => {    
-                            console.log("Cannot log in")    
-                        })    
-                }    
-                login()    
+            login() {       
+                let data = {    
+                    email: this.email,    
+                    password: this.password    
+                };    
+                axios.post("/api/admin/auth", data)    //POST-запрос на эндпоинт /api/login с данными, содержащими электронную почту и пароль
+                    .then((response) => { 
+                        localStorage.access_token = response.data.token   
+                        console.log("Logged in")    
+                        router.push("/adm/profile")    
+                    })    
+                    .catch((errors) => {    
+                        console.log("Cannot log in")    
+                    });    
+                    
             }    
         }    
     }

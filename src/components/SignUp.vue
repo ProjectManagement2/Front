@@ -8,13 +8,13 @@
             </div>
 
             <div class="form-group required">
-                <label class="control-label" for="username">Имя:</label>
-                <b-input v-model="form.username" type="text" id="username" placeholder="Имя"/>
+                <label class="control-label" for="name">Имя:</label>
+                <b-input v-model="form.name" type="text" id="name" placeholder="Имя"/>
             </div>
 
             <div class="form-group required">
-                <label class="control-label" for="secname">Отчество:</label>
-                <b-input v-model="form.secname" type="text" id="secname" placeholder="Отчество"/>
+                <label class="control-label" for="otch">Отчество:</label>
+                <b-input v-model="form.otch" type="text" id="otch" placeholder="Отчество"/>
             </div>
 
             <div class="form-group required">
@@ -37,13 +37,13 @@
                 <p><small class="text-muted">Минимальная длина пароля 6 символов</small></p>
             </div>
 
-            <div class="form-group required">
+            <!--<div class="form-group required">
                 <label class="control-label" for="repeatPassword">Повторите пароль:</label>
                 <b-input v-model="form.repeatPassword" type="password" id="repeatPassword" placeholder="Повторите пароль..."/>
-            </div>
+            </div>-->
 
             
-            <b-button variant="primary" type="submit" :disabled="formValid">Регистрация</b-button>
+            <b-button variant="primary" type="submit">Регистрация</b-button>
             <!--<p class="text-danger" v-if="!$v.form.password.minLength">Длина пароля меньше 6 символов</p>
             <p  class="text-danger" v-if="isPasswordTheSame">Введённые пароли не совпадают</p> -->
             <p class="mt-2">
@@ -63,6 +63,9 @@
 <script>
    //import { required, minLength, sameAs } from 'vuelidate/lib/validators';
    import {IMaskDirective} from 'vue-imask';
+   import axios from 'axios';
+   import router from '@/router/index.js';
+   import VueRouter from 'vue-router';
 
    export default {
     name: "SignUp",
@@ -70,12 +73,12 @@
       return {
         form: {
             surname: "",
-            username: "",
-            secname: "",
+            name: "",
+            otch: "",
             data: "",
             email: "",
             password: "",
-            repeatPassword: "", 
+            //repeatPassword: "", 
         },
         
         userData: "",
@@ -88,28 +91,25 @@
       };
     },
     methods: {
-        register: (e) => {    
-            e.preventDefault()      
-            let register = () => {    
-                let data = {
-                    surname:this.surname, 
-                    username: this.username,
-                    secname: this.secname,
-                    data: this.data,    
-                    email: this.email,
-                    password: this.password    
-                }    
-                axios.post("/api/auth/register", data)    //POST-запрос на эндпоинт /api/register с данными
-                    .then((response) => {
-                        localStorage.access_token = response.data.access_token    
-                        console.log("Registered successfully")    
-                        router.push("/user/profile")    
-                    })    
-                    .catch((errors) => {    
-                        console.log("Registration failed")    
-                    })    
-            }    
-            register()    
+        register() {    
+            let data = {
+                surname:this.surname, 
+                name: this.name,
+                otch: this.otch,
+                data: this.data,    
+                email: this.email,
+                password: this.password    
+            };    
+            axios.post("/api/auth/register", data)    //POST-запрос на эндпоинт /api/register с данными
+                .then((response) => {
+                    localStorage.access_token = response.data.token    
+                    console.log("Registered successfully")    
+                    router.push("/user/profile")
+                           
+                })    
+                .catch((errors) => {    
+                    console.log(errors)    
+                });       
         },    
         onAccept(e) {
             const maskRef = e.detail

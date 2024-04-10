@@ -20,6 +20,8 @@
 </template>
    
 <script>
+import axios from 'axios';
+
   export default {
     name: "SignIn",
     data() {
@@ -29,25 +31,21 @@
       };
     },
     methods: {
-      login: (e) => {    
-                e.preventDefault()      
-                let login = () => {    
-                    let data = {    
-                        email: this.email,    
-                        password: this.password    
-                    }    
-                    axios.post("/api/auth/login", data)    //POST-запрос на эндпоинт /api/login с данными
-                        .then((response) => { 
-                            localStorage.access_token = response.data.access_token   
-                            console.log("Logged in")    
-                            router.push("/user/profile")    
-                        })    
-                        .catch((errors) => {    
-                            console.log("Cannot log in")    
-                        })    
-                }    
-                login()    
-            }    
+      login() { // Убрана стрелочная функция
+          let data = {
+              email: this.email,
+              password: this.password
+          };
+          axios.post("http://localhost:4444/api/auth/login", data) // POST-запрос на эндпоинт /api/login с данными
+              .then((response) => {
+                  localStorage.access_token = response.data.token; // заменен access_token на token
+                  console.log("Logged in");
+                  router.push("/user/profile");
+              })
+              .catch((errors) => {
+                  console.log("Cannot log in");
+              });
+      }
     }
   };
    
