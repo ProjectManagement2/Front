@@ -1,17 +1,15 @@
 <template>
     <div id='signin' class="w-25 mx-auto border p-3 rounded">
-      <b-form @submit="login">
+      <b-form @submit.prevent="login">
         <div class="form-group">
           <label for="email">Email:</label>
-          <b-input v-model="email" type="text" id="email" placeholder="Адрес электронной почты..."></b-input>
+          <b-input v-model="form.email" type="text" id="email" placeholder="Адрес электронной почты..."></b-input>
         </div>
         <div class="form-group">
           <label for="password">Пароль:</label>
-          <b-input v-model="password" type="password" id="password" placeholder="Пароль"></b-input>
+          <b-input v-model="form.password" type="password" id="password" placeholder="Пароль"></b-input>
         </div>
-        <form action="#">
-          <button class="btn">Войти</button>
-        </form>
+        <b-button variant="primary" type="submit">Вход</b-button>
         
         <p class="mt-3">Ещё не зарегистрированы? <router-link class="link" to="/signup">Регистрация</router-link>
         </p>
@@ -21,29 +19,33 @@
    
 <script>
 import axios from 'axios';
+import router from '@/router/index.js';
 
   export default {
     name: "SignIn",
     data() {
       return {
-        email: "",
-        password: ""
+        form: {
+          email: "",
+          password: "",
+        }
+        
       };
     },
     methods: {
-      login() { // Убрана стрелочная функция
+      login() { 
           let data = {
-              email: this.email,
-              password: this.password
+              email: this.form.email,
+              password: this.form.password
           };
-          axios.post("http://localhost:4444/api/auth/login", data) // POST-запрос на эндпоинт /api/login с данными
+          axios.post("/api/auth/login", data) // POST-запрос на эндпоинт /api/login с данными
               .then((response) => {
                   localStorage.access_token = response.data.token; // заменен access_token на token
                   console.log("Logged in");
                   router.push("/user/profile");
               })
               .catch((errors) => {
-                  console.log("Cannot log in");
+                  console.log(errors);
               });
       }
     }

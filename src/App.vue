@@ -1,11 +1,13 @@
 <template>
   <div id="app">
+    <title>Project System</title>
     <header>
       <router-link class="label" to="/signin">вход</router-link>
       <router-link class="label" to="/signup">регистрация</router-link>
       <router-link class="label1" to="/adm/auth">Admin</router-link>
       <router-link class="label1" to="/adm/profile">Admin Profile</router-link>
       <router-link class="label1" to="/user/profile">User Profile</router-link>
+      <router-link class="label1" to="/project/create">Proj</router-link>
     </header>
     <div class="container-fluid my-5">
       <router-view></router-view>

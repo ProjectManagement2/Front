@@ -1,22 +1,80 @@
 <template>
     <div class="page-holder">
           <div class="container-fluid px-lg-4 px-xl-5 contentDiv">
-                <div class="page-header mb-4">
-                  <h1 class="page-heading">Профиль</h1>
-                </div>
+              <div class="page-header mb-2">
+                <h1 class="page-heading">Профиль</h1>
+              </div>
             <section>
               <div class="row">
                 <div class="col-lg-4">
                   <div class="card card-profile mb-4">
                     <div class="card-header" style="background-color: lightpink;"> </div>
                     <div class="card-body text-center"><img class="card-profile-img" src="https://i.pinimg.com/originals/e3/41/40/e34140dc81a93041f8ae93e6b87b3c6c.jpg" alt="Jassa Rich">
-                      <h3 class="mb-3">Иван Иванов</h3>
-                      <p class="mb-4">Full Stack Developer</p>
-                      <!-- <button class="btn btn-outline-dark btn-sm"><span class="fab fa-twitter"></span> Follow</button> -->
-                      
+                      <h3 class="mb-3">{{ posts.name }} {{ posts.surname }}</h3>
+                      <p class="mb-3">Дата рождения: {{ posts.date }}г.</p>
+                      <p class="mb-3">Почта: {{ posts.email }}</p>
                     </div>
                   </div>
                   
+                  
+                </div>
+                <div class="col-lg-4">
+                  <form class="card mb-4">
+                    <div class="card-header">
+                      <h4 class="card-heading">Организации</h4>
+                    </div>
+                    <div class="card-body">
+                      <div class="col">
+                        <div class="mb-4">
+                          <div class="col-md-13">
+                            <label class="form-label-org">Организация 1</label>
+                            
+                            <button class="btn btn-primary" type="primary">></button>
+                          </div>
+                        </div>
+                        <div class="mb-4">
+                          <div class="col-md-13">
+                            <label class="form-label-org">Организация 2</label>
+                            
+                            <button class="btn btn-primary" type="primary">></button>
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </form>
+
+                 
+                </div>
+                <div class="col-lg-4">
+                  <form class="card mb-4">
+                    <div class="card-header">
+                      <h4 class="card-heading">Проекты</h4>
+                    </div>
+                    <div class="card-body">
+                      <div class="col">
+                        <div class="mb-4">
+                          <div class="col-md-5">
+                            <label class="form-label-org">Проект 1</label>
+                            
+                            
+                          </div>
+                        </div>
+                        <div class="mb-4">
+                          <div class="col-md-5">
+                            <label class="form-label-org">Проект 2</label>
+                            
+                            
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-4">
                   <form class="card mb-4">
                     <div class="card-header">
                       <h4 class="card-heading">Редактировать</h4>
@@ -26,18 +84,26 @@
                         <div class="col-auto d-flex align-items-center"><img class="avatar avatar-lg p-1" src="https://i.pinimg.com/originals/e3/41/40/e34140dc81a93041f8ae93e6b87b3c6c.jpg" alt="Avatar"></div>
                         <div class="col">
                           <label class="form-label">Имя</label>
-                          <input class="form-control" placeholder="Your name">
+                          <input class="form-control mb-2" placeholder="Имя...">
+                          <label class="form-label">Фамилия</label>
+                          <input class="form-control mb-2" placeholder="Фамилия...">
+                          <label class="form-label">Отчество</label>
+                          <input class="form-control mb-2" placeholder="Отчество...">
                         </div>
                       </div>
                       <div class="mb-3"> 
                         <label class="form-label">О себе</label>
-                        <textarea class="form-control" rows="8">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</textarea>
+                        <textarea class="form-control" rows="6">Опишите себя...</textarea>
                       </div>
                       <div class="mb-3"> 
-                        <label class="form-label">Email</label>
-                        <input class="form-control" placeholder="you@domain.com">
+                        <label class="form-label">Дата рождения</label>
+                        <input class="form-control" placeholder="12.12.2000">
                       </div>
-                      <label class="form-label">Почта</label>
+                      <div class="mb-3"> 
+                        <label class="form-label">Почта</label>
+                        <input class="form-control" placeholder="email@email.com">
+                      </div>
+                      <label class="form-label">Пароль</label>
                       <input class="form-control" type="password" value="password">
                     </div>
                     <div class="card-footer text-end">
@@ -45,35 +111,10 @@
                     </div>
                   </form>
                 </div>
-                <div class="col-lg-8">
-                  
-                  <form class="card mb-4">
-                    <div class="card-header">
-                      <h4 class="card-heading">Организации</h4>
-                    </div>
-                    <div class="card-body">
-                      <div class="col">
-                        <div class="mb-4">
-                          <div class="col-md-5">
-                            <label class="form-label-org">Организация 1</label>
-                            
-                            <button class="btn btn-primary" type="primary">></button>
-                          </div>
-                        </div>
-                        <div class="mb-4">
-                          <div class="col-sm-6 col-md-3">
-                            <label class="form-label-org">Организация 2</label>
-                            
-                            <button class="btn btn-primary" type="primary">></button>
-                          </div>
-                        </div>
-                        
-                      </div>
-                    </div>
-                    
-                  </form>
-                </div>
+                
+
               </div>
+              
             </section>
           </div>
           
@@ -84,8 +125,26 @@
 <script>
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from 'axios'
+
 export default {
-  
+  name: "UserProfile",
+  data() {
+    return {
+      posts: []
+    }
+  },
+  mounted() {
+    axios
+      .get('/api/profile/info', {
+        headers: {
+          'authorization': `Bearer ${localStorage.access_token}`
+        }
+      })
+      .then((response) => {
+        this.posts = response.data
+      })
+  }
 }
 </script>
 
@@ -191,10 +250,7 @@ img, svg {
   letter-spacing: 0.2em;
   font-weight: 300;
 }
-.contentDiv
-{
-  padding-top: 4rem;
-}
+
 .card-profile .card-header {
   height: 9rem;
   background-position: center center;
@@ -203,13 +259,22 @@ img, svg {
 .form-label-org{
   border: 1px solid #b2b6ba;
   border-radius: 7px;
+  font-size: 17px;
   size: 150px;
-  margin: 5px;
-  padding-left: 15px;
-  padding-right: 15px;
+  margin: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 .btn {
   background-color: lightpink !important;
   border-color: lightpink !important;
+}
+.btn.btn-primary{
+  margin-top: 14px;
+  margin-bottom: 14px;
+  margin-left: 7px;
+
 }
 </style>

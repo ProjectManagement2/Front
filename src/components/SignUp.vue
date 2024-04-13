@@ -1,6 +1,6 @@
 <template>
     <div id="signup" class=" border rounded p-3 mx-auto">
-      <b-form @submit="register" class="fg">
+      <b-form @submit.prevent="register" class="fg">
         <div class="form-group part">
             <div class="form-group required">
                 <label class="control-label" for="surname">Фамилия:</label>
@@ -18,8 +18,8 @@
             </div>
 
             <div class="form-group required">
-                <label class="control-label" for="data">Дата рождения:</label>
-                <b-input v-model="form.email" type="text" id="data" v-imask="dataMask" placeholder="12.12.2000" @keypress="isNumber" @accept="onAccept" @complete="onComplete" maxlength="10"/>
+                <label class="control-label" for="date">Дата рождения:</label>
+                <b-input v-model="form.date" type="text" id="date" v-imask="dataMask" placeholder="12.12.2000" @keypress="isNumber" @accept="onAccept" @complete="onComplete" maxlength="10"/>
                 <p><small class="text-muted">Введите дату в формате: 00.00.0000</small></p>
             </div>
 
@@ -27,7 +27,7 @@
         <div class="form-group part">
             <div class="form-group required">
                 <label class="control-label" for="email">Почта:</label>
-                <b-input v-model="form.data" type="text" id="email" placeholder="email@email.com"/>
+                <b-input v-model="form.email" type="text" id="email" placeholder="email@email.com"/>
                 <p><small class="text-muted">Введите почту в формате: email@email.com</small></p>
             </div>
 
@@ -75,7 +75,7 @@
             surname: "",
             name: "",
             otch: "",
-            data: "",
+            date: "",
             email: "",
             password: "",
             //repeatPassword: "", 
@@ -93,18 +93,18 @@
     methods: {
         register() {    
             let data = {
-                surname:this.surname, 
-                name: this.name,
-                otch: this.otch,
-                data: this.data,    
-                email: this.email,
-                password: this.password    
+                surname: this.form.surname, 
+                name: this.form.name,
+                otch: this.form.otch,
+                date: this.form.date,    
+                email: this.form.email,
+                password: this.form.password    
             };    
-            axios.post("/api/auth/register", data)    //POST-запрос на эндпоинт /api/register с данными
+            axios.post("/api/auth/register", data)    
                 .then((response) => {
                     localStorage.access_token = response.data.token    
                     console.log("Registered successfully")    
-                    router.push("/user/profile")
+                    router.push("/signin")
                            
                 })    
                 .catch((errors) => {    

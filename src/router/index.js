@@ -5,6 +5,7 @@ import SignUp from '@/components/SignUp.vue';
 import LoginAdmin from "@/components/LoginAdmin.vue";
 import ProfileAdmin from "@/components/ProfileAdmin.vue";
 import UserProfile from "@/components/UserProfile.vue";
+import CreateProject from "@/components/CreateProj.vue";
 
 Vue.use(Router);
 
@@ -35,6 +36,11 @@ export default new Router({
     path: "/user/profile",
     name: "UserProfile",
     component: UserProfile
-  }
+  },
+  {
+    path: "/project/create",
+    name: "CreateProject",
+    component: CreateProject
+  },
  ],
 });

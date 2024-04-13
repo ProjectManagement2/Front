@@ -1,13 +1,13 @@
 <template>
     <div id='adm-login' class="w-25 mx-auto border p-3 rounded">
-      <b-form @submit="login">
+      <b-form @submit.prevent="login">
         <div class="form-group">
           <label for="email">Email:</label>
-          <b-input v-model="username" type="text" id="email" placeholder="Адрес электронной почты..."></b-input>
+          <b-input v-model="form.username" type="text" id="email" placeholder="Адрес электронной почты..."></b-input>
         </div>
         <div class="form-group">
           <label for="password">Пароль:</label>
-          <b-input v-model="password" type="password" id="password" placeholder="Пароль..."></b-input>
+          <b-input v-model="form.password" type="password" id="password" placeholder="Пароль..."></b-input>
         </div>
         <b-button class="btn" variant="primary" type="submit">Войти</b-button>
       </b-form>
@@ -15,36 +15,38 @@
 </template>
 
 <script>
-    import router from "../router"    
-    import axios from "axios"    
+    import router from '@/router/index.js';    
+    import axios from "axios";    
 
     export default {    
         name: "LoginAdmin", 
         data() {
             return {
-                email: '',
-                password: ''
-            }
+                form: {
+                    email: "",
+                    password: "",
+                }
+            };
         },   
         methods: {    
             login() {       
                 let data = {    
-                    email: this.email,    
-                    password: this.password    
+                    email: this.form.email,    
+                    password: this.form.password    
                 };    
                 axios.post("/api/admin/auth", data)    //POST-запрос на эндпоинт /api/login с данными, содержащими электронную почту и пароль
                     .then((response) => { 
-                        localStorage.access_token = response.data.token   
-                        console.log("Logged in")    
-                        router.push("/adm/profile")    
+                        localStorage.access_token = response.data.token;   
+                        console.log("Logged in");    
+                        router.push("/adm/profile");   
                     })    
                     .catch((errors) => {    
-                        console.log("Cannot log in")    
+                        console.log(errors);    
                     });    
                     
             }    
         }    
-    }
+    };
 </script>
 
 <style>
