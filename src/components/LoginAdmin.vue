@@ -3,7 +3,7 @@
       <b-form @submit.prevent="login">
         <div class="form-group">
           <label for="email">Email:</label>
-          <b-input v-model="form.username" type="text" id="email" placeholder="Адрес электронной почты..."></b-input>
+          <b-input v-model="form.email" type="text" id="email" placeholder="Адрес электронной почты..."></b-input>
         </div>
         <div class="form-group">
           <label for="password">Пароль:</label>

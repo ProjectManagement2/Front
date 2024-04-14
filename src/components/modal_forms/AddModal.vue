@@ -1,6 +1,6 @@
 <template>
     <div v-if="localIsVisible" id="add" class="w-75 mx-auto border p-3 rounded">
-      <b-form @submit.prevent="add">
+      <b-form @submit.prevent="addOrg">
         <h3 class="name-form">Добавление организаций</h3>
         <div class="row">
           <div class="col">
@@ -9,16 +9,16 @@
               <b-input v-model="form.organization" type="text" id="organization" placeholder="Название организации"></b-input>
             </div>
             <div class="form-group">
-              <label for="surname">Описание:</label>
-              <b-input v-model="form.surname" type="text" id="surname" placeholder="Расскажите об организации"></b-input>
+              <label for="description">Описание:</label>
+              <b-input v-model="form.description" type="text" id="description" placeholder="Расскажите об организации"></b-input>
             </div>
           </div>
           <div class="col">
             <div class="row form-group">
               <label>Выберете ответственного за организацию:</label>
-              <select v-model="selected">
-                <option v-for="option in options" :value="option.value">
-                  {{ option.text }}
+              <select v-model="form.leaderId" @change="selectUser">
+                <option v-for="user in users" :key="user._id" :value="user._id">
+                  {{ user.surname }} {{ user.name }} {{ user.otch }}
                 </option>
               </select>
             </div>
@@ -28,32 +28,72 @@
         
         
         <b-button variant="primary" type="submit">Добавить</b-button>
-        <b-button class="btn" @click="closeForm">Закрыть</b-button>
+        <b-button variant="primary" class="btn" @click="closeForm">Закрыть</b-button>
       </b-form>
     </div>
   </template>
   
   <script>
+  import axios from 'axios';
+
   export default {
     data() {
       return {
+        users: [],
         form: {
             organization: "",
-            surname: "",
-            name: "",
-            otch: "",
+            description: "",
+            leaderId: null,
         }
       };
     },
+    mounted() {
+      this.getUsers();
+    },
     methods: {
-      submitForm() {
-        // Ваша логика отправки формы
-        console.log('Отправлено:', this.name);
+      getUsers(){
+        axios
+          .get('/api/admin/getUsers', {
+            headers: {
+              'authorization': `Bearer ${localStorage.access_token}`
+            }
+          })
+          .then((response) => {
+            this.users = response.data
+          });
+      },
+
+      selectUser() {
+        console.log('Выбран пользователь с ID:', this.form.leaderId);
+      },
+
+      addOrg() {
+        let data = {    
+          organization: this.form.organization,    
+          description: this.form.description,
+          leaderId: this.form.leaderId    
+        };
+        if (this.form.leaderId){
+          axios
+          .post("/api/admin/createOrganization", data , {
+            headers: {
+              'authorization': `Bearer ${localStorage.access_token}`
+            }
+          })    //POST-запрос на эндпоинт /api/login с данными, содержащими электронную почту и пароль
+          .then(() => {    
+            console.log("New org is created");    
+               
+          })    
+          .catch((errors) => {    
+            console.log(errors);    
+          }); 
+        } else {
+          console.warn('Ответственный за организацию не выбран');
+        }
       },
       closeForm() {
-      // Метод для закрытия формы
-      this.$emit('close');
-    }
+        this.$emit('close');
+      }
       
     },
     props: {
@@ -91,7 +131,7 @@
     margin-top: 5px;
     margin-right: 5px;
   }
-  #organization, #surname, #name, #otch{
+  #organization, #description, #name, #otch{
     margin-bottom: 5px;
     font-size: 13px ; 
   }

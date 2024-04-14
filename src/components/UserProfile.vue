@@ -13,10 +13,9 @@
                       <h3 class="mb-3">{{ posts.name }} {{ posts.surname }}</h3>
                       <p class="mb-3">Дата рождения: {{ posts.date }}г.</p>
                       <p class="mb-3">Почта: {{ posts.email }}</p>
+                      <b-button class="btn"  @click="showEditProfile">Редактировать</b-button>
                     </div>
-                  </div>
-                  
-                  
+                  </div> 
                 </div>
                 <div class="col-lg-4">
                   <form class="card mb-4">
@@ -35,16 +34,12 @@
                         <div class="mb-4">
                           <div class="col-md-13">
                             <label class="form-label-org">Организация 2</label>
-                            
                             <button class="btn btn-primary" type="primary">></button>
                           </div>
                         </div>
-                        
                       </div>
                     </div>
                   </form>
-
-                 
                 </div>
                 <div class="col-lg-4">
                   <form class="card mb-4">
@@ -56,18 +51,13 @@
                         <div class="mb-4">
                           <div class="col-md-5">
                             <label class="form-label-org">Проект 1</label>
-                            
-                            
                           </div>
                         </div>
                         <div class="mb-4">
                           <div class="col-md-5">
                             <label class="form-label-org">Проект 2</label>
-                            
-                            
                           </div>
                         </div>
-                        
                       </div>
                     </div>
                   </form>
@@ -75,63 +65,36 @@
               </div>
               <div class="row">
                 <div class="col-lg-4">
-                  <form class="card mb-4">
-                    <div class="card-header">
-                      <h4 class="card-heading">Редактировать</h4>
-                    </div>
-                    <div class="card-body">
-                      <div class="row mb-3">
-                        <div class="col-auto d-flex align-items-center"><img class="avatar avatar-lg p-1" src="https://i.pinimg.com/originals/e3/41/40/e34140dc81a93041f8ae93e6b87b3c6c.jpg" alt="Avatar"></div>
-                        <div class="col">
-                          <label class="form-label">Имя</label>
-                          <input class="form-control mb-2" placeholder="Имя...">
-                          <label class="form-label">Фамилия</label>
-                          <input class="form-control mb-2" placeholder="Фамилия...">
-                          <label class="form-label">Отчество</label>
-                          <input class="form-control mb-2" placeholder="Отчество...">
-                        </div>
-                      </div>
-                      <div class="mb-3"> 
-                        <label class="form-label">О себе</label>
-                        <textarea class="form-control" rows="6">Опишите себя...</textarea>
-                      </div>
-                      <div class="mb-3"> 
-                        <label class="form-label">Дата рождения</label>
-                        <input class="form-control" placeholder="12.12.2000">
-                      </div>
-                      <div class="mb-3"> 
-                        <label class="form-label">Почта</label>
-                        <input class="form-control" placeholder="email@email.com">
-                      </div>
-                      <label class="form-label">Пароль</label>
-                      <input class="form-control" type="password" value="password">
-                    </div>
-                    <div class="card-footer text-end">
-                      <button class="btn btn-primary">Сохранить</button>
-                    </div>
-                  </form>
+                  <EditProfile :is-visible="isEditProfileVisible" @close="closeEditProfile" />
                 </div>
-                
-
               </div>
-              
             </section>
           </div>
-          
-        </div>
-      
-  </template>
+      </div>
+</template>
 
 <script>
-
+import EditProfile from "./modal_forms/EditProfile.vue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios'
 
 export default {
   name: "UserProfile",
+  components: {
+    EditProfile
+  },
   data() {
     return {
+      isEditProfileVisible: false,
       posts: []
+    }
+  },
+  methods: {
+    showEditProfile() {
+      this.isEditProfileVisible = true;
+    },
+    closeEditProfile() {
+      this.isEditProfileVisible = false;
     }
   },
   mounted() {

@@ -1,6 +1,6 @@
 <template>
     <div v-if="localIsVisible" id="add" class="w-75 mx-auto border p-3 rounded">
-      <b-form @submit.prevent="add">
+      <b-form @submit.prevent="deleteOrg">
         <h3 class="name-form">Удаление организаций</h3>
         <div class="form-group">
           <label for="organization">Организация:</label>
@@ -19,7 +19,7 @@
           <b-input v-model="form.otch" type="text" id="otch" placeholder="Отчество"></b-input>
         </div>
         <b-button variant="primary" type="submit">Удалить</b-button>
-        <b-button class="btn" @click="closeForm">Закрыть</b-button>
+        <b-button variant="primary" class="btn" @click="closeForm">Закрыть</b-button>
       </b-form>
     </div>
   </template>
@@ -37,7 +37,7 @@
       };
     },
     methods: {
-      submitForm() {
+      deleteOrg() {
         // Ваша логика отправки формы
         console.log('Отправлено:', this.name);
       },

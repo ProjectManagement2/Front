@@ -42,9 +42,9 @@
 </template>
 
 <script>
-import AddModal from './modal_windows/AddModal.vue';
-import EditModal from './modal_windows/EditModal.vue';
-import DeleteModal from './modal_windows/DeleteModal.vue';
+import AddModal from './modal_forms/AddModal.vue';
+import EditModal from './modal_forms/EditModal.vue';
+import DeleteModal from './modal_forms/DeleteModal.vue';
 import axios from 'axios'
 
     export default{
