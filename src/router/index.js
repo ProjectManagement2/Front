@@ -7,6 +7,7 @@ import ProfileAdmin from "@/components/ProfileAdmin.vue";
 import UserProfile from "@/components/UserProfile.vue";
 import CreateProject from "@/components/CreateProj.vue";
 import PageOrg from "@/components/PageOrg.vue";
+import ProjectPage from "@/components/ProjectPage.vue";
 
 Vue.use(Router);
 
@@ -47,6 +48,11 @@ export default new Router({
     path: "/organization/:id",
     name: "PageOrg",
     component: PageOrg
+  },
+  {
+    path: "/project/page",
+    name: "ProjectPage",
+    component: ProjectPage
   }
  ],
 });

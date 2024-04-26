@@ -2,7 +2,7 @@
     <div class="page-holder">
           <div class="container-fluid px-lg-4 px-xl-5 contentDiv">
               <div class="page-header mb-2">
-                <h1 class="page-heading">Об организации</h1>
+                <h1 class="page-heading">Проект</h1>
               </div>
               <section>
                 <div class="row">
@@ -11,12 +11,12 @@
                       <div class="card-header">
                         <h4 class="card-heading">{{ posts.name }}</h4>
                       </div>
-                      <p class="mb-3">Ответственный за организацию: {{ posts.leader.surname }} {{posts.leader.name}} {{posts.leader.otch}}</p>
+                      <p class="mb-3">Инициатор проекта: {{ posts.initiator.surname }} {{posts.initiator.name}} {{posts.initiator.otch}}</p>
                       <p class="mb-3">Описание: {{ posts.description }}</p>
-                      <b-button variant="primary"class="btn-click" @click="createProject">Создать проект</b-button>
+                      
                     </div> 
                   </div>
-                    <div class="col-lg-4">
+                    <!-- <div class="col-lg-4">
                     <form class="card mb-4">
                         <div class="card-header">
                         <h4 class="card-heading">Список сотрудников</h4>
@@ -47,16 +47,20 @@
                         </div>
                         <div class="card-body">
                         <div class="col">
-                          <div class="mb-4">
+                            <div class="mb-4">
                             <div class="col-md-5">
-                              <OrgProjectsList :projects="projects" />
+                                <label class="form-label-org">Проект 1</label>
                             </div>
-                          </div>
-                            
+                            </div>
+                            <div class="mb-4">
+                            <div class="col-md-5">
+                                <label class="form-label-org">Проект 2</label>
+                            </div>
+                            </div>
                         </div>
                         </div>
                     </form>
-                    </div>
+                    </div> -->
                 </div>
                 
               </section>
@@ -69,50 +73,31 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
 import router from '@/router/index.js';
-import OrgProjectsList from "./additional_comp/OrgProjectsList.vue";
 
 export default {
-  name: "PageOrg",
-  components: {
-    OrgProjectsList
-  },
+  name: "ProjectPage",
+  
   data() {
     return {
-      posts: [],
-      projects: []
+      posts: []
     }
   },
   
   mounted() {
     axios
-      .get('/api/organization/mainInfo', {
+      .get('/api/project/mainInfo', {
         headers: {
           'authorization': `Bearer ${localStorage.access_token}`,
-          'organizationId': localStorage.org_id
+          'projectid': localStorage.proj_id
         }
       })
       .then((response) => {
         this.posts = response.data
         console.log(this.posts)
-      }),
-    this.getProjs()
+      })
   },
 
   methods: {
-    
-    getProjs() {
-      axios
-      .get('/api/organization/getProjects', {
-        headers: {
-          'authorization': `Bearer ${localStorage.access_token}`,
-          'organizationId': localStorage.org_id
-        }
-      })
-      .then((response) => {
-        this.projects = response.data
-        console.log(this.projects)
-      })
-    },
     createProject() {
       router.push("/project/create");
     }

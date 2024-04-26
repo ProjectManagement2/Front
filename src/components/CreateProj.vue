@@ -6,22 +6,15 @@
         <div id='crproj' class="mx-auto border p-3 rounded">
             <b-form @submit.prevent="create">
               <div class="form-group">
-                <label for="name">Название прокета:</label>
+                <label for="name">Название проекта:</label>
                 <b-input v-model="form.name" type="text" id="name" placeholder="Назовите проект"></b-input>
               </div>
-              <div class="form-group">
-                <label for="initiator">Инициатор:</label>
-                <select v-model="form.leaderId" @change="selectUser">
-                  <option v-for="user in users" :key="user._id" :value="user._id">
-                    {{ user.surname }} {{ user.name }} {{ user.otch }}
-                  </option>
-                </select>
-              </div>
+              
               <div class="form-group">
                 <label for="description">Описание проекта:</label>
                 <b-input v-model="form.description" type="text" id="description" placeholder="Расскажите о проекте"></b-input>
               </div>
-              <b-button variant="primary" type="submit">Создать</b-button>
+              <b-button variant="primary" type="submit" >Создать</b-button>
             </b-form>
         </div>
     </div>
@@ -42,40 +35,26 @@ import router from '@/router/index.js';
           description: "",
           initiator: "",
         }
-        
       };
     },
-    mounted() {
-      this.getUsers();
-    },
+    
     methods: {
-      getUsers(){
-        axios
-          .get('/api/admin/getUsers', {
-            headers: {
-              'authorization': `Bearer ${localStorage.access_token}`
-            }
-          })
-          .then((response) => {
-            this.users = response.data
-          });
-      },
-
-      selectUser() {
-        console.log('Выбран пользователь с ID:', this.form.leaderId);
-      },
       create() { 
           let data = {
               name: this.form.name,
               description: this.form.description,
               initiator: this.form.initiator
           };
-          axios.post("/api/profile/createProject", data)    
-                .then((response) => {
-                    localStorage.access_token = response.data.token    
+          axios.post("/api/organization/createProject", data, {
+                headers: {
+                  'authorization': `Bearer ${localStorage.access_token}`,
+                  'organizationId': localStorage.org_id
+                }
+              })    
+                .then(() => {  
+                    
                     console.log("Project created successfully")    
-                    router.push("/user/profile")
-                           
+                    router.push("/project/page")     
                 })    
                 .catch((errors) => {    
                     console.log(errors)    
@@ -110,6 +89,7 @@ import router from '@/router/index.js';
   }
   label{
     margin-bottom: 10px;
+    margin-right: 10px;
   }
   .link{
     text-decoration: none;
