@@ -2,21 +2,27 @@
     <div v-if="localIsVisible" id="add" class="w-75 mx-auto border p-3 rounded">
       <b-form @submit.prevent="deleteOrg">
         <h3 class="name-form">Удаление организаций</h3>
-        <div class="form-group">
-          <label for="organization">Организация:</label>
-          <b-input v-model="form.organization" type="text" id="organization" placeholder="Название организации"></b-input>
-        </div>
-        <div class="form-group">
-          <label for="surname">Фамилия:</label>
-          <b-input v-model="form.surname" type="text" id="surname" placeholder="Фамилия"></b-input>
-        </div>
-        <div class="form-group">
-          <label for="name">Имя:</label>
-          <b-input v-model="form.name" type="text" id="name" placeholder="Имя"></b-input>
-        </div>
-        <div class="form-group">
-          <label for="otch">Отчество:</label>
-          <b-input v-model="form.otch" type="text" id="otch" placeholder="Отчество"></b-input>
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="name">Организация:</label>
+              <b-input v-model="form.name" type="text" id="name" placeholder="Название организации"></b-input>
+            </div>
+            <div class="form-group">
+              <label for="description">Описание:</label>
+              <b-input v-model="form.description" type="text" id="description" placeholder="Расскажите об организации"></b-input>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row form-group">
+              <label>Выберете ответственного за организацию:</label>
+              <select v-model="form.leaderId" @change="selectUser">
+                <option v-for="user in users" :key="user._id" :value="user._id">
+                  {{ user.surname }} {{ user.name }} {{ user.otch }}
+                </option>
+              </select>
+            </div>
+          </div>
         </div>
         <b-button variant="primary" type="submit">Удалить</b-button>
         <b-button variant="primary" class="btn" @click="closeForm">Закрыть</b-button>

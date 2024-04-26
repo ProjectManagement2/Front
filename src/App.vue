@@ -4,10 +4,11 @@
     <header>
       <router-link class="label" to="/signin">вход</router-link>
       <router-link class="label" to="/signup">регистрация</router-link>
-      <router-link class="label1" to="/adm/auth">Admin</router-link>
-      <router-link class="label1" to="/adm/profile">Admin Profile</router-link>
-      <router-link class="label1" to="/user/profile">User Profile</router-link>
+      <router-link class="label1" to="/adm/auth">Admin log</router-link>
+      <router-link class="label1" to="/adm/profile">Admin Prof</router-link>
+      <router-link class="label1" to="/user/profile">User Prof</router-link>
       <router-link class="label1" to="/project/create">Proj</router-link>
+      <router-link class="label1" to="/organization/page">Org</router-link>
     </header>
     <div class="container-fluid my-5">
       <router-view></router-view>

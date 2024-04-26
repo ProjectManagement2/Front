@@ -57,7 +57,6 @@
         console.log('Отправлено:', this.name);
       },
       closeForm() {
-      // Метод для закрытия формы
       this.$emit('close');
     }
       

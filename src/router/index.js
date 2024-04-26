@@ -6,6 +6,7 @@ import LoginAdmin from "@/components/LoginAdmin.vue";
 import ProfileAdmin from "@/components/ProfileAdmin.vue";
 import UserProfile from "@/components/UserProfile.vue";
 import CreateProject from "@/components/CreateProj.vue";
+import PageOrg from "@/components/PageOrg.vue";
 
 Vue.use(Router);
 
@@ -42,5 +43,10 @@ export default new Router({
     name: "CreateProject",
     component: CreateProject
   },
+  {
+    path: "/organization/:id",
+    name: "PageOrg",
+    component: PageOrg
+  }
  ],
 });

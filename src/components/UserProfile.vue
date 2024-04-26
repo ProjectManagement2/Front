@@ -26,17 +26,11 @@
                       <div class="col">
                         <div class="mb-4">
                           <div class="col-md-13">
-                            <label class="form-label-org">Организация 1</label>
+                            <UserOrgsList :organizations="organizations" />
                             
-                            <button class="btn btn-primary" type="primary">></button>
                           </div>
                         </div>
-                        <div class="mb-4">
-                          <div class="col-md-13">
-                            <label class="form-label-org">Организация 2</label>
-                            <button class="btn btn-primary" type="primary">></button>
-                          </div>
-                        </div>
+                        
                       </div>
                     </div>
                   </form>
@@ -77,28 +71,24 @@
 import EditProfile from "./modal_forms/EditProfile.vue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios'
+import UserOrgsList from "./additional_comp/UserOrgsList.vue";
 
 export default {
   name: "UserProfile",
   components: {
-    EditProfile
+    EditProfile,
+    UserOrgsList
   },
   data() {
     return {
       isEditProfileVisible: false,
-      posts: []
+      posts: [],
+      organizations: []
     }
   },
   methods: {
-    showEditProfile() {
-      this.isEditProfileVisible = true;
-    },
-    closeEditProfile() {
-      this.isEditProfileVisible = false;
-    }
-  },
-  mounted() {
-    axios
+    fetchUserData() {
+      axios
       .get('/api/profile/info', {
         headers: {
           'authorization': `Bearer ${localStorage.access_token}`
@@ -107,6 +97,31 @@ export default {
       .then((response) => {
         this.posts = response.data
       })
+    },
+    fetchUserOrganizations() {
+      axios.get(`/api/profile/organizations`, {
+          headers: {
+            'authorization': `Bearer ${localStorage.access_token}`
+          }
+        }) 
+        .then(response => {
+          this.organizations = response.data;
+        
+        })
+        .catch(error => {
+          console.error('Ошибка получения списка организаций пользователя:', error);
+        });
+    },
+    showEditProfile() {
+      this.isEditProfileVisible = true;
+    },
+    closeEditProfile() {
+      this.isEditProfileVisible = false;
+    }
+  },
+  mounted() {
+    this.fetchUserData();
+    this.fetchUserOrganizations();
   }
 }
 </script>

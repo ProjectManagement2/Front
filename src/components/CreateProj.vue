@@ -11,7 +11,11 @@
               </div>
               <div class="form-group">
                 <label for="initiator">Инициатор:</label>
-                <b-input v-model="form.initiator" type="text" id="initiator" placeholder="Определите инициатора"></b-input>
+                <select v-model="form.leaderId" @change="selectUser">
+                  <option v-for="user in users" :key="user._id" :value="user._id">
+                    {{ user.surname }} {{ user.name }} {{ user.otch }}
+                  </option>
+                </select>
               </div>
               <div class="form-group">
                 <label for="description">Описание проекта:</label>
@@ -32,6 +36,7 @@ import router from '@/router/index.js';
     name: "CreateProject",
     data() {
       return {
+        users: [],
         form: {
           name: "",
           description: "",
@@ -40,7 +45,25 @@ import router from '@/router/index.js';
         
       };
     },
+    mounted() {
+      this.getUsers();
+    },
     methods: {
+      getUsers(){
+        axios
+          .get('/api/admin/getUsers', {
+            headers: {
+              'authorization': `Bearer ${localStorage.access_token}`
+            }
+          })
+          .then((response) => {
+            this.users = response.data
+          });
+      },
+
+      selectUser() {
+        console.log('Выбран пользователь с ID:', this.form.leaderId);
+      },
       create() { 
           let data = {
               name: this.form.name,
@@ -96,4 +119,5 @@ import router from '@/router/index.js';
     background-color: lightpink;
     font-size: 15px;
   } 
+  
 </style>

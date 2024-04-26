@@ -7,11 +7,13 @@
               <section>
                 <div class="row">
                     <div class="col-lg-4">
-                    <div class="card card-profile mb-4">
-                        <h3 class="mb-3">{{ posts.name }}</h3>
-                        <p class="mb-3">Ответственный за организацию: {{ posts.date }}г.</p>
-                        <p class="mb-3">Описание: </p>
-                        <p class="mb-3">{{ posts.email }}</p>
+                    <div class="card mb-4">
+                      <div class="card-header">
+                        <h4 class="card-heading">{{ posts.name }}</h4>
+                      </div>
+                        <p class="mb-3">Ответственный за организацию: Синюгина Варвара Владимировна</p>
+                        <p class="mb-3">Описание: Хороша</p>
+                        
                         
                     </div> 
                     </div>
@@ -83,13 +85,15 @@ export default {
   
   mounted() {
     axios
-      .get('', {
+      .get('/api/organization/mainInfo', {
         headers: {
           'authorization': `Bearer ${localStorage.access_token}`
-        }
+        },
+        organizationId: localStorage.org_id
       })
       .then((response) => {
         this.posts = response.data
+        console.log(this.posts)
       })
   }
 }
@@ -223,5 +227,8 @@ img, svg {
   margin-bottom: 14px;
   margin-left: 7px;
 
+}
+.mb-3{
+  margin: 15px;
 }
 </style>

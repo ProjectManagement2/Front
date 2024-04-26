@@ -25,11 +25,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="post in posts" :key="post.id">
-                            <td v-text="post.id"></td>
-                            <td > {{ post.name }}</td>
-                            <td > {{ post.surname }}</td>
-                            <td > {{ post.otch }}</td>
+                        <tr v-for="post in posts" :key="post._id">
+                            <td> {{ post.name }}</td>
+                            <td> {{ post.leader.surname }}</td>
+                            <td> {{ post.leader.name }}</td>
+                            <td> {{ post.leader.otch }}</td>
                         </tr>
                     </tbody>
                 </table> 
@@ -86,7 +86,7 @@ import axios from 'axios'
             },
             fetchData() {
                 axios
-                .get('/api/profile/info', {
+                .get('/api/admin/getOrganizations', {
                     headers: {
                     'authorization': `Bearer ${localStorage.access_token}`
                     }
@@ -129,6 +129,7 @@ import axios from 'axios'
     text-align: left;
     background: white;
     padding: 8px;
+    border: 2px solid #c7c7c7;
     min-width: 30px;
     font-size: 15px;
     }

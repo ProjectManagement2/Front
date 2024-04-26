@@ -5,8 +5,8 @@
         <div class="row">
           <div class="col">
             <div class="form-group">
-              <label for="organization">Организация:</label>
-              <b-input v-model="form.organization" type="text" id="organization" placeholder="Название организации"></b-input>
+              <label for="name">Организация:</label>
+              <b-input v-model="form.name" type="text" id="name" placeholder="Название организации"></b-input>
             </div>
             <div class="form-group">
               <label for="description">Описание:</label>
@@ -25,8 +25,6 @@
             
           </div>
         </div>
-        
-        
         <b-button variant="primary" type="submit">Добавить</b-button>
         <b-button variant="primary" class="btn" @click="closeForm">Закрыть</b-button>
       </b-form>
@@ -41,7 +39,7 @@
       return {
         users: [],
         form: {
-            organization: "",
+            name: "",
             description: "",
             leaderId: null,
         }
@@ -69,7 +67,7 @@
 
       addOrg() {
         let data = {    
-          organization: this.form.organization,    
+          name: this.form.name,    
           description: this.form.description,
           leaderId: this.form.leaderId    
         };

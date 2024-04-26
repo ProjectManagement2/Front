@@ -128,28 +128,6 @@
             }
         }
     },
-    
-    // validations: {
-    //     username: {
-    //         required
-    //     },
-    //     password: {
-    //         required,
-    //         minLength: minLength(7)
-    //     },
-    //     repeatPassword: {
-    //         required,
-    //         sameAs: sameAs('password')
-    //     },
-    //     data: {
-    //         required
-    //     }
-    // },
-    // computed: {
-    //     formValid() {
-    //         return this.$v.$invalid
-    //     }
-    // },
     directives: {
         imask: IMaskDirective
     }
