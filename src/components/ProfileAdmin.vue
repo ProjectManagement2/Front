@@ -5,9 +5,9 @@
         </div>
         <div id="org-page" class="mx-auto border  rounded">
             <div id="btns">
-                <b-button class="btn"  @click="showAddForm">Добавить</b-button>
-                <b-button class="btn"  @click="showEditForm">Редактировать</b-button>
-                <b-button class="btn"  @click="showDeleteForm">Удалить</b-button>
+                <b-button class="btn-adm"  @click="showAddForm">Добавить</b-button>
+                <b-button class="btn-adm"  @click="showEditForm">Редактировать</b-button>
+                <b-button class="btn-adm"  @click="showDeleteForm">Удалить</b-button>
             </div>
             <div id="forms">
                 <AddModal :is-visible="isAddFormVisible" @close="closeAddForm" />

@@ -11,54 +11,47 @@
                       <div class="card-header">
                         <h4 class="card-heading">{{ posts.name }}</h4>
                       </div>
-                      <p class="mb-3">Ответственный за организацию: {{ posts.leader.surname }} {{posts.leader.name}} {{posts.leader.otch}}</p>
+                      <p class="mb-3">Ответственный за организацию: </p>
+                      <p class="mb-3">{{ posts.leader.surname }} {{posts.leader.name}} {{posts.leader.otch}}</p>
                       <p class="mb-3">Описание: {{ posts.description }}</p>
-                      <b-button variant="primary"class="btn-click" @click="createProject">Создать проект</b-button>
+                      <b-button variant="primary"class="btn-create-proj" @click="createProject">Создать проект</b-button>
                     </div> 
                   </div>
-                    <div class="col-lg-4">
-                    <form class="card mb-4">
-                        <div class="card-header">
-                        <h4 class="card-heading">Список сотрудников</h4>
-                        </div>
-                        <div class="card-body">
+                  <div class="col-lg-8">
+                    <div class="row">
+                      <div class="title-list">
+                        <b-button variant="primary" class="btn-org" @click="showProjects">Проекты</b-button>
+                        <b-button variant="primary" class="btn-org" @click="showEmployees">Участники</b-button>
+                        <b-button variant="primary" class="btn-org" @click="showLeaders">Лидеры организации</b-button>
+                      </div>
+                      <div v-if="currentTab === 'projects'">
+                        <h4 class="part-name">Список дейтсвующих проектов</h4>
                         <div class="col">
-                            <div class="mb-4">
-                            <div class="col-md-13">
-                                <label class="form-label-org">Сотрудник 1</label>
-                                
-                                <button class="btn btn-primary" type="primary">></button>
-                            </div>
-                            </div>
-                            <div class="mb-4">
-                            <div class="col-md-13">
-                                <label class="form-label-org">Сотрудник 2</label>
-                                <button class="btn btn-primary" type="primary">></button>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </form>
-                    </div>
-                    <div class="col-lg-4">
-                    <form class="card mb-4">
-                        <div class="card-header">
-                        <h4 class="card-heading">Действующие прокеты</h4>
-                        </div>
-                        <div class="card-body">
-                        <div class="col">
-                          <div class="mb-4">
-                            <div class="col-md-5">
-                              <OrgProjectsList :projects="projects" />
-                            </div>
+                          <div class="inf-org">
+                            <OrgProjectsList :projects="projects" />
                           </div>
+                        </div>
+                      </div>
+                      <div v-else-if="currentTab === 'employees'">
+                        <h4 class="part-name">Список сотрудников</h4>
+                        <div class="col">
+                          <div class="inf-org">
+                            <p class="mb-3">{{ posts.leader.surname }} {{posts.leader.name}} {{posts.leader.otch}}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div v-else-if="currentTab === 'leaders'">
+                        <h4 class="part-name">Список лидеров организации</h4>
+                        <div class="col">
+                          <div class="inf-org">
+                            <p class="mb-3">{{ posts.leader.surname }} {{posts.leader.name}} {{posts.leader.otch}}</p>
                             
+                          </div>
                         </div>
-                        </div>
-                    </form>
+                      </div>
                     </div>
+                  </div>
                 </div>
-                
               </section>
         </div>
     </div>
@@ -78,6 +71,7 @@ export default {
   },
   data() {
     return {
+      currentTab: 'projects',
       posts: [],
       projects: []
     }
@@ -113,8 +107,21 @@ export default {
         console.log(this.projects)
       })
     },
+
     createProject() {
       router.push("/project/create");
+    },
+
+    showProjects() {
+      this.currentTab = 'projects';
+    },
+
+    showEmployees() {
+      this.currentTab = 'employees';
+    },
+
+    showLeaders() {
+      this.currentTab = 'leaders';
     }
   }
 }
@@ -126,11 +133,16 @@ export default {
 }
 .card-header {
   position: relative;
-  padding: 2rem 2rem;
+  padding: 2%;
   border-bottom: none;
   background-color: white;
   box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 8%);
   z-index: 2;
+}
+.card-heading {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 5px;
 }
 .card {
   position: relative;
@@ -183,36 +195,7 @@ a {
   text-decoration: underline;
   cursor: pointer;
 }
-.card-profile-img {
-  position: relative;
-  max-width: 8rem;
-  margin-top: -6rem;
-  margin-bottom: 1rem;
-  border: 3px solid #fff;
-  border-radius: 100%;
-  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
-  z-index: 2;
-}
-img, svg {
-  vertical-align: middle;
-}
-.avatar.avatar-lg {
-  width: 5rem;
-  height: 5rem;
-  line-height: 5rem;
-}
-.avatar {
-  display: inline-block;
-  position: relative;
-  width: 3rem;
-  height: 3rem;
-  text-align: center;
-  border: #dee2e6;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
-  line-height: 3rem;
-}
+
 .form-control
 {
   color: #343a40;
@@ -221,6 +204,8 @@ img, svg {
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-weight: 300;
+  padding-top:20px;
+  padding-bottom: 20px;
 }
 
 .card-profile .card-header {
@@ -239,17 +224,43 @@ img, svg {
   padding-top: 10px;
   padding-bottom: 10px;
 }
-.btn {
+.btn-create-proj {
   background-color: lightpink !important;
   border-color: lightpink !important;
+  margin-left: 15px!important;
+  margin-right: 15px!important;
+  margin-top: 5px;
+  margin-bottom: 15px;
 }
-.btn.btn-primary{
-  margin-top: 14px;
-  margin-bottom: 14px;
-  margin-left: 7px;
+.btn-org{
+  background-color: #fff !important;
+  border: none!important;
+  margin-left: 50px!important;
+  margin-right: 50px!important;
+  margin-top: 0;
+  color: black !important;
+  font-size: 18px !important; 
+}
 
-}
 .mb-3{
-  margin: 15px;
+  margin-top: 15px;
+  margin-left:17px;
+}
+
+.title-list{
+  display: flex; 
+  justify-content: center;
+  padding: 0 !important;
+  
+}
+.part-name{
+  display: flex; 
+  justify-content: center;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+.inf-org{
+  display: flex; 
+  justify-content: center;
 }
 </style>

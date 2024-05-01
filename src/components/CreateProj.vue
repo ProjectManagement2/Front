@@ -95,9 +95,6 @@ import router from '@/router/index.js';
     text-decoration: none;
     color:rgb(167, 80, 124);
   } 
-  button{
-    background-color: lightpink;
-    font-size: 15px;
-  } 
+  
   
 </style>

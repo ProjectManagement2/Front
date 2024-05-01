@@ -161,7 +161,7 @@
     background-position: center center;
     background-size: cover;
   }
-  .btn.btn-primary, .btn-click{
+  .btn-click{
     margin-top: 14px;
     margin-bottom: 14px;
     margin-left: 4px;

@@ -224,16 +224,7 @@ img, svg {
   padding-top: 10px;
   padding-bottom: 10px;
 }
-.btn {
-  background-color: lightpink !important;
-  border-color: lightpink !important;
-}
-.btn.btn-primary{
-  margin-top: 14px;
-  margin-bottom: 14px;
-  margin-left: 7px;
 
-}
 .mb-3{
   margin: 15px;
 }

@@ -31,7 +31,7 @@
       list-style-type: none;
       margin: 10px;
       padding: 5px;
-      width: 180px;
+      width: 380px;
       color:black;
       text-align: center;
       text-decoration: none;
