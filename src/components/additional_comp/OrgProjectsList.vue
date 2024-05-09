@@ -20,7 +20,7 @@
 <style>
   ul{
     margin-left: 0;
-    padding-left: 0;
+    padding-left: 0 !important;
   }
 </style>
   

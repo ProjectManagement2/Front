@@ -14,7 +14,7 @@
                       <p class="mb-3">Ответственный за организацию: </p>
                       <p class="mb-3">{{ posts.leader.surname }} {{posts.leader.name}} {{posts.leader.otch}}</p>
                       <p class="mb-3">Описание: {{ posts.description }}</p>
-                      <b-button variant="primary"class="btn-create-proj" @click="createProject">Создать проект</b-button>
+                      
                     </div> 
                   </div>
                   <div class="col-lg-8">
@@ -29,6 +29,11 @@
                         <div class="col">
                           <div class="inf-org">
                             <OrgProjectsList :projects="projects" />
+                            
+                          </div>
+                          <div class="inf-org">
+                            <b-button variant="primary"class="btn-create-proj" @click="createProject">Создать проект</b-button>
+                            <b-button variant="primary"class="btn-create-proj" >Редактировать проект</b-button>
                           </div>
                         </div>
                       </div>
@@ -36,7 +41,12 @@
                         <h4 class="part-name">Список сотрудников</h4>
                         <div class="col">
                           <div class="inf-org">
-                            <p class="mb-3">{{ posts.leader.surname }} {{posts.leader.name}} {{posts.leader.otch}}</p>
+                            <ul>
+                              <li v-for="employee in employees" :key="employee.id">{{ employee.surname }} {{ employee.name }} {{ employee.otch }}</li>
+                            </ul>
+                          </div>
+                          <div class="inf-org">
+                            <b-button variant="primary"class="btn-create-proj" >Добавить сотрудника</b-button>
                           </div>
                         </div>
                       </div>
@@ -46,6 +56,9 @@
                           <div class="inf-org">
                             <p class="mb-3">{{ posts.leader.surname }} {{posts.leader.name}} {{posts.leader.otch}}</p>
                             
+                          </div>
+                          <div class="inf-org">
+                            <b-button variant="primary"class="btn-create-proj" >Добавить лидера</b-button>
                           </div>
                         </div>
                       </div>
@@ -73,7 +86,8 @@ export default {
     return {
       currentTab: 'projects',
       posts: [],
-      projects: []
+      projects: [],
+      employees: []
     }
   },
   
@@ -89,10 +103,24 @@ export default {
         this.posts = response.data
         console.log(this.posts)
       }),
-    this.getProjs()
+    this.getProjs(),
+    this.getEmpl()
   },
 
   methods: {
+    getEmpl() {
+      axios
+      .get('/api/organization/getMembers', {
+        headers: {
+          'authorization': `Bearer ${localStorage.access_token}`,
+          'organizationId': localStorage.org_id
+        }
+      })
+      .then((response) => {
+        this.employees = response.data
+        console.log(this.employees)
+      })
+    },
     
     getProjs() {
       axios

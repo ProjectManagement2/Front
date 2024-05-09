@@ -14,6 +14,14 @@
                 <label for="description">Описание проекта:</label>
                 <b-input v-model="form.description" type="text" id="description" placeholder="Расскажите о проекте"></b-input>
               </div>
+              <div class="row form-group">
+                <label>Выберете ответственного за организацию:</label>
+                <select v-model="form.projectLeaderId" @change="selectUser">
+                  <option v-for="user in users" :key="user._id" :value="user._id">
+                    {{ user.surname }} {{ user.name }} {{ user.otch }}
+                  </option>
+                </select>
+              </div>
               <b-button variant="primary" type="submit" >Создать</b-button>
             </b-form>
         </div>
@@ -33,17 +41,35 @@ import router from '@/router/index.js';
         form: {
           name: "",
           description: "",
-          initiator: "",
+          projectLeaderId: null,
         }
       };
     },
-    
+    mounted() {
+      this.getUsers();
+    },
     methods: {
+      getUsers(){
+        axios
+          .get('/api/organization/getMembers', {
+            headers: {
+              'authorization': `Bearer ${localStorage.access_token}`,
+              'organizationId': localStorage.org_id
+            }
+          })
+          .then((response) => {
+            this.users = response.data
+          });
+      },
+
+      selectUser() {
+        console.log('Выбран пользователь с ID:', this.form.projectLeaderId);
+      },
       create() { 
           let data = {
               name: this.form.name,
               description: this.form.description,
-              initiator: this.form.initiator
+              projectLeaderId: this.form.projectLeaderId
           };
           axios.post("/api/organization/createProject", data, {
                 headers: {

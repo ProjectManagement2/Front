@@ -10,7 +10,7 @@
       <router-link class="label1" to="/project/create">Proj</router-link>
       <router-link class="label1" to="/organization/page">Org</router-link>
     </header>
-    <div class="container-fluid my-5">
+    <div class="container-fluid ">
       <router-view></router-view>
     </div>
   </div>

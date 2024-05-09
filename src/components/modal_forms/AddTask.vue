@@ -1,28 +1,39 @@
 <template>
     <div v-if="localIsVisible" id="add" class="w-75 mx-auto border p-3 rounded">
-      <b-form @submit.prevent="addOrg">
-        <h3 class="name-form">Добавление организаций</h3>
+      <b-form @submit.prevent="addTask">
+        <h3 class="name-form">Добавление задачи</h3>
         <div class="row">
           <div class="col">
             <div class="form-group">
-              <label for="name">Организация:</label>
-              <b-input v-model="form.name" type="text" id="name" placeholder="Название организации"></b-input>
+              <label for="name">Название:</label>
+              <b-input v-model="form.name" type="text" id="name" placeholder="Название задачи"></b-input>
             </div>
             <div class="form-group">
               <label for="description">Описание:</label>
-              <b-input v-model="form.description" type="text" id="description" placeholder="Расскажите об организации"></b-input>
+              <b-input v-model="form.description" type="text" id="description" placeholder="Расскажите о задаче"></b-input>
+            </div>
+            <div class="form-group">
+              <label for="deadline">Дедлайн:</label>
+              <b-input v-model="form.deadline" type="date" id="deadline" placeholder="Дата завершения задачи: 01.01.2000"></b-input>
             </div>
           </div>
           <div class="col">
+            <div class="form-group">
+              <label for="checkbox">Важная задача:</label>
+              <input type="checkbox" id="isImportant" v-model="form.isImportant"></input>
+            </div>
+            <div class="form-group">
+              <label for="tags">Тэги (разделяйте запятыми):</label>
+              <b-input type="text" id="tags" v-model="form.tags"></b-input>
+            </div>
             <div class="row form-group">
               <label>Выберете ответственного за организацию:</label>
-              <select v-model="form.leaderId" @change="selectUser">
+              <select v-model="form.worker" @change="selectUser">
                 <option v-for="user in users" :key="user._id" :value="user._id">
                   {{ user.surname }} {{ user.name }} {{ user.otch }}
                 </option>
               </select>
             </div>
-            
           </div>
         </div>
         <b-button variant="primary" type="submit">Добавить</b-button>
@@ -41,7 +52,10 @@
         form: {
             name: "",
             description: "",
-            leaderId: null,
+            deadline: "",
+            isImportant: false,
+            tags: '',
+            worker: ''
         }
       };
     },
@@ -51,9 +65,10 @@
     methods: {
       getUsers(){
         axios
-          .get('/api/admin/getUsers', {
+          .get('/api/organization/getMembers', {
             headers: {
-              'authorization': `Bearer ${localStorage.access_token}`
+              'authorization': `Bearer ${localStorage.access_token}`,
+              'organizationId': localStorage.org_id
             }
           })
           .then((response) => {
@@ -62,31 +77,36 @@
       },
 
       selectUser() {
-        console.log('Выбран пользователь с ID:', this.form.leaderId);
+        console.log('Выбран пользователь с ID:', this.form.worker);
       },
 
-      addOrg() {
+      addTask() {
         let data = {    
           name: this.form.name,    
           description: this.form.description,
-          leaderId: this.form.leaderId    
+          deadline: this.form.deadline,
+          isImportant: this.form.isImportant,
+          tags: this.form.tags,
+          worker: this.form.worker    
         };
-        if (this.form.leaderId){
+        if (this.form.worker){
           axios
-          .post("/api/admin/createOrganization", data , {
+          .post("/api/project/createTask", data , {
             headers: {
-              'authorization': `Bearer ${localStorage.access_token}`
+              'authorization': `Bearer ${localStorage.access_token}`,
+              'projectid': localStorage.proj_id,
+              'stageid': localStorage.stage_id
             }
-          })    //POST-запрос на эндпоинт /api/login с данными, содержащими электронную почту и пароль
+          })    
           .then(() => {    
-            console.log("New org is created");    
-            window.location.reload();   
+            console.log("New task is created");    
+               
           })    
           .catch((errors) => {    
             console.log(errors);    
           }); 
         } else {
-          console.warn('Ответственный за организацию не выбран');
+          console.warn('Исполнитель не выбран');
         }
       },
       closeForm() {

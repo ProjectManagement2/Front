@@ -16,51 +16,64 @@
                       
                     </div> 
                   </div>
-                    <!-- <div class="col-lg-4">
-                    <form class="card mb-4">
-                        <div class="card-header">
-                        <h4 class="card-heading">Список сотрудников</h4>
-                        </div>
-                        <div class="card-body">
+                  <div class="col-lg-8">
+                    <div class="row">
+                      <div class="title-list">
+                        <b-button variant="primary" class="btn-proj" @click="showStages">Этапы и задачи</b-button>
+                        <b-button variant="primary" class="btn-proj" @click="showEmployees">Участники</b-button>
+                        <b-button variant="primary" class="btn-proj" @click="showLeaders">Руководители проекта</b-button>
+                        <b-button variant="primary" class="btn-proj" @click="showCalendar">Календарь</b-button>
+                        <b-button variant="primary" class="btn-proj" @click="showChat">Чат</b-button>
+                      </div>
+                      <div v-if="currentTab === 'stage'">
                         <div class="col">
-                            <div class="mb-4">
-                            <div class="col-md-13">
-                                <label class="form-label-org">Сотрудник 1</label>
-                                
-                                <button class="btn btn-primary" type="primary">></button>
-                            </div>
-                            </div>
-                            <div class="mb-4">
-                            <div class="col-md-13">
-                                <label class="form-label-org">Сотрудник 2</label>
-                                <button class="btn btn-primary" type="primary">></button>
-                            </div>
-                            </div>
+                          <div class="inf-proj">
+                            <StagesList :stages="stages" />
+                          </div>
                         </div>
+                      </div>
+                      <div v-else-if="currentTab === 'employees'">
+                        <h4 class="part-name">Список сотрудников</h4>
+                        <div class="col">
+                          <div class="inf-proj">
+                            <ul>
+                              <li v-for="employee in employees" :key="employee.id">{{ employee.surname }} {{ employee.name }} {{ employee.otch }}</li>
+                            </ul>
+                          </div>
                         </div>
-                    </form>
+                      </div>
+                      <div v-else-if="currentTab === 'leaders'">
+                        <h4 class="part-name">Список руководителей</h4>
+                        <div class="col">
+                          <div class="inf-proj">
+                            <p class="mb-3">{{ posts.leader.surname }} {{posts.leader.name}} {{posts.leader.otch}}</p>
+                            
+                          </div>
+                          <div class="inf-proj">
+                            <b-button variant="primary"class="btn-create-proj" >Добавить руководителя</b-button>
+                          </div>
+                        </div>
+                      </div>
+                      <div v-else-if="currentTab === 'calendar'">
+                        <h4 class="part-name">Календарь задач</h4>
+                        <div class="col">
+                          <div class="inf-proj">
+                            
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div v-else-if="currentTab === 'chat'">
+                        <h4 class="part-name">Чат проекта</h4>
+                        <div class="col">
+                          <div class="inf-proj">
+                            
+                            
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-lg-4">
-                    <form class="card mb-4">
-                        <div class="card-header">
-                        <h4 class="card-heading">Действующие прокеты</h4>
-                        </div>
-                        <div class="card-body">
-                        <div class="col">
-                            <div class="mb-4">
-                            <div class="col-md-5">
-                                <label class="form-label-org">Проект 1</label>
-                            </div>
-                            </div>
-                            <div class="mb-4">
-                            <div class="col-md-5">
-                                <label class="form-label-org">Проект 2</label>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </form>
-                    </div> -->
+                  </div>  
                 </div>
                 
               </section>
@@ -73,13 +86,18 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
 import router from '@/router/index.js';
+import StagesList from "./additional_comp/StagesList.vue";
 
 export default {
   name: "ProjectPage",
-  
+  components: {
+    StagesList
+  },
   data() {
     return {
-      posts: []
+      currentTab: 'stage',
+      posts: [],
+      stages:[]
     }
   },
   
@@ -94,13 +112,47 @@ export default {
       .then((response) => {
         this.posts = response.data
         console.log(this.posts)
-      })
+      }),
+    this.getStages()
   },
 
   methods: {
+    getStages(){
+      axios
+      .get('/api/project/getAllStages', {
+        headers: {
+          'authorization': `Bearer ${localStorage.access_token}`,
+          'projectid': localStorage.proj_id
+        }
+      })
+      .then((response) => {
+        this.stages = response.data
+        console.log(this.stages)
+      })
+    },
     createProject() {
       router.push("/project/create");
-    }
+    },
+
+    showStages() {
+      this.currentTab = 'stage';
+    },
+
+    showEmployees() {
+      this.currentTab = 'employees';
+    },
+
+    showLeaders() {
+      this.currentTab = 'leaders';
+    },
+
+    showCalendar() {
+      this.currentTab = 'calendar';
+    },
+
+    showChat() {
+      this.currentTab = 'chat';
+    },
   }
 }
 </script>
@@ -227,5 +279,30 @@ img, svg {
 
 .mb-3{
   margin: 15px;
+}
+.btn-proj{
+  background-color: #fff !important;
+  border: none!important;
+  margin-left: 40px!important;
+  margin-right: 40px!important;
+  margin-top: 0;
+  color: black !important;
+  font-size: 18px !important; 
+}
+.title-list{
+  display: flex; 
+  justify-content: center;
+  padding: 0 !important;
+  
+}
+.part-name{
+  display: flex; 
+  justify-content: center;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+.inf-proj{
+  display: flex; 
+  justify-content: center;
 }
 </style>
