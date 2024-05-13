@@ -48,18 +48,20 @@
   margin-top: 50px !important;
   margin-bottom: 30px;
   display: flex;
-  border: 1px solid rgb(158, 158, 158);
+  justify-content: space-between;
   border-radius: 10px;
+  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.1);
   padding-top: 10px;
   padding-bottom: 10px;
-
+  
+  
 }
 .stg-title{
   margin-left: 45% !important;
   margin-top: 1%;
 }
 .btn-create-stage{
-  left: 30%;
+  
   margin-bottom: 0.5%;
   margin-top: 0.5%;
   background-color: lightpink !important;

@@ -272,6 +272,7 @@ img, svg {
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-weight: 300;
+  font-size:31px;
 }
 
 .card-profile .card-header {
@@ -295,10 +296,11 @@ img, svg {
   margin: 15px;
 }
 .btn-proj{
+  
   background-color: #fff !important;
   border: none!important;
-  margin-left: 40px!important;
-  margin-right: 40px!important;
+  margin-left: 5%!important;
+  margin-right: 5%!important;
   margin-top: 0;
   color: black !important;
   font-size: 18px !important; 
@@ -306,8 +308,9 @@ img, svg {
 .title-list{
   display: flex; 
   justify-content: center;
+  position: relative;
   padding: 0 !important;
-  
+  width: 95%;
 }
 .part-name{
   display: flex; 
@@ -318,5 +321,6 @@ img, svg {
 .inf-proj{
   display: flex; 
   justify-content: center;
+  width: 100%;
 }
 </style>

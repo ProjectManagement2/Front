@@ -2,7 +2,7 @@
     <div class="chat-container">
       <div class="messages-container" ref="messagesContainer">
         <div v-for="(message, index) in messages" :key="index" class="message">
-          <span class="sender">{{ message.author.surname }} {{ message.author.name }}:</span>
+          <span class="sender">{{ message.author.surname }} {{ message.author.name }}</span>
           <span class="text">{{ message.text }}</span>
         </div>
       </div>
@@ -93,6 +93,17 @@
   
   .message {
     margin-bottom: 10px;
+    margin-left: 5px;
+    padding: 8px;
+    margin-bottom: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 35%;
+    font-size: small;
   }
   
   .sender {
@@ -108,7 +119,7 @@
     flex-grow: 1;
     margin-right: 10px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 5px;

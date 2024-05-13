@@ -5,10 +5,13 @@
                 <h6 class="stg-name">Этап: {{ stage.name }}</h6>
                 <h6 class="stg-descr">Описание: {{ stage.description }}</h6>
             </div>
-            <b-button variant="primary" class="btn-create-task" @click="showAddTask">Добавить задачу</b-button>
-            <button class="btn-open-stage" @click="showTasks">
-                <img src="@/assets/arrow-icon.png" alt="Показать задачи">
-            </button>
+            <div class="stage-buttons">
+                <b-button variant="primary" class="btn-create-task" @click="showAddTask">Добавить задачу</b-button>
+                <button class="btn-open-stage" @click="showTasks">
+                    <img src="@/assets/arrow-icon.png" alt="Показать задачи">
+                </button>
+            </div>
+            
         </div>
         <div>
             <TasksInf :is-visible="isTasksVisible" @click="showTasks"/>
@@ -56,12 +59,15 @@
 
 <style>
 .stg-elem{
-    border: 1px solid rgb(184, 184, 184);
+    border: 1px solid rgb(227, 227, 227);
     border-radius: 10px;
     display: flex;
+    justify-content: space-between;
     size: 90%;
 }
-
+.stage-buttons{
+    display: flex;
+}
 .stg-name{
     margin-top: 10px;
     margin-left: 15px;
@@ -73,16 +79,17 @@
 }
 .btn-create-task{
     display: flex;
+    
     margin-top: 15px;
     margin-bottom: 15px;
     background-color: lightpink !important;
     border-color: lightpink !important;
-    left: 29%;
+    
 }
 .btn-open-stage{
     background-color: transparent;
     border: none;
-    left: 29%;
+    
     display: flex;
     margin-top: 15px;
     margin-bottom: 15px;
