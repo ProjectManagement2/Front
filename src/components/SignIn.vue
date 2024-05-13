@@ -40,7 +40,7 @@ import router from '@/router/index.js';
           };
           axios.post("/api/auth/login", data) // POST-запрос на эндпоинт /api/login с данными
               .then((response) => {
-                  localStorage.access_token = response.data.token; // заменен access_token на token
+                  localStorage.access_token = response.data.token; 
                   console.log("Logged in");
                   router.push("/user/profile");
               })

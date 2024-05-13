@@ -67,8 +67,7 @@
                         <h4 class="part-name">Чат проекта</h4>
                         <div class="col">
                           <div class="inf-proj">
-                            
-                            
+                            <ProjectChat />
                           </div>
                         </div>
                       </div>
@@ -87,17 +86,20 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
 import router from '@/router/index.js';
 import StagesList from "./additional_comp/StagesList.vue";
+import ProjectChat from "./additional_comp/ProjectChat.vue";
 
 export default {
   name: "ProjectPage",
   components: {
-    StagesList
+    StagesList,
+    ProjectChat
   },
   data() {
     return {
       currentTab: 'stage',
       posts: [],
-      stages:[]
+      stages:[],
+      employees: []
     }
   },
   
@@ -113,7 +115,8 @@ export default {
         this.posts = response.data
         console.log(this.posts)
       }),
-    this.getStages()
+    this.getStages();
+    this.getEmpl();
   },
 
   methods: {
@@ -130,8 +133,19 @@ export default {
         console.log(this.stages)
       })
     },
-    createProject() {
-      router.push("/project/create");
+
+    getEmpl() {
+      axios
+      .get('/api/organization/getMembers', {
+        headers: {
+          'authorization': `Bearer ${localStorage.access_token}`,
+          'organizationId': localStorage.org_id
+        }
+      })
+      .then((response) => {
+        this.employees = response.data
+        console.log(this.employees)
+      })
     },
 
     showStages() {

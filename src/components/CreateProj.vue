@@ -80,7 +80,7 @@ import router from '@/router/index.js';
                 .then(() => {  
                     
                     console.log("Project created successfully")    
-                    router.push("/project/page")     
+                    router.push("/organization/:id")     
                 })    
                 .catch((errors) => {    
                     console.log(errors)    

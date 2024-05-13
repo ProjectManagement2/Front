@@ -16,12 +16,13 @@
               <label for="deadline">Дедлайн:</label>
               <b-input v-model="form.deadline" type="date" id="deadline" placeholder="Дата завершения задачи: 01.01.2000"></b-input>
             </div>
-          </div>
-          <div class="col">
             <div class="form-group">
               <label for="checkbox">Важная задача:</label>
               <input type="checkbox" id="isImportant" v-model="form.isImportant"></input>
             </div>
+          </div>
+          <div class="col">
+            
             <div class="form-group">
               <label for="tags">Тэги (разделяйте запятыми):</label>
               <b-input type="text" id="tags" v-model="form.tags"></b-input>
@@ -33,6 +34,10 @@
                   {{ user.surname }} {{ user.name }} {{ user.otch }}
                 </option>
               </select>
+            </div>
+            <div class="form-group">
+              <label for="file">Прикрепить файл:</label>
+              <input type="file" id="file" ref="fileInput" accept=".jpg, .jpeg, .png, .pdf" multiple>
             </div>
           </div>
         </div>
@@ -81,34 +86,47 @@
       },
 
       addTask() {
-        let data = {    
-          name: this.form.name,    
-          description: this.form.description,
-          deadline: this.form.deadline,
-          isImportant: this.form.isImportant,
-          tags: this.form.tags,
-          worker: this.form.worker    
-        };
+        // Создаем объект FormData для передачи данных формы, включая файлы
+        let formData = new FormData();
+        
+        // Добавляем остальные данные задачи к formData
+        formData.append('name', this.form.name);
+        formData.append('description', this.form.description);
+        formData.append('deadline', this.form.deadline);
+        formData.append('isImportant', this.form.isImportant);
+        formData.append('tags', this.form.tags);
+        formData.append('worker', this.form.worker);
+
+        // Добавляем выбранные файлы к formData
+        if (this.$refs.fileInput.files.length > 0) {
+          for (let i = 0; i < this.$refs.fileInput.files.length; i++) {
+            let file = this.$refs.fileInput.files[i];
+            formData.append('files[]', file);
+          }
+        }
+
+        // Отправляем данные на сервер
         if (this.form.worker){
           axios
-          .post("/api/project/createTask", data , {
-            headers: {
-              'authorization': `Bearer ${localStorage.access_token}`,
-              'projectid': localStorage.proj_id,
-              'stageid': localStorage.stage_id
-            }
-          })    
-          .then(() => {    
-            console.log("New task is created");    
-               
-          })    
-          .catch((errors) => {    
-            console.log(errors);    
-          }); 
+            .post("/api/project/createTask", formData , {
+              headers: {
+                'Content-Type': 'multipart/form-data', // Устанавливаем Content-Type как multipart/form-data для передачи файлов
+                'authorization': `Bearer ${localStorage.access_token}`,
+                'projectid': localStorage.proj_id,
+                'stageid': localStorage.stage_id
+              }
+            })    
+            .then(() => {    
+              console.log("New task is created");    
+            })    
+            .catch((errors) => {    
+              console.log(errors);    
+            }); 
         } else {
           console.warn('Исполнитель не выбран');
         }
       },
+
       closeForm() {
         this.$emit('close');
       }
@@ -149,7 +167,7 @@
     margin-top: 5px;
     margin-right: 5px;
   }
-  #organization, #description, #name, #otch{
+  #name, #description, #deadline, #checkbox, #tags, #file{
     margin-bottom: 5px;
     font-size: 13px ; 
   }
