@@ -14,7 +14,7 @@
             
         </div>
         <div>
-            <TasksInf :is-visible="isTasksVisible" @click="showTasks"/>
+            <TasksList :tasks="tasks" :is-visible="isTasksVisible" />
             <AddTask :is-visible="isAddTaskVisible" @close="closeAddTask" />
         </div>
     </div>
@@ -23,22 +23,25 @@
 
 <script> 
  import "bootstrap/dist/css/bootstrap.min.css";
+ import axios from 'axios';
  import AddTask from "../modal_forms/AddTask.vue";
- import TasksInf from "./TasksInf.vue";
+ import TasksList from "./TasksList.vue";
   export default {
     props: ['stage'],
     components: {
         AddTask,
-        TasksInf
+        TasksList
     },
     data() {
         return {
             isAddTaskVisible: false,
-            isTasksVisible: false
+            isTasksVisible: false,
+            tasks: []
         }  
     },
     mounted() {
         this.getStageId();
+        
     },
     methods: {
         showAddTask() {
@@ -48,11 +51,26 @@
             this.isAddTaskVisible = false;
         },
         showTasks(){
-            this.isTasksVisible = !this.isTasksVisible;
+            this.isTasksVisible = true;
+            if (this.isTasksVisible) {
+                this.getTasks();
+            }
         },
         getStageId() {
             localStorage.stage_id = this.stage._id;
-        }
+        },
+        getTasks(){
+            axios
+            .get('/api/project/getAllTasks', {
+                headers: {
+                'authorization': `Bearer ${localStorage.access_token}`,
+                'stageid': localStorage.stage_id
+                }
+            })
+            .then((response) => {
+                this.tasks = response.data
+            });
+        },
     }
   };
 </script>

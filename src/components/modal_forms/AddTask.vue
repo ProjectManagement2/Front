@@ -101,7 +101,7 @@
         if (this.$refs.fileInput.files.length > 0) {
           for (let i = 0; i < this.$refs.fileInput.files.length; i++) {
             let file = this.$refs.fileInput.files[i];
-            formData.append('files[]', file);
+            formData.append('files', file);
           }
         }
 
