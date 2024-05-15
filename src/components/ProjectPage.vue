@@ -58,7 +58,7 @@
                         <h4 class="part-name">Календарь задач</h4>
                         <div class="col">
                           <div class="inf-proj">
-                            
+                            <TaskCalendar />
                             
                           </div>
                         </div>
@@ -87,12 +87,14 @@ import axios from 'axios';
 import router from '@/router/index.js';
 import StagesList from "./additional_comp/StagesList.vue";
 import ProjectChat from "./additional_comp/ProjectChat.vue";
+import TaskCalendar from "./additional_comp/TaskCalendar.vue";
 
 export default {
   name: "ProjectPage",
   components: {
     StagesList,
-    ProjectChat
+    ProjectChat,
+    TaskCalendar
   },
   data() {
     return {
@@ -321,6 +323,7 @@ img, svg {
 .inf-proj{
   display: flex; 
   justify-content: center;
-  width: 100%;
+  width: 100% !important;
 }
+
 </style>
