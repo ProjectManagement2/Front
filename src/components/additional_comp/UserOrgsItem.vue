@@ -1,7 +1,7 @@
 <template>
   <div class="list-col">
     <li @click="goToOrganizationPage">{{ organization.name }}</li>
-    <button class="btn btn-primary" type="primary">></button>
+    
   </div>
 </template>
   

@@ -1,38 +1,21 @@
 <template>
   <div id="app">
-    <MenuSide :is-visible="isMenuOpen" @close="toggleMenu" />
     <title>Project System</title>
-    <header>
-      <button @click="toggleMenu">
-        <img src="@/assets/menu-icon.png" alt="Меню">
-      </button>
-      <router-link class="label" to="/signin">вход</router-link>
-      <router-link class="label" to="/signup">регистрация</router-link>
-    </header>
+    <Header />
     <div class="container-fluid ">
-      
       <router-view></router-view>
     </div>
   </div>
  </template>
 
  <script>
- import MenuSide from './components/additional_comp/Menu.vue';
+import Header from './components/additional_comp/Header.vue';
  export default {
   name: 'App',
   components: {
-    MenuSide
-  },
-  data() {
-    return {
-      isMenuOpen: false
-    };
-  },
-  methods: {
-    toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen;
-    }
+    Header
   }
+  
  };
  </script>
 

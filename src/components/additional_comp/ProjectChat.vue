@@ -82,7 +82,7 @@
     border-radius: 2%;
     box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 15%);
     padding: 10px;
-    background-color: #ecd9d93e;
+    background-color: rgba(168, 205, 234, 0.34);
   }
   
   .messages-container {

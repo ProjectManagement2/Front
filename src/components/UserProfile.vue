@@ -8,12 +8,12 @@
               <div class="row">
                 <div class="col-lg-4">
                   <div class="card card-profile mb-4">
-                    <div class="card-header" style="background-color: lightpink;"> </div>
+                    <div class="card-header" style="background-color: rgb(168, 205, 234);"> </div>
                     <div class="card-body text-center"><img class="card-profile-img" src="https://i.pinimg.com/originals/e3/41/40/e34140dc81a93041f8ae93e6b87b3c6c.jpg" alt="Jassa Rich">
                       <h3 class="mb-3">{{ posts.name }} {{ posts.surname }}</h3>
                       <p class="mb-3">Дата рождения: {{ posts.date }}г.</p>
                       <p class="mb-3">Почта: {{ posts.email }}</p>
-                      <b-button class="btn-prof"  @click="showEditProfile">Редактировать</b-button>
+                      <b-button class="btn-profile"  @click="showEditProfile">Редактировать</b-button>
                     </div>
                   </div> 
                 </div>
@@ -157,7 +157,7 @@ body{
   font-family: 'Poppins';
 }
 .text-primary {
-  color: lightpink ;
+  color: rgb(168, 205, 234) ;
 }
 h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
  
@@ -245,9 +245,10 @@ img, svg {
   padding-top: 10px;
   padding-bottom: 10px;
 }
-.btn-prof{
-  background-color: lightpink !important;
-  border-color: lightpink !important;
+.btn-profile{
+  background-color: rgb(168, 205, 234) !important;
+  border-color: rgb(168, 205, 234) !important;
+  color: rgb(67, 67, 67)!important;
 }
 
 </style>

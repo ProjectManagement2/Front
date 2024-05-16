@@ -4,72 +4,85 @@
   </div> 
 </template>
   
-  <script>
-  import FullCalendar from '@fullcalendar/vue';
-  import dayGridPlugin from '@fullcalendar/daygrid';
-  import interactionPlugin from '@fullcalendar/interaction'
-  import axios from 'axios';
-  
-  export default {
-    components: {
-      FullCalendar,
-    },
-    data() {
-      return {
-        calendarOptions: {
-          plugins: [ dayGridPlugin, interactionPlugin ],
-          initialView: 'dayGridMonth',
-          events: [],
-          height: '400px',
-          
-          aspectRatio: 2,
-        },
-        
-      };
-    },
-    mounted() {
-      this.loadTasks();
-    },
-    beforeDestroy() {
-      this.$refs.fullCalendar.destroy();
-    },
-    methods: {
-      formatDate(dateString) {
-        const dateObject = new Date(dateString);
-        const day = dateObject.getDate();
-        const month = dateObject.getMonth() + 1;
-        const year = dateObject.getFullYear();
-        return `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+<script>
+import FullCalendar from '@fullcalendar/vue';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import ruLocale from '@fullcalendar/core/locales/ru'; // Импортируем русскую локализацию
+import axios from 'axios';
+
+export default {
+  components: {
+    FullCalendar,
+  },
+  data() {
+    return {
+      calendarOptions: {
+        plugins: [dayGridPlugin, interactionPlugin],
+        initialView: 'dayGridMonth',
+        events: [],
+        locale: ruLocale, // Устанавливаем русскую локализацию
+        height: 'auto',
+        width: 'auto',
+        aspectRatio: 2,
+        eventContent: this.renderEventContent,
       },
-      loadTasks() {
-        axios
+    };
+  },
+  mounted() {
+    this.loadTasks();
+  },
+  methods: {
+    loadTasks() {
+      axios
         .get('/api/project/getCalendarTasks', {
-            headers: {
-                'authorization': `Bearer ${localStorage.access_token}`,
-                'projectid': localStorage.proj_id
-            }
+          headers: {
+            'authorization': `Bearer ${localStorage.access_token}`,
+            'projectid': localStorage.proj_id
+          }
         })
         .then(response => {
-            this.events = response.data.map(task => ({
-              end: task.deadline,
-              start: task.createdDate, 
-              title: task.name,
-              backgroundColor: 'red',
-              borderColor: 'black',
-            }));
-            console.log(this.events);
+          const events = [];
+          response.data.forEach(task => {
+            events.push({
+              title: `${task.name}`,
+              start: task.createdDate.split('T')[0],
+              end: task.deadline.split('T')[0],
+            });
+          });
+
+          this.calendarOptions.events = events;
         })
         .catch(error => {
-            console.error('Error loading tasks:', error);
+          console.error('Error loading tasks:', error);
         });
-      },
-      
     },
-  };
-  </script>
+    renderEventContent(eventInfo) {
+      return {
+        html: `<div class="event-content">${eventInfo.event.title}</div>`
+      };
+    },
+  },
+};
+</script>
 
 <style>
-.cld-container{
-  width: 800px;
+.cld-container {
+  overflow: hidden;
+  
+}
+
+.event-content {
+  padding: 5px;
+  background-color: #86b5da;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  cursor: pointer;
+}
+
+.event-content:hover {
+  background-color: #1565C0;
 }
 </style>

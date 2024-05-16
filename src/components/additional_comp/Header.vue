@@ -1,21 +1,42 @@
 <template>
+  <div>
+    <MenuSide :is-visible="isMenuOpen" @close="toggleMenu" />
     <header>
       <template v-if="isHomePage">
         <router-link class="label" to="/signin">вход</router-link>
         <router-link class="label" to="/signup">регистрация</router-link>
       </template>
       <template v-else-if="isLoginPage || isRegisterPage">
-        <router-link to="/">На главную</router-link>
+        <router-link class="label" to="/">На главную</router-link>
+        
       </template>
       <template v-else>
-        <router-link to="/">На главную</router-link>
-        <!-- Другие общие кнопки -->
+        <router-link class="label" to="/">На главную</router-link>
+        <button @click="toggleMenu">
+          <img src="@/assets/menu-icon.png" alt="Меню">
+        </button>
       </template>
     </header>
+  </div>
+  
 </template>
   
 <script>
+import MenuSide from './Menu.vue';
   export default {
+    components: {
+      MenuSide
+    },
+    data() {
+      return {
+        isMenuOpen: false
+      };
+    },
+    methods: {
+      toggleMenu() {
+        this.isMenuOpen = !this.isMenuOpen;
+      }
+    },
     computed: {
       // Проверка текущего пути, чтобы определить, находится ли пользователь на главной странице
       isHomePage() {

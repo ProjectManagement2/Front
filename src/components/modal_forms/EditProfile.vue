@@ -1,41 +1,50 @@
 <template>
-    <div v-if="localIsVisible" id="add" >
-      <b-form @submit.prevent="editProfile" class="card mb-4">
-        <div class="card-header">
-            <h4 class="card-heading">Редактировать</h4>
-        </div>
-        <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-auto d-flex align-items-center"><img class="avatar avatar-lg p-1" src="https://i.pinimg.com/originals/e3/41/40/e34140dc81a93041f8ae93e6b87b3c6c.jpg" alt="Avatar"></div>
+    <div v-if="localIsVisible" >
+      <div id="add">
+        <b-form @submit.prevent="editProfile"  class="card mb-4">
+          <div class="card-header">
+              <h4 class="card-heading">Редактировать</h4>
+          </div>
+          <div class="card-body">
+              <div class="row mb-3">
                 <div class="col">
-                    <label class="form-label">Имя</label>
-                    <input class="form-control mb-2" placeholder="Имя...">
-                    <label class="form-label">Фамилия</label>
-                    <input class="form-control mb-2" placeholder="Фамилия...">
-                    <label class="form-label">Отчество</label>
-                    <input class="form-control mb-2" placeholder="Отчество...">
+                  <div class="col-auto d-flex align-items-center">
+                    <img class="avatar avatar-lg p-1" src="https://i.pinimg.com/originals/e3/41/40/e34140dc81a93041f8ae93e6b87b3c6c.jpg" alt="Avatar">
+                  </div>
+                  <div class="col">
+                      <label class="form-label">Имя</label>
+                      <input class="form-control mb-2" placeholder="Имя...">
+                      <label class="form-label">Фамилия</label>
+                      <input class="form-control mb-2" placeholder="Фамилия...">
+                      <label class="form-label">Отчество</label>
+                      <input class="form-control mb-2" placeholder="Отчество...">
+                  </div>
                 </div>
-                </div>
-                <div class="mb-3"> 
+                <div class="col">
+                  <div class="mb-3"> 
                     <label class="form-label">О себе</label>
-                    <textarea class="form-control" rows="6">Опишите себя...</textarea>
-                </div>
-                <div class="mb-3"> 
+                    <textarea class="form-control" rows="4">Опишите себя...</textarea>
+                  </div>
+                  <div class="mb-3"> 
                     <label class="form-label">Дата рождения</label>
                     <input class="form-control" placeholder="12.12.2000">
-                </div>
-                <div class="mb-3"> 
+                  </div>
+                  <div class="mb-3"> 
                     <label class="form-label">Почта</label>
                     <input class="form-control" placeholder="email@email.com">
-                </div>
-                <label class="form-label">Пароль</label>
-                <input class="form-control" type="password" value="password">
-            </div>
-            <div class="card-footer text-end">
-                <button variant="primary" class="btn btn-primary">Сохранить</button>
-                <b-button variant="primary"class="btn-click" @click="closeForm">Закрыть</b-button>
-            </div>
-      </b-form>
+                  </div>
+                  <label class="form-label">Пароль</label>
+                  <input class="form-control" type="password" value="password">
+                </div> 
+              </div>  
+          </div>
+          <div class="card-footer text-end">
+            <b-button variant="primary" class="btn-save-editprofile">Сохранить</b-button>
+            <b-button variant="primary"class="btn-close-editprofile" @click="closeForm">Закрыть</b-button>
+          </div>
+        </b-form>
+      </div>
+      <div class="overlay" @click="closeForm"></div>
     </div>
   </template>
   
@@ -44,22 +53,34 @@
     data() {
       return {
         form: {
-            organization: "",
             surname: "",
             name: "",
             otch: "",
+            date: "",
+            email: "",
+            password: ""
         }
       };
     },
     methods: {
       editProfile() {
-        // Ваша логика отправки формы
-        console.log('Отправлено:', this.name);
+        axios
+          .patch("/api/profile/updateUserInfo", form, {
+            headers: {
+              'authorization': `Bearer ${localStorage.access_token}`,
+            }
+          })    
+          .then(() => {    
+            console.log("Данные пользователя обновлены");
+            window.location.reload();    
+          })    
+          .catch((errors) => {    
+            console.log(errors);    
+          }); 
       },
       closeForm() {
-      this.$emit('close');
-    }
-      
+        this.$emit('close');
+      }
     },
     props: {
       isVisible: {
@@ -75,22 +96,48 @@
   };
   </script>
   
-<style>
+<style scoped>
   #add{
-
     font-size: 13px;
+    position: fixed;
+    top: 5%;
+    left: 75%;
+    width: 50%; /* Ширина бокового меню */
+    height: 60%;
+    background-color: white; /* Цвет фона бокового меню */
+    z-index: 1000; /* Позиция по z-index - поверх всего остального контента */
+    transition: transform 0.3s ease; /* Анимация для открытия/закрытия меню */
+    transform: translateX(-100%);
+    border-radius: 1rem;
     
+  }
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Прозрачный чёрный цвет */
+    z-index: 999; /* Позиция по z-index - под боковым меню, но поверх остального контента */
   }
   .name-form{
     font-size: 18px;
     margin: 5px;
     margin-bottom: 15px;
   }
-  .btn{
-    background-color: lightpink;
+  .btn-save-editprofile, .btn-close-editprofile{
+    background-color: rgb(168, 205, 234) !important;
+    border-color: rgb(168, 205, 234) !important;
+    color: white;
+    border: 1px;
+    border-radius: 5px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 7px;
+    padding-right: 7px;
     font-size: 15px;
   } 
-  .form-group, .row.form-group, .btn, .mt-3{
+  .form-group, .row.form-group, .mt-3{
     margin-left:5px;
     margin-top: 5px;
     margin-right: 5px;
@@ -161,9 +208,5 @@
     background-position: center center;
     background-size: cover;
   }
-  .btn-click{
-    margin-top: 14px;
-    margin-bottom: 14px;
-    margin-left: 4px;
-  }
+  
 </style>

@@ -32,8 +32,8 @@
                             
                           </div>
                           <div class="inf-org">
-                            <b-button variant="primary"class="btn-create-proj" @click="createProject">Создать проект</b-button>
-                            <b-button variant="primary"class="btn-create-proj" >Редактировать проект</b-button>
+                            <b-button v-if="access === true" variant="primary"class="btn-create-proj" @click="createProject">Создать проект</b-button>
+                            <b-button v-if="access === true" variant="primary"class="btn-change-proj" >Редактировать проект</b-button>
                           </div>
                         </div>
                       </div>
@@ -46,7 +46,7 @@
                             </ul>
                           </div>
                           <div class="inf-org">
-                            <b-button variant="primary"class="btn-create-proj" >Добавить сотрудника</b-button>
+                            <b-button v-if="access === true" variant="primary"class="btn-create-proj" >Добавить сотрудника</b-button>
                           </div>
                         </div>
                       </div>
@@ -58,7 +58,7 @@
                             
                           </div>
                           <div class="inf-org">
-                            <b-button variant="primary"class="btn-create-proj" >Добавить лидера</b-button>
+                            <b-button v-if="access === true" variant="primary"class="btn-create-proj" >Добавить лидера</b-button>
                           </div>
                         </div>
                       </div>
@@ -87,7 +87,8 @@ export default {
       currentTab: 'projects',
       posts: [],
       projects: [],
-      employees: []
+      employees: [],
+      access: null
     }
   },
   
@@ -104,10 +105,24 @@ export default {
         console.log(this.posts)
       }),
     this.getProjs(),
-    this.getEmpl()
+    this.getEmpl(),
+    this.getUserAccess()
   },
 
   methods: {
+    getUserAccess() {
+      axios
+      .get('/api/access/checkOrgLeader', {
+        headers: {
+          'authorization': `Bearer ${localStorage.access_token}`,
+          'organizationId': localStorage.org_id
+        }
+      })
+      .then((response) => {
+        this.access = response.data.access
+        console.log(this.access)
+      })
+    },
     getEmpl() {
       axios
       .get('/api/organization/getMembers', {
@@ -163,7 +178,7 @@ export default {
   position: relative;
   padding: 2%;
   border-bottom: none;
-  background-color: white;
+  background-color: rgba(168, 205, 234, 0.323)!important;
   box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 8%);
   z-index: 2;
 }
@@ -171,6 +186,7 @@ export default {
   margin-top: 10px;
   margin-bottom: 10px;
   margin-left: 5px;
+  
 }
 .card {
   position: relative;
@@ -190,9 +206,7 @@ export default {
 body{
   font-family: 'Poppins';
 }
-.text-primary {
-  color: lightpink ;
-}
+
 h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
  
   line-height: 1.2;
@@ -218,12 +232,6 @@ h3, .h3 {
   margin-bottom: 1%;
   flex-wrap: wrap;
 }
-a {
-  color: #4650dd;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
 .form-control
 {
   color: #343a40;
@@ -252,13 +260,14 @@ a {
   padding-top: 10px;
   padding-bottom: 10px;
 }
-.btn-create-proj {
-  background-color: lightpink !important;
-  border-color: lightpink !important;
+.btn-create-proj, .btn-change-proj {
+  background-color: rgb(168, 205, 234) !important;
+  border-color: rgb(168, 205, 234) !important;
   margin-left: 15px!important;
   margin-right: 15px!important;
-  margin-top: 5px;
+  margin-top: 15px!important;
   margin-bottom: 15px;
+  color: rgb(67, 67, 67)!important;
 }
 .btn-org{
   background-color: #fff !important;
@@ -268,6 +277,7 @@ a {
   margin-top: 0;
   color: black !important;
   font-size: 18px !important; 
+  font-weight: 600 ;
 }
 
 .mb-3{
@@ -278,14 +288,23 @@ a {
 .title-list{
   display: flex; 
   justify-content: center;
-  padding: 0 !important;
+  padding-bottom: 15px;
+  padding-top: 8px;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  border-radius: 20px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.07);
   
 }
 .part-name{
   display: flex; 
   justify-content: center;
-  margin-top: 25px;
-  margin-bottom: 25px;
+  margin-top: 35px !important;
+  margin-bottom: 35px !important;
+  
 }
 .inf-org{
   display: flex; 

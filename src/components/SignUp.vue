@@ -43,7 +43,7 @@
             </div>-->
 
             
-            <b-button variant="primary" type="submit">Регистрация</b-button>
+            <b-button class="btn-signup" variant="primary" type="submit">Регистрация</b-button>
             <!--<p class="text-danger" v-if="!$v.form.password.minLength">Длина пароля меньше 6 символов</p>
             <p  class="text-danger" v-if="isPasswordTheSame">Введённые пароли не совпадают</p> -->
             <p class="mt-2">
@@ -52,7 +52,7 @@
                 </small>
             </p>
 
-            <p class="mt-3">Уже есть аккаунт? <router-link class="link" to="/signin">Вход</router-link></p>
+            <p class="mt-3">Уже есть аккаунт? <router-link class="link-tosignin" to="/signin">Вход</router-link></p>
         </div>    
 
             
@@ -140,6 +140,7 @@
         width: 900px;
         font-size: 15px;
         box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%) ;
+        margin-top: 8%;
     }
     .fg{
         display: flex;
@@ -152,8 +153,13 @@
         content:" *";
         color:red;
     }
-    
-    .form-group, .btn, .mt-3{
+    .btn-signup{
+        background-color: rgb(168, 205, 234) !important;
+        border-color: rgb(168, 205, 234) !important;
+        margin-top: 20px !important;
+        color: rgb(67, 67, 67)!important;
+    }
+    .form-group, .mt-3{
         margin-left:15px;
         margin-top: 25px;
         margin-right: 15px;
@@ -164,9 +170,9 @@
     label{
         margin-bottom: 10px;
     }
-    .link{
+    .link-tosignin{
         text-decoration: none;
-        color:rgb(157, 34, 96);
+        color:rgb(89, 80, 167);
     } 
 </style>
    

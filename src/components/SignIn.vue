@@ -9,9 +9,9 @@
           <label for="password">Пароль:</label>
           <b-input v-model="form.password" type="password" id="password" placeholder="Пароль"></b-input>
         </div>
-        <b-button variant="primary" type="submit">Вход</b-button>
+        <b-button class="btn-signin" variant="primary" type="submit">Вход</b-button>
         
-        <p class="mt-3">Ещё не зарегистрированы? <router-link class="link" to="/signup">Регистрация</router-link>
+        <p class="mt-3">Ещё не зарегистрированы? <router-link class="link-tosignup" to="/signup">Регистрация</router-link>
         </p>
       </b-form>
     </div>
@@ -60,11 +60,14 @@ import router from '@/router/index.js';
     font-size: 15px;
     box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
   }
-  .btn{
-    background-color: lightpink;
+  .btn-signin{
+    background-color: rgb(168, 205, 234) !important;
+    border-color: rgb(168, 205, 234) !important;
+    margin-top: 20px !important;
     font-size: 15px;
+    color: rgb(67, 67, 67)!important;
   } 
-  .form-group, .btn, .mt-3{
+  .form-group, .mt-3{
       margin-left:15px;
       margin-top: 25px;
       margin-right: 15px;
@@ -72,9 +75,9 @@ import router from '@/router/index.js';
   label{
     margin-bottom: 10px;
   }
-  .link{
+  .link-tosignup{
     text-decoration: none;
-    color:rgb(167, 80, 124);
+    color:rgb(89, 80, 167);
   } 
   
 </style>

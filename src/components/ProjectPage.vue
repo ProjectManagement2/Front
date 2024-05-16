@@ -27,7 +27,7 @@
                       </div>
                       <div v-if="currentTab === 'stage'">
                         <div class="col">
-                          <div class="inf-proj">
+                          <div class="inf-proj-stages">
                             <StagesList :stages="stages" />
                           </div>
                         </div>
@@ -46,11 +46,13 @@
                         <h4 class="part-name">Список руководителей</h4>
                         <div class="col">
                           <div class="inf-proj">
-                            <p class="mb-3">{{ posts.leader.surname }} {{posts.leader.name}} {{posts.leader.otch}}</p>
+                            <ul>
+                              <li v-for="projectLeaders in leaders" :key="projectLeaders.id">{{ projectLeaders.surname }} {{ projectLeaders.name }} {{ projectLeaders.otch }}</li>
+                            </ul>
                             
                           </div>
                           <div class="inf-proj">
-                            <b-button variant="primary"class="btn-create-proj" >Добавить руководителя</b-button>
+                            <b-button v-if="access === true" variant="primary"class="btn-create-proj" >Добавить руководителя</b-button>
                           </div>
                         </div>
                       </div>
@@ -101,7 +103,9 @@ export default {
       currentTab: 'stage',
       posts: [],
       stages:[],
-      employees: []
+      employees: [],
+      leaders: [],
+      access: null
     }
   },
   
@@ -119,9 +123,24 @@ export default {
       }),
     this.getStages();
     this.getEmpl();
+    this.getUserAccess();
+    this.getLeaders();
   },
 
   methods: {
+    getUserAccess() {
+      axios
+      .get('/api/access/checkProjectLeader', {
+        headers: {
+          'authorization': `Bearer ${localStorage.access_token}`,
+          'projectid': localStorage.proj_id
+        }
+      })
+      .then((response) => {
+        this.access = response.data.access
+        console.log(this.access)
+      })
+    },
     getStages(){
       axios
       .get('/api/project/getAllStages', {
@@ -150,6 +169,19 @@ export default {
       })
     },
 
+    getLeaders(){
+      axios
+      .get('/api/project/getProjectLeaders', {
+        headers: {
+          'authorization': `Bearer ${localStorage.access_token}`,
+          'projectid': localStorage.proj_id
+        }
+      })
+      .then((response) => {
+        this.leaders = response.data
+        console.log(this.leaders)
+      })
+    },
     showStages() {
       this.currentTab = 'stage';
     },
@@ -305,13 +337,14 @@ img, svg {
   margin-right: 5%!important;
   margin-top: 0;
   color: black !important;
-  font-size: 18px !important; 
+  font-size: 15px !important;
+  font-weight: 600!important; 
 }
 .title-list{
   display: flex; 
   justify-content: center;
   position: relative;
-  padding: 0 !important;
+  
   width: 95%;
 }
 .part-name{
