@@ -46,7 +46,7 @@ export default {
           response.data.forEach(task => {
             events.push({
               title: `${task.name}`,
-              start: task.createdDate.split('T')[0],
+              start: task.startDate.split('T')[0],
               end: task.deadline.split('T')[0],
               backgroundColor: this.getRandomLightColor(),
               borderColor: this.getRandomLightColor(),

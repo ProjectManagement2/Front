@@ -10,6 +10,7 @@ import CreateProject from "@/components/CreateProj.vue";
 import PageOrg from "@/components/PageOrg.vue";
 import ProjectPage from "@/components/ProjectPage.vue";
 import TaskPage from "@/components/TaskPage.vue";
+import UserKanban from "@/components/UserKanban.vue";
 
 Vue.use(Router);
 
@@ -61,6 +62,11 @@ export default new Router({
     path: "/task/page",
     name: "TaskPage",
     component: TaskPage
+  },
+  {
+    path: "/user/kanban",
+    name: "UserKanban",
+    component: UserKanban
   }
  ],
 });

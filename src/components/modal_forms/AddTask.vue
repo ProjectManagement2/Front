@@ -15,6 +15,11 @@
                 placeholder="Расскажите о задаче"></b-input>
             </div>
             <div class="form-group">
+              <label for="startDate">Начало задачи:</label>
+              <b-input v-model="form.startDate" type="date" id="startDate"
+                placeholder="Дата начала задачи: 01.01.2000"></b-input>
+            </div>
+            <div class="form-group">
               <label for="deadline">Дедлайн:</label>
               <b-input v-model="form.deadline" type="date" id="deadline"
                 placeholder="Дата завершения задачи: 01.01.2000"></b-input>
@@ -62,6 +67,7 @@ export default {
       form: {
         name: "",
         description: "",
+        startDate: "",
         deadline: "",
         isImportant: false,
         tags: '',
@@ -95,6 +101,7 @@ export default {
 
       formData.append('name', this.form.name);
       formData.append('description', this.form.description);
+      formData.append('startDate', this.form.startDate);
       formData.append('deadline', this.form.deadline);
       formData.append('isImportant', this.form.isImportant);
       formData.append('tags', this.form.tags);

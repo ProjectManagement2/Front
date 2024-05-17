@@ -23,6 +23,17 @@
                   </li>
                 </ul>
               </div>
+              <div v-if="task.solution.text != null || task.solution.files != null"class="attached-solution">
+                <h5 class="file-title">Прикрепленный отчет</h5>
+                <h6>{{ task.solution.text }}</h6>
+                <h6 class="file-title">Файлы отчета:</h6>
+                <ul>
+                  <li v-for="file in task.solution.files" :key="file.id">
+                    <a class="link-file" @click.prevent="downloadFile(file.filename)" href="#"
+                      :download="file.filename">{{ file.filename }}</a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
           <div class="col-lg-8">
@@ -104,7 +115,7 @@ export default {
       // Отправляем данные на сервер
       
         axios
-          .patch("/api/task/createSolution", formData, {
+          .patch("/api/task/updateSolution", formData, {
             headers: {
               "Content-Type": "multipart/form-data", // Устанавливаем Content-Type как multipart/form-data для передачи файлов
               authorization: `Bearer ${localStorage.access_token}`,
@@ -194,7 +205,7 @@ export default {
   margin-bottom: 20px;
 }
 
-.attached-files {
+.attached-files, .attached-solution {
   margin-bottom: 20px;
   margin-left: 20px;
   margin-top: 20px;
@@ -226,6 +237,7 @@ select {
 .link-file {
   color: rgb(64, 64, 64);
   text-decoration: none;
+  font-size: 12px;
 }
 
 .link-file :hover {
