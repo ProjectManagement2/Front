@@ -14,6 +14,7 @@
               <p class="mb-3">{{ task.description }}</p>
               <p class="mb-3">Дедлайн: {{ formatDate(task.deadline) }}</p>
               <p class="mb-3">Статус: {{ task.status }}</p>
+              <p class="mb-3">Исполнитель: {{ task.worker.surname }} {{ task.worker.name }} {{ task.worker.otch }}</p>
               <div class="attached-files">
                 <h5 class="file-title">Прикрепленные файлы</h5>
                 <ul>
@@ -23,9 +24,16 @@
                   </li>
                 </ul>
               </div>
-              <div v-if="task.solution.text != null || task.solution.files != null"class="attached-solution">
-                <h5 class="file-title">Прикрепленный отчет</h5>
-                <h6>{{ task.solution.text }}</h6>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card mb-4">
+              <div class="card-header">
+                <h4 class="card-heading">Прикрепленный отчет</h4>
+              </div>
+              <div v-if="task.solution.text != '' && task.solution.files != ''" class="attached-solution">
+                <h6>Текст отчета:</h6>
+                <p>{{ task.solution.text }}</p>
                 <h6 class="file-title">Файлы отчета:</h6>
                 <ul>
                   <li v-for="file in task.solution.files" :key="file.id">
@@ -34,23 +42,30 @@
                   </li>
                 </ul>
               </div>
+              <div v-else>
+                <h5 class="null-solution">Отчет по задаче не добавлен</h5>
+              </div>
             </div>
           </div>
-          <div class="col-lg-8">
-            <div class="row">
+          <div v-if="access === true" class="col-lg-4">
+            <div class="card mb-4">
+              <div class="card-header">
+                <h4 class="card-heading">Отчет по задаче</h4>
+              </div>
               <div class="task-edit-container">
                 <form class="task-edit-elem" @submit.prevent="submitSolution">
-                  <h4 class="task-edit-title">Отчет по задаче</h4>
+                  <p>Текст</p>
                   <textarea v-model="form.solutionText" placeholder="Введите текст отчета"></textarea>
+                  <p>Файлы:</p>
                   <input type="file" id="file" ref="fileInput" multiple />
-                  <div class="col">
+                  <!-- <div class="col">
                     <h6 class="status-title">Выберете статус задачи:</h6>
                     <select v-model="status">
                       <option value="выполняется">Выполняется</option>
                       <option value="завершена">Завершена</option>
                     </select>
-                  </div>
-                  <b-button class="btn-addresult" type="submit" >Отправить решение</b-button>
+                  </div> -->
+                  <b-button class="btn-addresult" type="submit">Отправить решение</b-button>
                 </form>
               </div>
             </div>
@@ -73,12 +88,27 @@ export default {
       form: {
         solutionText: "",
       },
+      access: null,
     };
   },
   mounted() {
     this.getTask();
+    this.getUserAccess();
   },
   methods: {
+    getUserAccess() {
+      axios
+        .get("/api/access/checkTaskWorker", {
+          headers: {
+            authorization: `Bearer ${localStorage.access_token}`,
+            taskid: localStorage.task_id,
+          },
+        })
+        .then((response) => {
+          this.access = response.data.access;
+          console.log(this.access);
+        });
+    },
     getTask() {
       axios
         .get("/api/task/taskInfo", {
@@ -111,26 +141,21 @@ export default {
           formData.append("files", file);
         }
       }
-
-      // Отправляем данные на сервер
-      
-        axios
-          .patch("/api/task/updateSolution", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data", // Устанавливаем Content-Type как multipart/form-data для передачи файлов
-              authorization: `Bearer ${localStorage.access_token}`,
-              taskid: localStorage.task_id,
-            },
-          })
-          .then(() => {
-            console.log("New solution is created");
-            window.location.reload();
-          })
-          .catch((errors) => {
-            console.log(errors);
-          });
-      
-        
+      axios
+        .patch("/api/task/updateSolution", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data", // Устанавливаем Content-Type как multipart/form-data для передачи файлов
+            authorization: `Bearer ${localStorage.access_token}`,
+            taskid: localStorage.task_id,
+          },
+        })
+        .then(() => {
+          console.log("New solution is created");
+          window.location.reload();
+        })
+        .catch((errors) => {
+          console.log(errors);
+        });
     },
     downloadFile(filename) {
       const url = `http://localhost:4444/download/${filename}`;
@@ -177,13 +202,9 @@ export default {
 }
 
 .task-edit-container {
-  margin-left: 5%;
-  margin-right: 2%;
-  padding: 2%;
-  border: 1px solid rgb(189, 189, 189);
-  border-radius: 10px;
-  width: 90%;
-  height: 90%;
+  margin: 5%;
+
+
 }
 
 .task-edit-elem {
@@ -201,11 +222,18 @@ export default {
   margin-bottom: 15px;
 }
 
+.null-solution {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
 .task-details {
   margin-bottom: 20px;
 }
 
-.attached-files, .attached-solution {
+.attached-files,
+.attached-solution {
   margin-bottom: 20px;
   margin-left: 20px;
   margin-top: 20px;
@@ -229,9 +257,9 @@ select {
   color: rgb(67, 67, 67) !important;
   background-color: rgb(168, 205, 234) !important;
   border-color: rgb(168, 205, 234) !important;
-
+  margin-top: 20px;
   cursor: pointer;
-  width: 25%;
+  width: 45%;
 }
 
 .link-file {

@@ -1,8 +1,11 @@
 <template>
   <div id="app">
     <title>Project System</title>
-    <Header />
-    <div class="container-fluid ">
+    <Header/>
+    <div v-if="isHomePage" >
+      <MainPage/>
+    </div>
+    <div class="container-fluid " v-else>
       <router-view></router-view>
     </div>
   </div>
@@ -10,12 +13,18 @@
 
  <script>
 import Header from './components/additional_comp/Header.vue';
+import MainPage from './components/MainPage.vue';
  export default {
   name: 'App',
   components: {
-    Header
+    Header,
+    MainPage
+  },
+  computed: {
+      isHomePage() {
+        return this.$route.path === '/';
+      }
   }
-  
  };
  </script>
 
