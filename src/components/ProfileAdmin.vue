@@ -5,9 +5,9 @@
         </div>
         <div id="org-page" class="mx-auto border  rounded">
             <div id="btns">
-                <b-button class="btn-adm"  @click="showAddForm">Добавить</b-button>
-                <b-button class="btn-adm"  @click="showEditForm">Редактировать</b-button>
-                <b-button class="btn-adm"  @click="showDeleteForm">Удалить</b-button>
+                <b-button class="btn-adm" @click="showAddForm">Добавить</b-button>
+                <b-button class="btn-adm" @click="showEditForm">Редактировать</b-button>
+                <b-button class="btn-adm" @click="showDeleteForm">Удалить</b-button>
             </div>
             <div id="forms">
                 <AddModal :is-visible="isAddFormVisible" @close="closeAddForm" />
@@ -15,13 +15,13 @@
                 <DeleteModal :is-visible="isDeleteFormVisible" @close="closeDeleteForm" />
             </div>
             <div>
-            <table id="table-org">
+                <table id="table-org">
                     <thead>
                         <tr>
                             <th>организация</th>
                             <th>фамилия</th>
                             <th>имя</th>
-                            <th>отчество</th> 
+                            <th>отчество</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,13 +32,13 @@
                             <td> {{ post.leader.otch }}</td>
                         </tr>
                     </tbody>
-                </table> 
-            </div> 
+                </table>
+            </div>
         </div>
-        
+
     </div>
-    
-    
+
+
 </template>
 
 <script>
@@ -47,84 +47,86 @@ import EditModal from './modal_forms/EditModal.vue';
 import DeleteModal from './modal_forms/DeleteModal.vue';
 import axios from 'axios'
 
-    export default{
-        name:"ProfileAdmin",
-        components: {
-            AddModal,
-            EditModal,
-            DeleteModal
+export default {
+    name: "ProfileAdmin",
+    components: {
+        AddModal,
+        EditModal,
+        DeleteModal
+    },
+    data() {
+        return {
+            isAddFormVisible: false,
+            isEditFormVisible: false,
+            isDeleteFormVisible: false,
+            posts: []
+        }
+    },
+    mounted() {
+        this.fetchData();
+    },
+    methods: {
+        showAddForm() {
+            this.isAddFormVisible = true;
         },
-        data() {
-            return {
-                isAddFormVisible: false,
-                isEditFormVisible: false,
-                isDeleteFormVisible: false,
-                posts: []
-            }  
+        closeAddForm() {
+            this.isAddFormVisible = false;
         },
-        mounted() {
-            this.fetchData();
+        showEditForm() {
+            this.isEditFormVisible = true;
         },
-        methods: {
-            showAddForm() {
-                this.isAddFormVisible = true;
-            },
-            closeAddForm() {
-                this.isAddFormVisible = false;
-            },
-            showEditForm() {
-                this.isEditFormVisible = true;
-            },
-            closeEditForm() {
-                this.isEditFormVisible = false;
-            },
-            showDeleteForm() {
-                this.isDeleteFormVisible = true;
-            },
-            closeDeleteForm() {
-                this.isDeleteFormVisible = false;
-            },
-            fetchData() {
-                axios
+        closeEditForm() {
+            this.isEditFormVisible = false;
+        },
+        showDeleteForm() {
+            this.isDeleteFormVisible = true;
+        },
+        closeDeleteForm() {
+            this.isDeleteFormVisible = false;
+        },
+        fetchData() {
+            axios
                 .get('/api/admin/getOrganizations', {
                     headers: {
-                    'authorization': `Bearer ${localStorage.access_token}`
+                        'authorization': `Bearer ${localStorage.access_token}`
                     }
                 })
                 .then((response) => {
                     this.posts = response.data
-                    
+
                 })
-            }
         }
-        
-    };
-    
+    }
+
+};
+
 </script>
 
 <style>
-    #org-page{
+#org-page {
     width: 90%;
     box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
-    }
-    #btns{
-    margin-left: 2%; 
-    margin-top: 1%;    
-    }
-    .page-header{
-    margin-left: 5% ;
+}
+
+#btns {
+    margin-left: 2%;
+    margin-top: 1%;
+}
+
+.page-header {
+    margin-left: 5%;
     margin-bottom: 20px;
-    }
-                  
-    table {
+}
+
+table {
     font-family: 'Avantgarde', 'TeX Gyre Adventor', 'URW Gothic L', sans-serif;
     width: 90%;
     border-collapse: collapse;
     border: 2px solid #c7c7c7;
     margin: 2% 2% 3% 3%;
-    }
+}
 
-    table th {
+table th {
     text-transform: uppercase;
     text-align: left;
     background: white;
@@ -132,17 +134,17 @@ import axios from 'axios'
     border: 2px solid #c7c7c7;
     min-width: 30px;
     font-size: 15px;
-    }
+}
 
-    table td {
+table td {
     text-align: left;
     padding: 8px;
     border: 2px solid #c7c7c7;
     font-size: 15px;
-    
-    }
-    table td:last-child {
+
+}
+
+table td:last-child {
     border-right: none;
-    }
-    
+}
 </style>

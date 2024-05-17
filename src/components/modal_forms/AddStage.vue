@@ -7,11 +7,11 @@
           <div class="col">
             <div class="form-group">
               <label for="name">Название:</label>
-              <b-input v-model="form.name" type="text" id="name" placeholder="Название организации"></b-input>
+              <b-input v-model="form.name" type="text" id="name" placeholder="Название этапа'"></b-input>
             </div>
             <div class="form-group">
               <label for="description">Описание:</label>
-              <b-input v-model="form.description" type="text" id="description" placeholder="Расскажите об организации"></b-input>
+              <b-input v-model="form.description" type="text" id="description" placeholder="Расскажите об этапе"></b-input>
             </div>
             
           </div>
@@ -53,7 +53,7 @@
         })    
         .then(() => {    
           console.log("New stage is created");    
-               
+          window.location.reload();     
         })    
         .catch((errors) => {    
           console.log(errors);    

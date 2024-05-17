@@ -1,9 +1,9 @@
 <template>
   <div class="cld-container">
     <FullCalendar :options="calendarOptions" />
-  </div> 
+  </div>
 </template>
-  
+
 <script>
 import FullCalendar from '@fullcalendar/vue';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -48,6 +48,9 @@ export default {
               title: `${task.name}`,
               start: task.createdDate.split('T')[0],
               end: task.deadline.split('T')[0],
+              backgroundColor: this.getRandomLightColor(),
+              borderColor: this.getRandomLightColor(),
+              textColor: '#000000'
             });
           });
 
@@ -56,6 +59,13 @@ export default {
         .catch(error => {
           console.error('Error loading tasks:', error);
         });
+    },
+    getRandomLightColor() {
+      const getComponent = () => Math.floor(Math.random() * 156 + 100); // Get value between 100 and 255
+      const red = Math.floor(Math.random() * 56 + 200); // Get value between 200 and 255 for light colors
+      const green = getComponent();
+      const blue = getComponent();
+      return `rgb(${red}, ${green}, ${blue})`;
     },
     renderEventContent(eventInfo) {
       return {
@@ -69,16 +79,12 @@ export default {
 <style>
 .cld-container {
   overflow: hidden;
-  
 }
 
 .event-content {
   padding: 5px;
-  background-color: #86b5da;
-  color: #fff;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  
   cursor: pointer;
 }
 
