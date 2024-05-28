@@ -20,7 +20,7 @@
                 placeholder="Дата начала задачи: 01.01.2000"></b-input>
             </div>
             <div class="form-group">
-              <label for="deadline">Дедлайн:</label>
+              <label for="deadline">Окончание задачи:</label>
               <b-input v-model="form.deadline" type="date" id="deadline"
                 placeholder="Дата завершения задачи: 01.01.2000"></b-input>
             </div>

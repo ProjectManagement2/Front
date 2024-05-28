@@ -58,12 +58,14 @@ export default {
   margin-top: 10%;
   font-size: 15px;
   box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
+  width: 30%!important;
 }
 
 .btn-signin {
   background-color: rgb(168, 205, 234) !important;
   border-color: rgb(168, 205, 234) !important;
   margin-top: 20px !important;
+  margin-left: 15px!important;
   font-size: 15px;
   color: rgb(67, 67, 67) !important;
 }

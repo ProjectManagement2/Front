@@ -11,18 +11,26 @@
               <div class="card-header">
                 <h4 class="card-heading">{{ task.name }}</h4>
               </div>
+              <div v-if="task.isImportant === true">
+                <p class="important-task">Важная задача!</p>
+              </div>
               <p class="mb-3">{{ task.description }}</p>
               <p class="mb-3">Дедлайн: {{ formatDate(task.deadline) }}</p>
               <p class="mb-3">Статус: {{ task.status }}</p>
               <p class="mb-3">Исполнитель: {{ task.worker.surname }} {{ task.worker.name }} {{ task.worker.otch }}</p>
               <div class="attached-files">
                 <h5 class="file-title">Прикрепленные файлы</h5>
-                <ul>
-                  <li v-for="file in task.files" :key="file.id">
-                    <a class="link-file" @click.prevent="downloadFile(file.filename)" href="#"
-                      :download="file.filename">{{ file.filename }}</a>
-                  </li>
-                </ul>
+                <div v-if="task.files != ''">
+                  <ul>
+                    <li v-for="file in task.files" :key="file.id">
+                      <a class="link-file" @click.prevent="downloadFile(file.filename)" href="#"
+                        :download="file.filename">{{ file.filename }}</a>
+                    </li>
+                  </ul>
+                </div>
+                <div v-else>
+                  <p>Файлы не были прикреплены</p>
+                </div>
               </div>
             </div>
           </div>
@@ -237,6 +245,10 @@ export default {
   margin-bottom: 20px;
   margin-left: 20px;
   margin-top: 20px;
+}
+.important-task{
+  margin: 15px;
+  color: red;
 }
 
 .file-title {

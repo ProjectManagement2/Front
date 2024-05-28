@@ -13,7 +13,24 @@
               <label for="description">Описание:</label>
               <b-input v-model="form.description" type="text" id="description" placeholder="Расскажите об этапе"></b-input>
             </div>
-            
+            <div class="form-group">
+              <label for="startDate">Начало этапа:</label>
+              <b-input v-model="form.startDate" type="date" id="startDate"
+                placeholder="Дата начала этапа: 01.01.2000"></b-input>
+            </div>
+            <div class="form-group">
+              <label for="endDate">Окончание этапа:</label>
+              <b-input v-model="form.endDate" type="date" id="endDate"
+                placeholder="Дата завершения этапа: 01.01.2000"></b-input>
+            </div>
+            <div class="row form-group">
+              <label>Выберете зависимость от этапа (необязательно):</label>
+              <select v-model="form.relatedStage" @change="selectStage">
+                <option v-for="stage in stages" :key="stage._id" :value="stage._id">
+                  {{ stage.name }} 
+                </option>
+              </select>
+            </div>
           </div>
         </div>
         <b-button variant="primary" class="btn-add-addstage" type="submit">Добавить</b-button>
@@ -31,18 +48,43 @@
   export default {
     data() {
       return {
+        stages: [],
         form: {
             name: "",
-            description: "",   
+            description: "",
+            startDate: "",
+            endDate: "",
+            relatedStage: ""   
         }
       };
     },
-    
+    mounted(){
+      this.getStages()
+    },
     methods: {
+      getStages() {
+        axios
+        .get("/api/project/getAllStages", {
+          headers: {
+            authorization: `Bearer ${localStorage.access_token}`,
+            projectid: localStorage.proj_id,
+          },
+        })
+        .then((response) => {
+          this.stages = response.data;
+          console.log(this.stages);
+        });
+      },
+      selectStage() {
+        console.log('Выбран этап с ID:', this.form.relatedStage);
+      },
       addStage() {
         let data = {    
           name: this.form.name,    
-          description: this.form.description
+          description: this.form.description,
+          startDate: this.form.startDate,
+          endDate: this.form.endDate,
+          relatedStage: this.form.relatedStage
         };
         axios
         .post("/api/project/createStage", data , {

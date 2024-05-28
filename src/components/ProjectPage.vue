@@ -22,34 +22,41 @@
                 <div class="card-header">
                   <h4 class="card-heading">Статистика</h4>
                 </div>
-                <div class="stat-list">
-                  <p class="statistic-item">
-                    Кол-во этапов: {{ statistics.stagesCount }}
-                  </p>
-                  <p class="statistic-item">
-                    Кол-во задач: {{ statistics.tasksCount }}
-                  </p>
-                  <p class="statistic-item">
-                    "Новых" задач: {{ statistics.taskStatusCount.statusNew }}
-                  </p>
-                  <p class="statistic-item">
-                    "Выполняется" задач: {{ statistics.taskStatusCount.statusInProcess }}
-                  </p>
-                  <p class="statistic-item">
-                    "Завершено" задач: {{ statistics.taskStatusCount.statusDone }}
-                  </p>
-                  <p class="statistic-item">
-                    Просрочено задач: {{ statistics.overdueTasks }}
-                  </p>
-                  <p class="statistic-item">
-                    Важных задач: {{ statistics.overdueTasks }}
-                  </p>
+                <div class="row">
+                  <TasksStatChart ></TasksStatChart>
                 </div>
-                
-                
+                <div class="row">
+                  <div class="stat-list">
+                    <div class="col">
+                      <p class="statistic-item">
+                        Кол-во этапов: {{ statistics.stagesCount }}
+                      </p>
+                      <p class="statistic-item">
+                        Кол-во задач: {{ statistics.tasksCount }}
+                      </p>
+                      
+                      <p class="statistic-item">
+                        Просрочено задач: {{ statistics.overdueTasks }}
+                      </p>
+                      <p class="statistic-item">
+                        Важных задач: {{ statistics.overdueTasks }}
+                      </p>
+                    </div>
+                    <div class="col">
+                      <p class="statistic-item">
+                        "Новых" задач: {{ statistics.taskStatusCount.statusNew }}
+                      </p>
+                      <p class="statistic-item">
+                        "Выполняется" задач: {{ statistics.taskStatusCount.statusInProcess }}
+                      </p>
+                      <p class="statistic-item">
+                        "Завершено" задач: {{ statistics.taskStatusCount.statusDone }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            
           </div>
           <div class="col-lg-8">
             <div class="row">
@@ -102,7 +109,7 @@
                 <h4 class="part-name">Календарь задач</h4>
                 <div class="col">
                   <div class="inf-proj">
-                    <TaskCalendar />
+                    <GanttChart />
                   </div>
                 </div>
               </div>
@@ -130,6 +137,8 @@ import StagesList from "./additional_comp/StagesList.vue";
 import ProjectChat from "./additional_comp/ProjectChat.vue";
 import TaskCalendar from "./additional_comp/TaskCalendar.vue";
 import AddLeaderProj from "./modal_forms/AddLeaderProj.vue";
+import GanttChart from "./GanttChart.vue";
+import TasksStatChart from "./additional_comp/TasksStatChart.vue";
 
 export default {
   name: "ProjectPage",
@@ -137,7 +146,9 @@ export default {
     StagesList,
     ProjectChat,
     TaskCalendar,
-    AddLeaderProj
+    AddLeaderProj,
+    GanttChart,
+    TasksStatChart
   },
   data() {
     return {
@@ -434,8 +445,8 @@ svg {
 .btn-proj {
   background-color: #fff !important;
   border: none !important;
-  margin-left: 5% !important;
-  margin-right: 5% !important;
+  margin-left: 4% !important;
+  margin-right: 4% !important;
   margin-top: 0;
   color: black !important;
   font-size: 15px !important;

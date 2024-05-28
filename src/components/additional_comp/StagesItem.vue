@@ -3,8 +3,18 @@
         <AddTask :is-visible="isAddTaskVisible" @close="closeAddTask" :stageId="stage._id" />
         <div class="stg-elem">
             <div class="stage-inf">
-                <h6 class="stg-name">{{ stage.name }}</h6>
-                <h6 class="stg-descr">Описание: {{ stage.description }}</h6>
+                <div class="row">
+                    <div class="col">
+                        <h6 class="stg-name">{{ stage.name }}</h6>
+                        <h6 class="stg-descr">Описание: {{ stage.description }}</h6> 
+                    </div>
+                    <div class="col">
+                        <h6 class="stg-name">Начало: {{ stage.startDate }}</h6>
+                        <h6 class="stg-descr">Конец: {{ stage.endDate }}</h6> 
+                    </div>
+                </div>
+                
+                
             </div>
             <div class="stage-buttons">
                 <b-button v-if="access === true" variant="primary" class="btn-create-task" @click="showAddTask">Добавить
@@ -133,7 +143,7 @@ export default {
     margin-bottom: 15px;
     background-color: rgb(168, 205, 234) !important;
     border-color: rgb(168, 205, 234) !important;
-
+    height: 45%;
 }
 
 .btn-open-stage {
