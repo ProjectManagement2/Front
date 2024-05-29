@@ -1,20 +1,25 @@
 <template>
     <div>
         <AddTask :is-visible="isAddTaskVisible" @close="closeAddTask" :stageId="stage._id" />
-        <div class="stg-elem">
+        <div v-if="stage.isAvailable === true" class="stg-elem">
             <div class="stage-inf">
                 <div class="row">
                     <div class="col">
                         <h6 class="stg-name">{{ stage.name }}</h6>
-                        <h6 class="stg-descr">Описание: {{ stage.description }}</h6> 
+                        <h6 class="stg-descr">Описание: {{ stage.description }}</h6>
+                        <div v-if="access === true" class="switch-container">
+                            <label class="switch">
+                                <input type="checkbox" v-model="isStageCompleted" @change="toggleStageCompletion">
+                                <span class="slider round"></span>
+                            </label>
+                            <span class="switch-span">Этап завершен</span>
+                        </div>
                     </div>
                     <div class="col">
-                        <h6 class="stg-name">Начало: {{ stage.startDate }}</h6>
-                        <h6 class="stg-descr">Конец: {{ stage.endDate }}</h6> 
+                        <h6 class="stg-name">Начало: {{ formatDate(stage.startDate) }}</h6>
+                        <h6 class="stg-descr">Конец: {{ formatDate(stage.endDate) }}</h6>
                     </div>
                 </div>
-                
-                
             </div>
             <div class="stage-buttons">
                 <b-button v-if="access === true" variant="primary" class="btn-create-task" @click="showAddTask">Добавить
@@ -23,14 +28,24 @@
                     <img src="@/assets/arrow-icon.png" alt="Показать задачи">
                 </button>
             </div>
-
+        </div>
+        <div v-else>
+            <div class="stage-blocked">
+                <div class="row">
+                    <div class="col">
+                        <h6 class="stg-name">{{ stage.name }}</h6>
+                        <h6 class="stg-descr">Описание: {{ stage.description }}</h6>
+                    </div>
+                    <div class="col">
+                        <h6 class="stg-name">Сейчас этап не доступен</h6>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="tasks-list">
             <TasksList :tasks="tasks" :is-visible="isTasksVisible" />
-
         </div>
     </div>
-
 </template>
 
 <script>
@@ -46,6 +61,7 @@ export default {
     },
     data() {
         return {
+            isStageCompleted: false,
             isAddTaskVisible: false,
             isTasksVisible: false,
             tasks: [],
@@ -69,6 +85,14 @@ export default {
                     this.access = response.data.access
                     console.log(this.access)
                 })
+        },
+        formatDate(dateString) {
+            const dateObject = new Date(dateString);
+            const day = dateObject.getDate();
+            const month = dateObject.getMonth() + 1;
+            const year = dateObject.getFullYear();
+            return `${day < 10 ? "0" + day : day}.${month < 10 ? "0" + month : month
+                }.${year}`;
         },
         showAddTask() {
             this.isAddTaskVisible = true;
@@ -97,7 +121,25 @@ export default {
                     this.tasks = response.data
                 });
         },
-    }
+        toggleStageCompletion() {
+            axios
+                .patch('/api/project/updateStageStatus', {
+                    headers: {
+                        'authorization': `Bearer ${localStorage.access_token}`,
+                        'stageid': this.stage._id,
+                        'projectid': localStorage.proj_id
+                    }
+                },{
+                    isDone: this.isStageCompleted,
+                })
+                .then(response => {
+                    console.log('Stage completion status updated', response);
+                })
+                .catch(error => {
+                    console.error('Error updating stage completion status', error);
+                });
+            }
+        }
 };
 </script>
 
@@ -111,7 +153,14 @@ export default {
     background-color: white;
 
 }
-
+.stage-blocked{
+    border: 1px solid rgb(227, 227, 227);
+    border-radius: 10px;
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(221, 221, 221);
+}
 .tasks-list {
     display: flex;
     justify-content: center;
@@ -143,7 +192,7 @@ export default {
     margin-bottom: 15px;
     background-color: rgb(168, 205, 234) !important;
     border-color: rgb(168, 205, 234) !important;
-    height: 45%;
+    height: 30%;
 }
 
 .btn-open-stage {
@@ -159,5 +208,66 @@ export default {
     width: 35px;
     /* Размер иконки меню */
     height: auto;
+}
+.switch-container {
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 35px;
+  height: 18px;
+  margin-right: 10px;
+}
+
+.switch-span{
+  padding-bottom: 10px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 4px;
+  bottom: 2.5px;
+  background-color: white;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: rgb(168, 205, 234);
+}
+
+input:checked + .slider:before {
+  transform: translateX(15px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 </style>

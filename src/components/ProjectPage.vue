@@ -22,39 +22,45 @@
                 <div class="card-header">
                   <h4 class="card-heading">Статистика</h4>
                 </div>
-                <div class="row">
-                  <TasksStatChart ></TasksStatChart>
+                <div v-if="statistics.tasksCount === 0" class="stat-null">
+                  <span>Добавьте этапы и задачи для расчета статистики</span>
                 </div>
-                <div class="row">
-                  <div class="stat-list">
-                    <div class="col">
-                      <p class="statistic-item">
-                        Кол-во этапов: {{ statistics.stagesCount }}
-                      </p>
-                      <p class="statistic-item">
-                        Кол-во задач: {{ statistics.tasksCount }}
-                      </p>
-                      
-                      <p class="statistic-item">
-                        Просрочено задач: {{ statistics.overdueTasks }}
-                      </p>
-                      <p class="statistic-item">
-                        Важных задач: {{ statistics.overdueTasks }}
-                      </p>
-                    </div>
-                    <div class="col">
-                      <p class="statistic-item">
-                        "Новых" задач: {{ statistics.taskStatusCount.statusNew }}
-                      </p>
-                      <p class="statistic-item">
-                        "Выполняется" задач: {{ statistics.taskStatusCount.statusInProcess }}
-                      </p>
-                      <p class="statistic-item">
-                        "Завершено" задач: {{ statistics.taskStatusCount.statusDone }}
-                      </p>
+                <div v-else>
+                  <div class="row">
+                    <TasksStatChart></TasksStatChart>
+                  </div>
+                  <div class="row">
+                    <div class="stat-list">
+                      <div class="col">
+                        <p class="statistic-item">
+                          Кол-во этапов: {{ statistics.stagesCount }}
+                        </p>
+                        <p class="statistic-item">
+                          Кол-во задач: {{ statistics.tasksCount }}
+                        </p>
+
+                        <p class="statistic-item">
+                          Просрочено задач: {{ statistics.overdueTasks }}
+                        </p>
+                        <p class="statistic-item">
+                          Важных задач: {{ statistics.overdueTasks }}
+                        </p>
+                      </div>
+                      <div class="col">
+                        <p class="statistic-item">
+                          "Новых" задач: {{ statistics.taskStatusCount.statusNew }}
+                        </p>
+                        <p class="statistic-item">
+                          "Выполняется" задач: {{ statistics.taskStatusCount.statusInProcess }}
+                        </p>
+                        <p class="statistic-item">
+                          "Завершено" задач: {{ statistics.taskStatusCount.statusDone }}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
+                
               </div>
             </div>
           </div>
@@ -99,10 +105,11 @@
                     </ul>
                   </div>
                   <div class="inf-proj">
-                    <b-button v-if="access === true" variant="primary" class="btn-create-proj" @click="showAddLP">Добавить
+                    <b-button v-if="access === true" variant="primary" class="btn-create-proj"
+                      @click="showAddLP">Добавить
                       руководителя</b-button>
                   </div>
-                  <AddLeaderProj :is-visible="isAddLPVisible" @close="closeAddLP"/>
+                  <AddLeaderProj :is-visible="isAddLPVisible" @close="closeAddLP" />
                 </div>
               </div>
               <div v-else-if="currentTab === 'calendar'">
@@ -175,7 +182,7 @@ export default {
         this.posts = response.data;
         console.log(this.posts);
       }),
-    this.getStages();
+      this.getStages();
     this.getEmpl();
     this.getUserAccess();
     this.getLeaders();
@@ -185,16 +192,16 @@ export default {
   methods: {
     getStatistics() {
       axios
-      .get("/api/project/statistics", {
-        headers: {
-          authorization: `Bearer ${localStorage.access_token}`,
-          projectid: localStorage.proj_id,
-        },
-      })
-      .then((response) => {
-        this.statistics = response.data;
-        console.log(this.statistics);
-      })
+        .get("/api/project/statistics", {
+          headers: {
+            authorization: `Bearer ${localStorage.access_token}`,
+            projectid: localStorage.proj_id,
+          },
+        })
+        .then((response) => {
+          this.statistics = response.data;
+          console.log(this.statistics);
+        })
     },
     getUserAccess() {
       axios
@@ -250,6 +257,7 @@ export default {
           console.log(this.leaders);
         });
     },
+    
     showStages() {
       this.currentTab = "stage";
     },
@@ -314,11 +322,11 @@ body {
   font-family: "Poppins";
 }
 
-.stat-list{
+.stat-list {
   margin-top: 10px;
 }
 
-.statistic-item{
+.statistic-item {
   margin-left: 15px;
 }
 
@@ -471,5 +479,9 @@ svg {
   display: flex;
   justify-content: center;
   width: 100% !important;
+}
+
+.stat-null{
+  margin: 20px;
 }
 </style>

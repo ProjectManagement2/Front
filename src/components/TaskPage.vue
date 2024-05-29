@@ -246,7 +246,8 @@ export default {
   margin-left: 20px;
   margin-top: 20px;
 }
-.important-task{
+
+.important-task {
   margin: 15px;
   color: red;
 }

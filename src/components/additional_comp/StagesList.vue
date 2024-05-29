@@ -7,12 +7,10 @@
         <b-button v-if="access === true" variant="primary" class="btn-create-stage" @click="showAddStage">Добавить
           этап</b-button>
       </div>
-
       <div class="stages-list">
         <StagesItem v-for="stage in stages" :key="stage.id" :stage="stage" />
       </div>
     </div>
-
   </div>
 </template>
 

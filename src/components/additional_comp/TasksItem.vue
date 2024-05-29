@@ -1,10 +1,10 @@
 <template>
-    <div >
-      <li @click="goToTaskPage">
-        {{ task.name }}
-        <p class="stat-task">Статус: {{ task.status }}</p>
-      </li>
-    </div>
+  <div>
+    <li @click="goToTaskPage">
+      {{ task.name }}
+      <p class="stat-task">Статус: {{ task.status }}</p>
+    </li>
+  </div>
 </template>
 
 <script>
@@ -19,12 +19,12 @@ export default {
     }
   },
   props: ['task']
-  
+
 };    
 </script>
 
 <style>
-.stat-task{
+.stat-task {
   font-size: 12px;
   margin-bottom: 0;
 }
