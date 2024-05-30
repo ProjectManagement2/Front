@@ -70,7 +70,7 @@
                 <b-button variant="primary" class="btn-proj" @click="showStages">Этапы и задачи</b-button>
                 <b-button variant="primary" class="btn-proj" @click="showEmployees">Участники</b-button>
                 <b-button variant="primary" class="btn-proj" @click="showLeaders">Руководители проекта</b-button>
-                <b-button variant="primary" class="btn-proj" @click="showCalendar">Календарь</b-button>
+                <b-button variant="primary" class="btn-proj" @click="showCalendar">Диаграмма Ганта</b-button>
                 <b-button variant="primary" class="btn-proj" @click="showChat">Чат</b-button>
               </div>
               <div v-if="currentTab === 'stage'">
@@ -113,10 +113,11 @@
                 </div>
               </div>
               <div v-else-if="currentTab === 'calendar'">
-                <h4 class="part-name">Календарь задач</h4>
+                <h4 class="part-name">Диаграмма Ганта</h4>
                 <div class="col">
                   <div class="inf-proj">
-                    <GanttChart />
+                    
+                    <TasksGanttChart/>
                   </div>
                 </div>
               </div>
@@ -146,6 +147,7 @@ import TaskCalendar from "./additional_comp/TaskCalendar.vue";
 import AddLeaderProj from "./modal_forms/AddLeaderProj.vue";
 import GanttChart from "./GanttChart.vue";
 import TasksStatChart from "./additional_comp/TasksStatChart.vue";
+import TasksGanttChart from "./additional_comp/TasksGanttChart.vue";
 
 export default {
   name: "ProjectPage",
@@ -155,7 +157,8 @@ export default {
     TaskCalendar,
     AddLeaderProj,
     GanttChart,
-    TasksStatChart
+    TasksStatChart,
+    TasksGanttChart
   },
   data() {
     return {
