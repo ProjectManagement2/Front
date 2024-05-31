@@ -9,6 +9,7 @@
       <router-link class="label1" to="/adm/profile">Профиль (Admin)</router-link>
       <router-link class="label1" to="/user/profile">Профиль</router-link>
       <router-link class="label1" to="/user/kanban">Канбан-доска</router-link>
+      <router-link class="label1" to="/user/calendar">Календарь задач</router-link>
     </div>
 
     <!-- Затемнение остальной части страницы -->

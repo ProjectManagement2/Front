@@ -22,8 +22,15 @@
                 </div>
             </div>
             <div class="stage-buttons">
-                <b-button v-if="access === true" variant="primary" class="btn-create-task" @click="showAddTask">Добавить
-                    задачу</b-button>
+                <button v-if="access === true" class="btn-create-task" @click="showAddTask">
+                    <img src="@/assets/add-icon.png" alt="Показать задачи">
+                </button>
+                <button v-if="access === true" class="btn-create-task" @click="showAddTask">
+                    <img src="@/assets/edit-icon.png" alt="Показать задачи">
+                </button>
+                <button v-if="access === true" class="btn-create-task" @click="showAddTask">
+                    <img src="@/assets/delete-icon.png" alt="Показать задачи">
+                </button>
                 <button class="btn-open-stage" @click="showTasks">
                     <img src="@/assets/arrow-icon.png" alt="Показать задачи">
                 </button>
@@ -40,7 +47,22 @@
                         <h6 class="stg-name">Сейчас этап не доступен</h6>
                     </div>
                 </div>
+                <div class="stage-buttons">
+                <button v-if="access === true" class="btn-create-task" @click="showAddTask">
+                    <img src="@/assets/add-icon.png" alt="Показать задачи">
+                </button>
+                <button v-if="access === true" class="btn-create-task" @click="showAddTask">
+                    <img src="@/assets/edit-icon.png" alt="Показать задачи">
+                </button>
+                <button v-if="access === true" class="btn-create-task" @click="showAddTask">
+                    <img src="@/assets/delete-icon.png" alt="Показать задачи">
+                </button>
+                <button class="btn-open-stage" @click="showTasks">
+                    <img src="@/assets/arrow-icon.png" alt="Показать задачи">
+                </button>
             </div>
+            </div>
+            
         </div>
         <div class="tasks-list">
             <TasksList :tasks="tasks" :is-visible="isTasksVisible" />
@@ -190,11 +212,17 @@ export default {
 .btn-create-task {
     display: flex;
     color: rgb(67, 67, 67) !important;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    height: 30px;
+    margin-top: 8%;
+    margin-left: 10px;
+    margin-right: 15px;
+    padding-right: 3px;
+    padding-left: 3px;
+    padding-bottom: 3px !important;
+    padding-top: 3px;
     background-color: rgb(168, 205, 234) !important;
     border-color: rgb(168, 205, 234) !important;
-    height: 30%;
+    border-radius: 8px;
 }
 
 .btn-open-stage {
@@ -207,9 +235,12 @@ export default {
 }
 
 .btn-open-stage img {
-    width: 35px;
-    /* Размер иконки меню */
+    width: 30px;
     height: auto;
+}
+.btn-create-task img {
+  width: 25px;
+  height: auto;
 }
 .switch-container {
   display: flex;

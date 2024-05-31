@@ -1,7 +1,13 @@
 <template>
-  <div class="cld-container">
-    <FullCalendar :options="calendarOptions" />
+  <div>
+    <div class="page-header mb-2">
+      <h1 class="page-heading">Календарь задач</h1>
+    </div>
+    <div class="cld-container">
+      <FullCalendar :options="calendarOptions" />
+    </div>
   </div>
+  
 </template>
 
 <script>
@@ -35,13 +41,13 @@ export default {
   methods: {
     loadTasks() {
       axios
-        .get('/api/project/getCalendarTasks', {
+        .get("/api/profile/userTasks", {
           headers: {
-            'authorization': `Bearer ${localStorage.access_token}`,
-            'projectid': localStorage.proj_id
-          }
+            authorization: `Bearer ${localStorage.access_token}`,
+          },
         })
         .then(response => {
+          console.log('API response:', response.data);
           const events = [];
           response.data.forEach(task => {
             events.push({
@@ -79,6 +85,8 @@ export default {
 <style>
 .cld-container {
   overflow: hidden;
+  margin-top: 60px;
+  margin-right: 20px;
 }
 
 .event-content {

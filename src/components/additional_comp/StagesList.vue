@@ -4,8 +4,18 @@
     <div class="stg-row">
       <div class="stages-new">
         <h5 class="stg-title">Этапы</h5>
-        <b-button v-if="access === true" variant="primary" class="btn-create-stage" @click="showAddStage">Добавить
-          этап</b-button>
+        <div class="stg-buttons">
+          <button v-if="access === true" class="btn-create-stage" @click="showAddStage">
+            <img src="@/assets/add-icon.png" alt="Показать задачи">
+          </button>
+          <button v-if="access === true" class="btn-create-stage" @click="showAddStage">
+            <img src="@/assets/edit-icon.png" alt="Показать задачи">
+          </button>
+          <button v-if="access === true" class="btn-create-stage" @click="showAddStage">
+            <img src="@/assets/delete-icon.png" alt="Показать задачи">
+          </button>
+        </div>
+        
       </div>
       <div class="stages-list">
         <StagesItem v-for="stage in stages" :key="stage.id" :stage="stage" />
@@ -80,11 +90,19 @@ export default {
 .btn-create-stage {
   color: rgb(67, 67, 67) !important;
   margin-bottom: 0.5%;
-  margin-top: 0.5%;
+  margin-top: 1%;
+  margin-left: 10px;
+  margin-right: 15px;
+  padding-right: 3px;
+  padding-left: 3px;
   background-color: rgb(168, 205, 234) !important;
   border-color: rgb(168, 205, 234) !important;
+  border-radius: 8px;
 }
-
+.btn-create-stage img {
+  width: 25px;
+  height: auto;
+}
 .stages-list {
   padding: 0px !important;
 
