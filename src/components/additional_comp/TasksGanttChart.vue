@@ -109,7 +109,8 @@
               end: new Date(task.deadline).toISOString(),
               user: task.worker.surname,
               duration: 2 * 24 * 60 * 60 * 1000,
-              progress: 100,
+              progress: 50,
+              type: 'task'
               
             }));
             //this.updateGanttDates();

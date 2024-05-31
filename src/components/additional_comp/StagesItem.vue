@@ -61,7 +61,7 @@ export default {
     },
     data() {
         return {
-            isStageCompleted: false,
+            isStageCompleted: this.stage.isDone,
             isAddTaskVisible: false,
             isTasksVisible: false,
             tasks: [],
@@ -124,16 +124,18 @@ export default {
         toggleStageCompletion() {
             axios
                 .patch('/api/project/updateStageStatus', {
+                    isDone: this.isStageCompleted,
+                },{
                     headers: {
                         'authorization': `Bearer ${localStorage.access_token}`,
                         'stageid': this.stage._id,
                         'projectid': localStorage.proj_id
                     }
-                },{
-                    isDone: this.isStageCompleted,
                 })
                 .then(response => {
                     console.log('Stage completion status updated', response);
+                    window.location.reload(); 
+                    
                 })
                 .catch(error => {
                     console.error('Error updating stage completion status', error);

@@ -32,6 +32,15 @@
                   <p>Файлы не были прикреплены</p>
                 </div>
               </div>
+              <div class="attached-files">
+                <h5 class="file-title">Комментарии</h5>
+                <div v-if="comments.text != ''">
+                  <p>{{ comments.text }}</p>
+                </div>
+                <div v-else>
+                  <p>Комментарии отсутствуют</p>
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-lg-4">
@@ -55,7 +64,7 @@
               </div>
             </div>
           </div>
-          <div v-if="access === true" class="col-lg-4">
+          <div v-if="accessUser === true && accessLeader === false" class="col-lg-4">
             <div class="card mb-4">
               <div class="card-header">
                 <h4 class="card-heading">Отчет по задаче</h4>
@@ -66,14 +75,28 @@
                   <textarea v-model="form.solutionText" placeholder="Введите текст отчета"></textarea>
                   <p>Файлы:</p>
                   <input type="file" id="file" ref="fileInput" multiple />
-                  <!-- <div class="col">
-                    <h6 class="status-title">Выберете статус задачи:</h6>
-                    <select v-model="status">
-                      <option value="выполняется">Выполняется</option>
-                      <option value="завершена">Завершена</option>
-                    </select>
-                  </div> -->
                   <b-button class="btn-addresult" type="submit">Отправить решение</b-button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div v-else-if="accessUser === false && accessLeader === true" class="col-lg-4">
+            <div class="card mb-4">
+              <div class="card-header">
+                <h4 class="card-heading">Комментарий по отчету</h4>
+              </div>
+              <div class="task-edit-container">
+                <form class="task-edit-elem" @submit.prevent="submitResponse">
+                  <p>Текст</p>
+                  <textarea v-model="response.text" placeholder="Введите текст комментария"></textarea>
+                  <div class="col">
+                    <h6 class="status-title">Изменение статуса задачи:</h6>
+                    <select v-model="response.status">
+                      <option value="Выполняется">В процессе</option>
+                      <option value="Завершена">Завершена</option>
+                    </select>
+                  </div>
+                  <b-button class="btn-addresult" type="submit">Отправить</b-button>
                 </form>
               </div>
             </div>
@@ -96,14 +119,36 @@ export default {
       form: {
         solutionText: "",
       },
-      access: null,
+      response: {
+        text: "",
+        status: ""
+      },
+      accessUser: null,
+      accessLeader: null,
+      comments: []
     };
   },
   mounted() {
     this.getTask();
     this.getUserAccess();
+    this.getProjectLeader();
+    this.getComments();
   },
   methods: {
+    getComments(){
+      axios
+        .get("/api/task/getComments", {
+          headers: {
+            authorization: `Bearer ${localStorage.access_token}`,
+            taskid: localStorage.task_id,
+            projectid: localStorage.proj_id,
+          },
+        })
+        .then((response) => {
+          this.comments = response.data.access;
+          console.log(this.comments);
+        });
+    },
     getUserAccess() {
       axios
         .get("/api/access/checkTaskWorker", {
@@ -113,8 +158,21 @@ export default {
           },
         })
         .then((response) => {
-          this.access = response.data.access;
-          console.log(this.access);
+          this.accessUser = response.data.access;
+          console.log(this.accessUser);
+        });
+    },
+    getProjectLeader() {
+      axios
+        .get("/api/access/checkProjectLeader", {
+          headers: {
+            authorization: `Bearer ${localStorage.access_token}`,
+            projectid: localStorage.proj_id,
+          },
+        })
+        .then((response) => {
+          this.accessLeader = response.data.access;
+          console.log(this.accessLeader);
         });
     },
     getTask() {
@@ -128,6 +186,31 @@ export default {
         .then((response) => {
           this.task = response.data;
         });
+    },
+    submitResponse(){
+      let data = {
+        text: this.response.text,
+        status: this.response.status
+      };
+      if (this.response.status) {
+        axios
+          .post("/api/task/createComment", data, {
+              headers: {
+                'authorization': `Bearer ${localStorage.access_token}`,
+                'projectid': localStorage.proj_id,
+                'taskid': localStorage.task_id,
+              }
+          })
+          .then(() => {
+            console.log("New response is created");
+            window.location.reload();
+          })
+          .catch((errors) => {
+            console.log(errors);
+          });
+      } else {
+        console.warn('Статус не выбран');
+      }
     },
     formatDate(dateString) {
       const dateObject = new Date(dateString);
