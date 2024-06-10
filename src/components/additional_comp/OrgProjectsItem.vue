@@ -1,6 +1,6 @@
 <template>
   <div class="list-col">
-    <li @click="goToProjectPage">{{ project.name }}</li>
+    <li class="projects-item" @click="goToProjectPage">{{ project.name }}</li>
 
   </div>
 </template>
@@ -27,7 +27,7 @@ export default {
   margin-left: 0;
 }
 
-li {
+.projects-item {
   padding-left: 0;
   list-style-type: none;
   margin: 10px;
@@ -43,8 +43,7 @@ li {
   border-radius: 10px;
 }
 
-li:hover {
-  background-color: rgba(234, 205, 221, 0.421);
-
+.projects-item :hover {
+  background-color: rgba(205, 226, 234, 0.421);
 }
 </style>

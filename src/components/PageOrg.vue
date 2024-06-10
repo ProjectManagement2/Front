@@ -24,7 +24,7 @@
               <div class="title-list">
                 <b-button variant="primary" class="btn-org" @click="showProjects">Проекты</b-button>
                 <b-button variant="primary" class="btn-org" @click="showEmployees">Участники</b-button>
-                <b-button variant="primary" class="btn-org" @click="showLeaders">Лидеры организации</b-button>
+                <!-- <b-button variant="primary" class="btn-org" @click="showLeaders">Лидеры организации</b-button> -->
               </div>
               <div v-if="currentTab === 'projects'">
                 <h4 class="part-name">Список дейтсвующих проектов</h4>
@@ -45,7 +45,7 @@
                 <div class="col">
                   <div class="inf-org">
                     <ul>
-                      <li v-for="employee in employees" :key="employee.id">
+                      <li class="empl-item" v-for="employee in employees" :key="employee.id">
                         {{ employee.surname }} {{ employee.name }}
                         {{ employee.otch }}
                       </li>
@@ -60,7 +60,7 @@
                 </div>
               </div>
               <div v-else-if="currentTab === 'leaders'">
-                <h4 class="part-name">Список лидеров организации</h4>
+                <h4 class="part-name">Лидер организации</h4>
                 <div class="col">
                   <div class="inf-org">
                     <p class="mb-3">
@@ -68,10 +68,7 @@
                       {{ posts.leader.otch }}
                     </p>
                   </div>
-                  <div class="inf-org">
-                    <b-button v-if="access === true" variant="primary" class="btn-create-proj">Добавить
-                      лидера</b-button>
-                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -354,5 +351,24 @@ h3,
 .inf-org {
   display: flex;
   justify-content: center;
+}
+.empl-item {
+  padding-left: 0;
+  list-style-type: none;
+  margin: 10px;
+  padding: 5px;
+  width: 380px;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  font-size: 17px;
+  font-family: 'Avantgarde', 'TeX Gyre Adventor', 'URW Gothic L', sans-serif;
+  font-weight: 500;
+  border: 1px solid rgb(155, 155, 155);
+  border-radius: 10px;
+}
+
+.empl-item :hover {
+  background-color: rgba(205, 226, 234, 0.421)
 }
 </style>

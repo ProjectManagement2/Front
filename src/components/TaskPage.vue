@@ -93,7 +93,8 @@
                     <h6 class="status-title">Изменение статуса задачи:</h6>
                     <select v-model="response.status">
                       <option value="Выполняется">В процессе</option>
-                      <option value="Завершена">Завершена</option>
+                      <option value="Утверждена">Утверждена</option>
+                      
                     </select>
                   </div>
                   <b-button class="btn-addresult" type="submit">Отправить</b-button>
@@ -135,7 +136,7 @@ export default {
     this.getComments();
   },
   methods: {
-    getComments(){
+    getComments() {
       axios
         .get("/api/task/getComments", {
           headers: {
@@ -187,7 +188,7 @@ export default {
           this.task = response.data;
         });
     },
-    submitResponse(){
+    submitResponse() {
       let data = {
         text: this.response.text,
         status: this.response.status
@@ -195,11 +196,11 @@ export default {
       if (this.response.status) {
         axios
           .post("/api/task/createComment", data, {
-              headers: {
-                'authorization': `Bearer ${localStorage.access_token}`,
-                'projectid': localStorage.proj_id,
-                'taskid': localStorage.task_id,
-              }
+            headers: {
+              'authorization': `Bearer ${localStorage.access_token}`,
+              'projectid': localStorage.proj_id,
+              'taskid': localStorage.task_id,
+            }
           })
           .then(() => {
             console.log("New response is created");

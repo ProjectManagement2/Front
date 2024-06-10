@@ -1,17 +1,18 @@
 <template>
     <div v-if="localIsVisible">
-        <div id="add" class="w-75 mx-auto border p-3 rounded">
-            <b-form @submit.prevent="addEmpl">
+        <div id="delete" class="w-75 mx-auto border p-3 rounded">
+            <b-form @submit.prevent="deleteStage">
+                <h3 class="name-form">Удаление этапа</h3>
                 <div class="row form-group">
-                    <label>Выберете сотрудника:</label>
-                    <select v-model="form.newMemberId" @change="selectUser">
-                        <option v-for="user in users" :key="user._id" :value="user._id">
-                            {{ user.surname }} {{ user.name }} {{ user.otch }}
+                    <label>Выберете этап:</label>
+                    <select class="select-stage" v-model="form.StageId" @change="selectStage">
+                        <option v-for="stage in stages" :key="stage._id" :value="stage._id">
+                            {{ stage.name }}
                         </option>
                     </select>
                 </div>
-                <b-button variant="primary" class="btn-add-addtask" type="submit">Добавить</b-button>
-                <b-button variant="primary" class="btn-close-addtask" @click="closeForm">Закрыть</b-button>
+                <b-button variant="primary" class="btn-delete-deletestage" type="submit">Удалить</b-button>
+                <b-button variant="primary" class="btn-close-deletestage" @click="closeForm">Закрыть</b-button>
             </b-form>
         </div>
         <div class="overlay" @click="closeForm"></div>
@@ -25,53 +26,51 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            users: [],
-            form:{ newMemberId: '' }
+            stages: [],
+            form:{ StageId: '' }
             
         };
     },
     mounted() {
-        this.getUsers();
+        this.getStages();
     },
     methods: {
-        getUsers() {
+        getStages() {
             axios
-                .get('/api/organization/allUsers', {
+                .get('/api/project/getAllStages', {
                     headers: {
                         'authorization': `Bearer ${localStorage.access_token}`,
-                        'organizationId': localStorage.org_id
+                        'projectid': localStorage.proj_id,
                     }
                 })
                 .then((response) => {
-                    this.users = response.data
+                    this.stages = response.data
                 });
         },
 
-        selectUser() {
-            console.log('Выбран пользователь с ID:', this.form.newMemberId);
+        selectStage() {
+            console.log('Выбран этап с ID:', this.form.StageId);
         },
 
-        addEmpl() {
-            let data = {
-                newMemberId: this.form.newMemberId
-            };
-            if (this.form.newMemberId) {
+        deleteStage() {
+            if (this.form.StageId) {
                 axios
-                    .post("/api/organization/addUser", data, {
+                    .delete("/api/project/deleteStage", {
                         headers: {
                             'authorization': `Bearer ${localStorage.access_token}`,
-                            'organizationId': localStorage.org_id
+                            'projectid': localStorage.proj_id,
+                            'stageid': this.form.StageId
                         }
                     })
                     .then(() => {
-                        console.log("New empl is added");
+                        console.log("Этап удален");
                         window.location.reload();
                     })
                     .catch((errors) => {
                         console.log(errors);
                     });
             } else {
-                console.warn('Исполнитель не выбран');
+                console.warn('Этап не выбран');
             }
         },
 
@@ -84,10 +83,6 @@ export default {
         isVisible: {
             type: Boolean,
             default: false
-        },
-        stageId: {
-            type: String,
-            required: true
         }
     },
     computed: {
@@ -99,9 +94,9 @@ export default {
 </script>
 
 <style scoped>
-#add {
+#delete {
     left: 50%;
-    top: -300px;
+    top: -150px;
     background-color: white;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -128,12 +123,13 @@ export default {
 
 .name-form {
     font-size: 18px;
-    margin: 5px;
+    
+    margin-left: 15px;
     margin-bottom: 15px;
 }
 
-.btn-add-addtask,
-.btn-close-addtask {
+.btn-delete-deletestage,
+.btn-close-deletestage {
     font-size: 15px;
     color: rgb(67, 67, 67) !important;
     background-color: rgb(168, 205, 234) !important;
@@ -150,13 +146,13 @@ export default {
     margin-right: 5px;
 }
 
-#name,
-#description,
-#deadline,
-#checkbox,
-#tags,
-#file {
-    margin-bottom: 5px;
-    font-size: 13px;
+.select-stage {
+  margin-left: 10px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  border-color: rgb(199, 199, 199);
+  border-radius: 5px;
+  height: 30px;
+  width: 500px;
 }
 </style>

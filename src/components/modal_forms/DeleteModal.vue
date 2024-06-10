@@ -24,8 +24,8 @@
             </div>
           </div>
         </div>
-        <b-button variant="primary" type="submit">Удалить</b-button>
-        <b-button variant="primary" class="btn" @click="closeForm">Закрыть</b-button>
+        <b-button variant="primary" class="btn-close-org-delete" type="submit">Удалить</b-button>
+        <b-button variant="primary" class="btn-close-org-delete" @click="closeForm">Закрыть</b-button>
       </b-form>
     </div>
   </template>
@@ -79,11 +79,17 @@
     margin: 5px;
     margin-bottom: 15px;
   }
-  .btn{
-    background-color: lightpink;
-    font-size: 15px;
+  .btn-close-org-delete{
+    margin-top: 25px!important;
+    margin-left: 15px!important;
+    margin-bottom: 15px!important;
+    color: rgb(67, 67, 67) !important;
+    height: 40px;
+    background-color: rgb(168, 205, 234) !important;
+    border-color: rgb(168, 205, 234) !important;
+    border-radius: 8px;
   } 
-  .form-group, .btn, .mt-3{
+  .form-group, .mt-3{
       margin-left:5px;
       margin-top: 5px;
       margin-right: 5px;

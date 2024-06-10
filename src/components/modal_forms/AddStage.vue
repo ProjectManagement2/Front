@@ -48,7 +48,7 @@
   export default {
     data() {
       return {
-        stages: [],
+        
         form: {
             name: "",
             description: "",
@@ -154,13 +154,16 @@
     color: rgb(67, 67, 67)!important;
     background-color: rgb(168, 205, 234) !important;
     border-color: rgb(168, 205, 234) !important;
+    margin-right: 10px;
+    margin-top: 20px;
+    margin-left: 5px;
   } 
   .form-group, .row.form-group, .mt-3{
     margin-left:5px;
     margin-top: 5px;
     margin-right: 5px;
   }
-  #organization, #description, #name, #otch{
+  #organization, #description, #name, #otch, #startDate, #endDate{
     margin-bottom: 5px;
     font-size: 13px ; 
   }

@@ -9,7 +9,7 @@
           <label for="password">Пароль:</label>
           <b-input v-model="form.password" type="password" id="password" placeholder="Пароль..."></b-input>
         </div>
-        <b-button class="btn" variant="primary" type="submit">Войти</b-button>
+        <b-button class="btn-admin-login" variant="primary" type="submit">Войти</b-button>
       </b-form>
     </div>
 </template>
@@ -55,10 +55,19 @@
       margin-top: 12%;
       box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
   }
-  .form-group, .btn{
+  .form-group{
       margin-left:15px;
       margin-top: 25px;
       margin-right: 15px;
   }
-    
+  .btn-admin-login{
+    margin-top: 25px!important;
+    margin-left: 15px!important;
+    margin-bottom: 15px!important;
+    color: rgb(67, 67, 67) !important;
+    height: 40px;
+    background-color: rgb(168, 205, 234) !important;
+    border-color: rgb(168, 205, 234) !important;
+    border-radius: 8px;
+  }  
 </style>

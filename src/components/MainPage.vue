@@ -5,7 +5,7 @@
                 <span class="main-info_label">For Everyone</span>
                 <h1 class="main-info_header">Planify: простой и удобный инструмент управления проектами</h1>
                 <span class="main-info_subtitle">Повысьте производительность вашей команды c Planify</span>
-                <button class="main-info_button" to="/signup">Начать использовать</button>
+                <button class="main-info_button" @click="openStart">Начать использовать</button>
             </div>
 
             <div class="key-features">
@@ -31,6 +31,18 @@
     </main>
 
 </template>
+
+<script>
+import router from '@/router/index.js';
+export default {
+   methods: {
+        openStart(){
+            router.push("/signin");
+        }
+   } 
+}
+
+</script>
 
 <style>
 .main-container {

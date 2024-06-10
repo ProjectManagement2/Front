@@ -1,17 +1,18 @@
 <template>
     <div v-if="localIsVisible">
-        <div id="add" class="w-75 mx-auto border p-3 rounded">
-            <b-form @submit.prevent="addEmpl">
+        <div id="delete" class="w-75 mx-auto border p-3 rounded">
+            <b-form @submit.prevent="deleteTask">
+                <h3 class="name-form">Удаление задачи</h3>
                 <div class="row form-group">
-                    <label>Выберете сотрудника:</label>
-                    <select v-model="form.newMemberId" @change="selectUser">
-                        <option v-for="user in users" :key="user._id" :value="user._id">
-                            {{ user.surname }} {{ user.name }} {{ user.otch }}
+                    <label>Выберете задачу:</label>
+                    <select class="select-task" v-model="form.TaskId" @change="selectTask">
+                        <option v-for="task in tasks" :key="task._id" :value="task._id">
+                            {{ task.name }}
                         </option>
                     </select>
                 </div>
-                <b-button variant="primary" class="btn-add-addtask" type="submit">Добавить</b-button>
-                <b-button variant="primary" class="btn-close-addtask" @click="closeForm">Закрыть</b-button>
+                <b-button variant="primary" class="btn-delete-deletetask" type="submit">Удалить</b-button>
+                <b-button variant="primary" class="btn-close-deletetask" @click="closeForm">Закрыть</b-button>
             </b-form>
         </div>
         <div class="overlay" @click="closeForm"></div>
@@ -25,53 +26,51 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            users: [],
-            form:{ newMemberId: '' }
+            tasks: [],
+            form:{ TaskId: '' }
             
         };
     },
     mounted() {
-        this.getUsers();
+        this.getTasks();
     },
     methods: {
-        getUsers() {
+        getTasks() {
             axios
-                .get('/api/organization/allUsers', {
+                .get('/api/project/getAllTasks', {
                     headers: {
                         'authorization': `Bearer ${localStorage.access_token}`,
-                        'organizationId': localStorage.org_id
+                        'stageid': this.stageId
                     }
                 })
                 .then((response) => {
-                    this.users = response.data
+                    this.tasks = response.data
                 });
         },
 
-        selectUser() {
-            console.log('Выбран пользователь с ID:', this.form.newMemberId);
+        selectTask() {
+            console.log('Выбрана задача с ID:', this.form.TaskId);
         },
 
-        addEmpl() {
-            let data = {
-                newMemberId: this.form.newMemberId
-            };
-            if (this.form.newMemberId) {
+        deleteTask() {
+            if (this.form.TaskId) {
                 axios
-                    .post("/api/organization/addUser", data, {
+                    .delete("/api/project/deleteTask", {
                         headers: {
                             'authorization': `Bearer ${localStorage.access_token}`,
-                            'organizationId': localStorage.org_id
+                            'projectid': localStorage.proj_id,
+                            'taskid': this.form.TaskId
                         }
                     })
                     .then(() => {
-                        console.log("New empl is added");
+                        console.log("Задача удалена");
                         window.location.reload();
                     })
                     .catch((errors) => {
                         console.log(errors);
                     });
             } else {
-                console.warn('Исполнитель не выбран');
+                console.warn('Задача не выбрана');
             }
         },
 
@@ -99,9 +98,9 @@ export default {
 </script>
 
 <style scoped>
-#add {
+#delete {
     left: 50%;
-    top: -300px;
+    top: -150px;
     background-color: white;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -128,12 +127,13 @@ export default {
 
 .name-form {
     font-size: 18px;
-    margin: 5px;
+    
+    margin-left: 15px;
     margin-bottom: 15px;
 }
 
-.btn-add-addtask,
-.btn-close-addtask {
+.btn-delete-deletetask,
+.btn-close-deletetask {
     font-size: 15px;
     color: rgb(67, 67, 67) !important;
     background-color: rgb(168, 205, 234) !important;
@@ -150,13 +150,13 @@ export default {
     margin-right: 5px;
 }
 
-#name,
-#description,
-#deadline,
-#checkbox,
-#tags,
-#file {
-    margin-bottom: 5px;
-    font-size: 13px;
+.select-task {
+  margin-left: 10px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  border-color: rgb(199, 199, 199);
+  border-radius: 5px;
+  height: 30px;
+  width: 500px;
 }
 </style>

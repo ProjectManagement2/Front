@@ -75,6 +75,8 @@ export default {
           return 'В процессе'
         case 'statusDone':
           return 'Завершенные'
+        case 'statusUnavailable':
+          return 'Недоступные'
         default:
           return status // Возвращаем оригинальный статус, если нет соответствующего лейбла
       }

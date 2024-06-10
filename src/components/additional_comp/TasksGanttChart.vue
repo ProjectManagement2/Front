@@ -27,7 +27,6 @@ export default {
       options: {
           maxRows: 100,
           maxHeight: 300,
-          
           row: {
               height: 24,
           },
@@ -105,6 +104,7 @@ export default {
           this.tasks = response.data.map((task) => ({
             id: task._id,
             label: task.name,
+            dependentOn: [task.relatedTask],
             start: new Date(task.startDate).toISOString(),
             end: new Date(task.deadline).toISOString(),
             user: task.worker.surname,

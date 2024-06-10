@@ -1,9 +1,18 @@
 <template>
   <div>
-    <li @click="goToTaskPage">
-      {{ task.name }}
-      <p class="stat-task">Статус: {{ task.status }}</p>
-    </li>
+    <div v-if="task.status === 'Недоступна'">
+      <li class="task-bloked">
+        {{ task.name }}
+        <p class="stat-task">Статус: {{ task.status }}</p>
+      </li>
+    </div>
+    <div v-else>
+      <li class="task-item" @click="goToTaskPage">
+        {{ task.name }}
+        <p class="stat-task">Статус: {{ task.status }}</p>
+      </li>
+    </div>
+
   </div>
 </template>
 
@@ -27,5 +36,46 @@ export default {
 .stat-task {
   font-size: 12px;
   margin-bottom: 0;
+}
+
+.task-item {
+  padding-left: 0;
+  list-style-type: none;
+  margin: 10px;
+  padding: 5px;
+  width: 180px;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  font-size: 17px;
+  font-family: 'Avantgarde', 'TeX Gyre Adventor', 'URW Gothic L', sans-serif;
+  font-weight: 500;
+  border: 1px solid rgb(155, 155, 155);
+  border-radius: 10px;
+}
+
+.task-item :hover {
+  background-color: rgba(205, 226, 234, 0.421) ;
+}
+
+.task-bloked {
+  background-color: rgb(170, 170, 170) ;
+  padding-left: 0;
+  list-style-type: none;
+  margin: 10px;
+  padding: 5px;
+  width: 180px;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  font-size: 17px;
+  font-family: 'Avantgarde', 'TeX Gyre Adventor', 'URW Gothic L', sans-serif;
+  font-weight: 500;
+  border: 1px solid rgb(155, 155, 155);
+  border-radius: 10px;
+}
+
+.task-bloked :hover {
+  background-color: rgb(170, 170, 170);
 }
 </style>

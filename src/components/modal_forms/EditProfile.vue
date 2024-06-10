@@ -139,8 +139,9 @@ export default {
 .btn-close-editprofile {
   background-color: rgb(168, 205, 234) !important;
   border-color: rgb(168, 205, 234) !important;
-  color: white;
+  color: rgb(65, 65, 65);
   border: 1px;
+  margin-right: 10px;
   border-radius: 5px;
   padding-top: 7px;
   padding-bottom: 7px;

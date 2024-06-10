@@ -36,9 +36,17 @@
             </div>
             <div class="row form-group">
               <label>Выберете исполнителя:</label>
-              <select v-model="form.worker" @change="selectUser">
+              <select class="select-addtask" v-model="form.worker" @change="selectUser">
                 <option v-for="user in users" :key="user._id" :value="user._id">
                   {{ user.surname }} {{ user.name }} {{ user.otch }}
+                </option>
+              </select>
+            </div>
+            <div class="row form-group">
+              <label>Выберете зависимость от задачи (необязательно):</label>
+              <select class="select-relatedtask" v-model="form.relatedTask" @change="selectTask">
+                <option v-for="task in tasks" :key="task._id" :value="task._id">
+                  {{ task.name }} 
                 </option>
               </select>
             </div>
@@ -63,6 +71,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      tasks: [],
       users: [],
       form: {
         name: "",
@@ -70,6 +79,7 @@ export default {
         startDate: "",
         deadline: "",
         isImportant: false,
+        relatedTask: '',
         tags: '',
         worker: ''
       }
@@ -77,8 +87,25 @@ export default {
   },
   mounted() {
     this.getUsers();
+    this.getTasks();
   },
   methods: {
+    getTasks() {
+      axios
+        .get("/api/project/getAllTasks", {
+          headers: {
+            authorization: `Bearer ${localStorage.access_token}`,
+            stageid: this.stageId,
+          },
+        })
+        .then((response) => {
+          this.tasks = response.data;
+        });
+    },
+
+    selectTask() {
+      console.log("Выбрана задача с ID:", this.form.TaskId);
+    },
     getUsers() {
       axios
         .get('/api/organization/getMembers', {
@@ -104,6 +131,7 @@ export default {
       formData.append('startDate', this.form.startDate);
       formData.append('deadline', this.form.deadline);
       formData.append('isImportant', this.form.isImportant);
+      formData.append('relatedTask', this.form.relatedTask);
       formData.append('tags', this.form.tags);
       formData.append('worker', this.form.worker);
 
@@ -201,6 +229,8 @@ export default {
   color: rgb(67, 67, 67) !important;
   background-color: rgb(168, 205, 234) !important;
   border-color: rgb(168, 205, 234) !important;
+  margin-right: 10px;
+  margin-top: 10px;
 }
 
 .form-group,
@@ -213,11 +243,22 @@ export default {
 
 #name,
 #description,
+#startDate,
 #deadline,
 #checkbox,
 #tags,
 #file {
   margin-bottom: 5px;
   font-size: 13px;
+}
+
+.select-addtask, .select-relatedtask {
+ 
+  margin-right: 15px;
+  margin-bottom: 15px;
+  border-color: rgb(199, 199, 199);
+  border-radius: 5px;
+  height: 30px;
+  width: 300px;
 }
 </style>

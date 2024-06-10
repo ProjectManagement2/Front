@@ -5,9 +5,9 @@
         </div>
         <div id="org-page" class="mx-auto border  rounded">
             <div id="btns">
-                <b-button class="btn-adm" @click="showAddForm">Добавить</b-button>
-                <b-button class="btn-adm" @click="showEditForm">Редактировать</b-button>
-                <b-button class="btn-adm" @click="showDeleteForm">Удалить</b-button>
+                <b-button class="btn-admin-profile" @click="showAddForm">Добавить</b-button>
+                <b-button class="btn-admin-profile" @click="showEditForm">Редактировать</b-button>
+                <b-button class="btn-admin-profile" @click="showDeleteForm">Удалить</b-button>
             </div>
             <div id="forms">
                 <AddModal :is-visible="isAddFormVisible" @close="closeAddForm" />
@@ -146,5 +146,16 @@ table td {
 
 table td:last-child {
     border-right: none;
+}
+
+.btn-admin-profile{
+    margin-top: 25px!important;
+    margin-left: 15px!important;
+    margin-bottom: 10px!important;
+    color: rgb(67, 67, 67) !important;
+    height: 40px;
+    background-color: rgb(168, 205, 234) !important;
+    border-color: rgb(168, 205, 234) !important;
+    border-radius: 8px;
 }
 </style>

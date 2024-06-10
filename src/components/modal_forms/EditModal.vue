@@ -1,6 +1,6 @@
 <template>
     <div v-if="localIsVisible" id="add" class="w-75 mx-auto border p-3 rounded">
-      <b-form @submit.prevent="editOrg">
+      <b-form @submit.prevent="editOrganization">
         <h3 class="name-form">Редактирование организаций</h3>
         <div class="row">
           <div class="col">
@@ -24,8 +24,8 @@
             </div>
           </div>
         </div>
-        <b-button variant="primary" type="submit">Редактировать</b-button>
-        <b-button variant="primary" class="btn" @click="closeForm">Закрыть</b-button>
+        <b-button variant="primary" class="btn-close-org-edit" type="submit">Редактировать</b-button>
+        <b-button variant="primary" class="btn-close-org-edit" @click="closeForm">Закрыть</b-button>
       </b-form>
     </div>
   </template>
@@ -35,18 +35,38 @@
     data() {
       return {
         form: {
-            organization: "",
-            surname: "",
             name: "",
-            otch: "",
+            description: "",
+            leaderId: null,
         }
       };
     },
     methods: {
-      editOrg() {
-        // Ваша логика отправки формы
-        console.log('Отправлено:', this.name);
-      },
+      editOrganization() {
+        let data = {    
+          name: this.form.name,    
+          description: this.form.description,
+          leaderId: this.form.leaderId    
+        };
+        if (this.form.leaderId){
+          axios
+          .patch("/api/admin/updateOrganization", data, {
+            headers: {
+              'authorization': `Bearer ${localStorage.access_token}`,
+            }
+          })
+          .then(() => {
+            console.log("Данные пользователя обновлены");
+            window.location.reload();
+          })
+          .catch((errors) => {
+            console.log(errors);
+          });
+        } else {
+          console.warn('Ответственный за организацию не выбран');
+        }
+        
+    },
       closeForm() {
       // Метод для закрытия формы
       this.$emit('close');
@@ -79,11 +99,17 @@
     margin: 5px;
     margin-bottom: 15px;
   }
-  .btn{
-    background-color: lightpink;
-    font-size: 15px;
+  .btn-close-org-edit{
+    margin-top: 25px!important;
+    margin-left: 15px!important;
+    margin-bottom: 15px!important;
+    color: rgb(67, 67, 67) !important;
+    height: 40px;
+    background-color: rgb(168, 205, 234) !important;
+    border-color: rgb(168, 205, 234) !important;
+    border-radius: 8px;
   } 
-  .form-group, .btn, .mt-3{
+  .form-group, .mt-3{
       margin-left:5px;
       margin-top: 5px;
       margin-right: 5px;

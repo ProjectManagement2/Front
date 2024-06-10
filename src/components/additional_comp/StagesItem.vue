@@ -1,19 +1,14 @@
 <template>
     <div>
-        <AddTask :is-visible="isAddTaskVisible" @close="closeAddTask" :stageId="stage._id" />
-        <div v-if="stage.isAvailable === true" class="stg-elem">
+        <AddTask :is-visible="isAddTaskVisible" @close="closeAddTask" :stageId="stage._id"></AddTask>
+        <DeleteTask :is-visible="isDeleteTaskVisible" @close="closeDeleteTask" :stageId="stage._id"></DeleteTask> 
+        <EditTask :is-visible="isEditTaskVisible" @close="closeEditTask" :stageId="stage._id"></EditTask>
+        <div class="stg-elem">
             <div class="stage-inf">
                 <div class="row">
                     <div class="col">
                         <h6 class="stg-name">{{ stage.name }}</h6>
                         <h6 class="stg-descr">Описание: {{ stage.description }}</h6>
-                        <div v-if="access === true" class="switch-container">
-                            <label class="switch">
-                                <input type="checkbox" v-model="isStageCompleted" @change="toggleStageCompletion">
-                                <span class="slider round"></span>
-                            </label>
-                            <span class="switch-span">Этап завершен</span>
-                        </div>
                     </div>
                     <div class="col">
                         <h6 class="stg-name">Начало: {{ formatDate(stage.startDate) }}</h6>
@@ -25,44 +20,16 @@
                 <button v-if="access === true" class="btn-create-task" @click="showAddTask">
                     <img src="@/assets/add-icon.png" alt="Показать задачи">
                 </button>
-                <button v-if="access === true" class="btn-create-task" @click="showAddTask">
+                <button v-if="access === true" class="btn-create-task" @click="showEditTask">
                     <img src="@/assets/edit-icon.png" alt="Показать задачи">
                 </button>
-                <button v-if="access === true" class="btn-create-task" @click="showAddTask">
+                <button v-if="access === true" class="btn-create-task" @click="showDeleteTask">
                     <img src="@/assets/delete-icon.png" alt="Показать задачи">
                 </button>
                 <button class="btn-open-stage" @click="showTasks">
                     <img src="@/assets/arrow-icon.png" alt="Показать задачи">
                 </button>
             </div>
-        </div>
-        <div v-else>
-            <div class="stage-blocked">
-                <div class="row">
-                    <div class="col">
-                        <h6 class="stg-name">{{ stage.name }}</h6>
-                        <h6 class="stg-descr">Описание: {{ stage.description }}</h6>
-                    </div>
-                    <div class="col">
-                        <h6 class="stg-name">Сейчас этап не доступен</h6>
-                    </div>
-                </div>
-                <div class="stage-buttons">
-                <button v-if="access === true" class="btn-create-task" @click="showAddTask">
-                    <img src="@/assets/add-icon.png" alt="Показать задачи">
-                </button>
-                <button v-if="access === true" class="btn-create-task" @click="showAddTask">
-                    <img src="@/assets/edit-icon.png" alt="Показать задачи">
-                </button>
-                <button v-if="access === true" class="btn-create-task" @click="showAddTask">
-                    <img src="@/assets/delete-icon.png" alt="Показать задачи">
-                </button>
-                <button class="btn-open-stage" @click="showTasks">
-                    <img src="@/assets/arrow-icon.png" alt="Показать задачи">
-                </button>
-            </div>
-            </div>
-            
         </div>
         <div class="tasks-list">
             <TasksList :tasks="tasks" :is-visible="isTasksVisible" />
@@ -74,16 +41,21 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
 import AddTask from "../modal_forms/AddTask.vue";
+import EditTask from "../modal_forms/EditTask.vue";
+import DeleteTask from "../modal_forms/DeleteTask.vue";
 import TasksList from "./TasksList.vue";
 export default {
     props: ['stage'],
     components: {
         AddTask,
+        EditTask,
+        DeleteTask,
         TasksList
     },
     data() {
         return {
-            isStageCompleted: this.stage.isDone,
+            isDeleteTaskVisible: false,
+            isEditTaskVisible: false,
             isAddTaskVisible: false,
             isTasksVisible: false,
             tasks: [],
@@ -122,6 +94,18 @@ export default {
         closeAddTask() {
             this.isAddTaskVisible = false;
         },
+        showEditTask() {
+            this.isEditTaskVisible = true;
+        },
+        closeEditTask() {
+            this.isEditTaskVisible = false;
+        },
+        showDeleteTask() {
+            this.isDeleteTaskVisible = true;
+        },
+        closeDeleteTask() {
+            this.isDeleteTaskVisible = false;
+        },
         showTasks() {
             this.isTasksVisible = !this.isTasksVisible;
             if (this.isTasksVisible) {
@@ -143,27 +127,8 @@ export default {
                     this.tasks = response.data
                 });
         },
-        toggleStageCompletion() {
-            axios
-                .patch('/api/project/updateStageStatus', {
-                    isDone: this.isStageCompleted,
-                },{
-                    headers: {
-                        'authorization': `Bearer ${localStorage.access_token}`,
-                        'stageid': this.stage._id,
-                        'projectid': localStorage.proj_id
-                    }
-                })
-                .then(response => {
-                    console.log('Stage completion status updated', response);
-                    window.location.reload(); 
-                    
-                })
-                .catch(error => {
-                    console.error('Error updating stage completion status', error);
-                });
-            }
-        }
+        
+    }
 };
 </script>
 
@@ -242,65 +207,5 @@ export default {
   width: 25px;
   height: auto;
 }
-.switch-container {
-  display: flex;
-  align-items: center;
-  margin-left: 15px;
-}
 
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 35px;
-  height: 18px;
-  margin-right: 10px;
-}
-
-.switch-span{
-  padding-bottom: 10px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: 0.4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 12px;
-  width: 12px;
-  left: 4px;
-  bottom: 2.5px;
-  background-color: white;
-  transition: 0.4s;
-}
-
-input:checked + .slider {
-  background-color: rgb(168, 205, 234);
-}
-
-input:checked + .slider:before {
-  transform: translateX(15px);
-}
-
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
 </style>
