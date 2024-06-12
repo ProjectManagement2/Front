@@ -34,6 +34,7 @@
         <div class="tasks-list">
             <TasksList :tasks="tasks" :is-visible="isTasksVisible" />
         </div>
+        
     </div>
 </template>
 

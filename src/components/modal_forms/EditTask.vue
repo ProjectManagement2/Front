@@ -7,11 +7,7 @@
           <div class="col">
             <div class="row form-group">
               <label>Выберете задачу, которую хотите изменить:</label>
-              <select
-                class="select-edittask"
-                v-model="form.TaskId"
-                @change="selectTask"
-              >
+              <select class="select-edittask" v-model="form.TaskId" @change="selectTask">
                 <option v-for="task in tasks" :key="task._id" :value="task._id">
                   {{ task.name }}
                 </option>
@@ -19,51 +15,27 @@
             </div>
             <div class="form-group">
               <label for="name">Название:</label>
-              <b-input
-                v-model="form.name"
-                type="text"
-                id="name"
-                placeholder="Название задачи"
-              ></b-input>
+              <b-input v-model="form.name" type="text" id="name" placeholder="Новое название задачи"></b-input>
             </div>
             <div class="form-group">
               <label for="description">Описание:</label>
-              <b-input
-                v-model="form.description"
-                type="text"
-                id="description"
-                placeholder="Расскажите о задаче"
-              ></b-input>
+              <b-input v-model="form.description" type="text" id="description"
+                placeholder="Новое описание задачи"></b-input>
             </div>
             <div class="form-group">
               <label for="startDate">Начало задачи:</label>
-              <b-input
-                v-model="form.startDate"
-                type="date"
-                id="startDate"
-                placeholder="Дата начала задачи: 01.01.2000"
-              ></b-input>
+              <b-input v-model="form.startDate" type="date" id="startDate"
+                placeholder="Дата начала задачи: 01.01.2000"></b-input>
             </div>
             <div class="form-group">
               <label for="deadline">Окончание задачи:</label>
-              <b-input
-                v-model="form.deadline"
-                type="date"
-                id="deadline"
-                placeholder="Дата завершения задачи: 01.01.2000"
-              ></b-input>
+              <b-input v-model="form.deadline" type="date" id="deadline"
+                placeholder="Дата завершения задачи: 01.01.2000"></b-input>
             </div>
           </div>
         </div>
-        <b-button variant="primary" class="btn-edit-edittask" type="submit"
-          >Сохранить</b-button
-        >
-        <b-button
-          variant="primary"
-          class="btn-close-edittask"
-          @click="closeForm"
-          >Закрыть</b-button
-        >
+        <b-button variant="primary" class="btn-edit-edittask" type="submit">Сохранить</b-button>
+        <b-button variant="primary" class="btn-close-edittask" @click="closeForm">Закрыть</b-button>
       </b-form>
     </div>
     <div class="overlay" @click="closeForm"></div>
@@ -82,7 +54,7 @@ export default {
         description: "",
         startDate: "",
         deadline: "",
-        TaskId: "",
+        TaskId: ""
       },
     };
   },
@@ -108,17 +80,15 @@ export default {
     },
 
     editTask() {
-      let formData = new FormData();
-
-      formData.append("name", this.form.name);
-      formData.append("description", this.form.description);
-      formData.append("startDate", this.form.startDate);
-      formData.append("deadline", this.form.deadline);
-
       if (this.form.TaskId) {
-        console.log('Okey');
+        let data = {    
+          name: this.form.name,    
+          description: this.form.description,
+          startDate: this.form.startDate,
+          deadline: this.form.deadline
+        };
         axios
-          .patch("/api/project/updateTask", formData, {
+          .patch("/api/project/updateTask", data, {
             headers: {
               'authorization': `Bearer ${localStorage.access_token}`,
               'projectid': localStorage.proj_id,
@@ -127,6 +97,7 @@ export default {
             },
           })
           .then(() => {
+            
             console.log("Задача обновлена");
             window.location.reload();
           })

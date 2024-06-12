@@ -1,17 +1,25 @@
 <template>
     <div v-if="localIsVisible">
-      <div  id="add" class="w-75 mx-auto border p-3 rounded">
-        <b-form @submit.prevent="addStage">
-          <h3 class="name-form">Добавление этапа</h3>
+      <div  id="edit" class="w-75 mx-auto border p-3 rounded">
+        <b-form @submit.prevent="editStage">
+          <h3 class="name-form">Редактирование этапа</h3>
           <div class="row">
             <div class="col">
+              <div class="row form-group">
+                <label>Выберете этап, который хотите изменить:</label>
+                <select class="select-editstage" v-model="form.StageId" @change="selectStage">
+                  <option v-for="stage in stages" :key="stage._id" :value="stage._id">
+                    {{ stage.name }}
+                  </option>
+                </select>
+              </div>
               <div class="form-group">
                 <label for="name">Название:</label>
-                <b-input v-model="form.name" type="text" id="name" placeholder="Название этапа'"></b-input>
+                <b-input v-model="form.name" type="text" id="name" placeholder="Новое название этапа"></b-input>
               </div>
               <div class="form-group">
                 <label for="description">Описание:</label>
-                <b-input v-model="form.description" type="text" id="description" placeholder="Расскажите об этапе"></b-input>
+                <b-input v-model="form.description" type="text" id="description" placeholder="Новое описание этапа"></b-input>
               </div>
               <div class="form-group">
                 <label for="startDate">Начало этапа:</label>
@@ -23,18 +31,10 @@
                 <b-input v-model="form.endDate" type="date" id="endDate"
                   placeholder="Дата завершения этапа: 01.01.2000"></b-input>
               </div>
-              <div class="row form-group">
-                <label>Выберете зависимость от этапа (необязательно):</label>
-                <select v-model="form.relatedStage" @change="selectStage">
-                  <option v-for="stage in stages" :key="stage._id" :value="stage._id">
-                    {{ stage.name }} 
-                  </option>
-                </select>
-              </div>
             </div>
           </div>
-          <b-button variant="primary" class="btn-add-addstage" type="submit">Добавить</b-button>
-          <b-button variant="primary" class="btn-close-addstage" @click="closeForm">Закрыть</b-button>
+          <b-button variant="primary" class="btn-edit-editstage" type="submit">Сохранить</b-button>
+          <b-button variant="primary" class="btn-close-editstage" @click="closeForm">Закрыть</b-button>
         </b-form>
         
       </div>
@@ -48,13 +48,13 @@
     export default {
       data() {
         return {
-          
+          stages: [],
           form: {
               name: "",
               description: "",
               startDate: "",
               endDate: "",
-              relatedStage: ""   
+              StageId: ""  
           }
         };
       },
@@ -76,30 +76,36 @@
           });
         },
         selectStage() {
-          console.log('Выбран этап с ID:', this.form.relatedStage);
+          console.log('Выбран этап с ID:', this.form.StageId);
         },
-        addStage() {
-          let data = {    
-            name: this.form.name,    
-            description: this.form.description,
-            startDate: this.form.startDate,
-            endDate: this.form.endDate,
-            relatedStage: this.form.relatedStage
-          };
-          axios
-          .post("/api/project/createStage", data , {
-            headers: {
-              'authorization': `Bearer ${localStorage.access_token}`,
-              'projectid': localStorage.proj_id
-            }
-          })    
-          .then(() => {    
-            console.log("New stage is created");    
-            window.location.reload();     
-          })    
-          .catch((errors) => {    
-            console.log(errors);    
-          }); 
+        editStage() {
+          if (this.form.StageId){
+            let data = {    
+              name: this.form.name,    
+              description: this.form.description,
+              startDate: this.form.startDate,
+              endDate: this.form.endDate
+            };
+            axios
+            .patch("/api/project/updateStage", data , {
+              headers: {
+                'authorization': `Bearer ${localStorage.access_token}`,
+                'projectid': localStorage.proj_id,
+                'stageid': this.form.StageId
+              }
+            })    
+            .then(() => {    
+              
+              console.log("Этап обновлен");    
+              window.location.reload();     
+            })    
+            .catch((errors) => {    
+              console.log(errors);    
+            }); 
+          } else {
+            console.warn("Этап не выбран");
+          }
+          
         },
         closeForm() {
           this.$emit('close');
@@ -121,7 +127,7 @@
     </script>
     
   <style scoped>
-    #add{
+    #edit{
       left: 50%;
       top: -150px;
       margin-top: 15px;
@@ -148,7 +154,7 @@
       margin: 5px;
       margin-bottom: 15px;
     }
-    .btn-add-addstage, .btn-close-addstage{
+    .btn-edit-editstage, .btn-close-editstage{
       background-color: lightpink;
       font-size: 15px;
       color: rgb(67, 67, 67)!important;
@@ -163,8 +169,16 @@
       margin-top: 5px;
       margin-right: 5px;
     }
-    #organization, #description, #name, #otch, #startDate, #endDate{
+    #description, #name, #otch, #startDate, #endDate{
       margin-bottom: 5px;
       font-size: 13px ; 
+    }
+    .select-editstage {
+      margin-right: 15px;
+      margin-bottom: 15px;
+      border-color: rgb(199, 199, 199);
+      border-radius: 5px;
+      height: 30px;
+      width: 300px;
     }
   </style>

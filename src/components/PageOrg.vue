@@ -35,9 +35,10 @@
                   <div class="inf-org">
                     <b-button v-if="access === true" variant="primary" class="btn-create-proj"
                       @click="createProject">Создать проект</b-button>
-                    <b-button v-if="access === true" variant="primary" class="btn-change-proj">Редактировать
+                    <b-button v-if="access === true" variant="primary" class="btn-change-proj" @click="showEditProject">Редактировать
                       проект</b-button>
                   </div>
+                  <EditProject :is-visible="isEditProjectVisible" @close="closeEditProject"></EditProject>
                 </div>
               </div>
               <div v-else-if="currentTab === 'employees'">
@@ -85,16 +86,19 @@ import axios from "axios";
 import router from "@/router/index.js";
 import OrgProjectsList from "./additional_comp/OrgProjectsList.vue";
 import AddEmplOrg from "./modal_forms/AddEmplOrg.vue";
+import EditProject from "./modal_forms/EditProject.vue";
 
 export default {
   name: "PageOrg",
   components: {
     OrgProjectsList,
-    AddEmplOrg
+    AddEmplOrg,
+    EditProject
   },
   data() {
     return {
       isAddEmplVisible: false,
+      isEditProjectVisible: false,
       currentTab: "projects",
       posts: [],
       projects: [],
@@ -182,6 +186,12 @@ export default {
     },
     closeAddEmpl() {
       this.isAddEmplVisible = false;
+    },
+    showEditProject() {
+      this.isEditProjectVisible = true;
+    },
+    closeEditProject() {
+      this.isEditProjectVisible = false;
     }
   },
 };

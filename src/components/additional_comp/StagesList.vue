@@ -1,6 +1,7 @@
 <template>
   <div>
     <AddStage :is-visible="isAddStageVisible" @close="closeAddStage"></AddStage>
+    <EditStage :is-visible="isEditStageVisible" @close="closeEditStage"></EditStage>
     <DeleteStage :is-visible="isDeleteStageVisible" @close="closeDeleteStage"></DeleteStage>
     <div class="stg-row">
       <div class="stages-new">
@@ -9,7 +10,7 @@
           <button v-if="access === true" class="btn-create-stage" @click="showAddStage">
             <img src="@/assets/add-icon.png" alt="Показать задачи">
           </button>
-          <button v-if="access === true" class="btn-create-stage" @click="showAddStage">
+          <button v-if="access === true" class="btn-create-stage" @click="showEditStage">
             <img src="@/assets/edit-icon.png" alt="Показать задачи">
           </button>
           <button v-if="access === true" class="btn-create-stage" @click="showDeleteStage">
@@ -22,12 +23,14 @@
         <StagesItem v-for="stage in stages" :key="stage.id" :stage="stage" />
       </div>
     </div>
+    
   </div>
 </template>
 
 <script>
 import AddStage from '../modal_forms/AddStage.vue';
 import DeleteStage from '../modal_forms/DeleteStage.vue';
+import EditStage from '../modal_forms/EditStage.vue';
 import StagesItem from './StagesItem.vue';
 import axios from 'axios';
 
@@ -35,11 +38,13 @@ export default {
   components: {
     StagesItem,
     AddStage,
+    EditStage,
     DeleteStage
   },
   data() {
     return {
       isAddStageVisible: false,
+      isEditStageVisible: false,
       isDeleteStageVisible: false,
       access: null
     }
@@ -67,6 +72,12 @@ export default {
     },
     closeAddStage() {
       this.isAddStageVisible = false;
+    },
+    showEditStage() {
+      this.isEditStageVisible = true;
+    },
+    closeEditStage() {
+      this.isEditStageVisible = false;
     },
     showDeleteStage() {
       this.isDeleteStageVisible = true;

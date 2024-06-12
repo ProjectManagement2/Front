@@ -23,14 +23,7 @@
               <b-input v-model="form.endDate" type="date" id="endDate"
                 placeholder="Дата завершения этапа: 01.01.2000"></b-input>
             </div>
-            <div class="row form-group">
-              <label>Выберете зависимость от этапа (необязательно):</label>
-              <select v-model="form.relatedStage" @change="selectStage">
-                <option v-for="stage in stages" :key="stage._id" :value="stage._id">
-                  {{ stage.name }} 
-                </option>
-              </select>
-            </div>
+            
           </div>
         </div>
         <b-button variant="primary" class="btn-add-addstage" type="submit">Добавить</b-button>
@@ -53,8 +46,8 @@
             name: "",
             description: "",
             startDate: "",
-            endDate: "",
-            relatedStage: ""   
+            endDate: ""
+              
         }
       };
     },
@@ -83,8 +76,8 @@
           name: this.form.name,    
           description: this.form.description,
           startDate: this.form.startDate,
-          endDate: this.form.endDate,
-          relatedStage: this.form.relatedStage
+          endDate: this.form.endDate
+          
         };
         axios
         .post("/api/project/createStage", data , {
