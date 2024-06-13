@@ -35,6 +35,8 @@
   </template>
   
   <script>
+  import axios from 'axios';
+
   export default {
     data() {
       return {
@@ -67,10 +69,16 @@
         console.log('Выбран проект с ID:', this.form.ProjectId);
       },
       editProject() {
+        let data = {    
+              name: this.form.name,    
+              description: this.form.description
+            };
         axios
-          .patch("/api/organization/updateProject", form, {
+          .patch("/api/project/updateProject", data, {
             headers: {
               'authorization': `Bearer ${localStorage.access_token}`,
+              'organizationId': localStorage.org_id,
+              'projectid': this.form.ProjectId,
             }
           })
           .then(() => {

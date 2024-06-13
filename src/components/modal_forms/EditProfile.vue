@@ -14,28 +14,39 @@
               </div>
               <div class="col">
                 <label class="form-label">Имя</label>
-                <input class="form-control mb-2" placeholder="Имя...">
+                <b-input v-model="form.name" type="name" id="name"
+                placeholder="Имя..."></b-input>
+                
                 <label class="form-label">Фамилия</label>
-                <input class="form-control mb-2" placeholder="Фамилия...">
+                <b-input v-model="form.surname" type="surname" id="surname"
+                placeholder="Фамилия..."></b-input>
+                
                 <label class="form-label">Отчество</label>
-                <input class="form-control mb-2" placeholder="Отчество...">
+                <b-input v-model="form.otch" type="otch" id="otch"
+                placeholder="Отчество..."></b-input>
+                
               </div>
             </div>
             <div class="col">
-              <div class="mb-3">
-                <label class="form-label">О себе</label>
-                <textarea class="form-control" rows="4">Опишите себя...</textarea>
-              </div>
+              
               <div class="mb-3">
                 <label class="form-label">Дата рождения</label>
-                <input class="form-control" placeholder="12.12.2000">
+                <b-input v-model="form.date" type="date" id="date"
+                placeholder="01.01.2000"></b-input>
               </div>
               <div class="mb-3">
                 <label class="form-label">Почта</label>
-                <input class="form-control" placeholder="email@email.com">
+                <b-input v-model="form.email" type="email" id="email"
+                placeholder="email@email.com"></b-input>
+                
               </div>
-              <label class="form-label">Пароль</label>
-              <input class="form-control" type="password" value="password">
+              <div class="mb-3">
+                <label class="form-label">Пароль</label>
+                <b-input v-model="form.password" type="password" id="password"
+                   value="password"></b-input>
+                
+              </div>
+              
             </div>
           </div>
         </div>
@@ -50,6 +61,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -65,8 +78,17 @@ export default {
   },
   methods: {
     editProfile() {
+      let data = {
+        surname: this.form.surname,
+        name: this.form.name,
+        otch: this.form.otch,
+        date: this.form.date,
+        email: this.form.email,
+        newPassword: this.form.password
+      };
+      console.log(data);
       axios
-        .patch("/api/profile/updateUserInfo", form, {
+        .patch("/api/profile/updateUserInfo", data, {
           headers: {
             'authorization': `Bearer ${localStorage.access_token}`,
           }
@@ -78,6 +100,7 @@ export default {
         .catch((errors) => {
           console.log(errors);
         });
+        window.location.reload();
     },
     closeForm() {
       this.$emit('close');
@@ -158,10 +181,10 @@ export default {
   margin-right: 5px;
 }
 
-#organization,
+#password,
 #surname,
 #name,
-#otch {
+#otch, #date, #email {
   margin-bottom: 5px;
   font-size: 13px;
 }

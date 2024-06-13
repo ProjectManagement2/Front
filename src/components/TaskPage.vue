@@ -32,15 +32,21 @@
                   <p>Файлы не были прикреплены</p>
                 </div>
               </div>
-              <div class="attached-files">
+              <div v-if="comments.length === 0 " class="attached-files">
                 <h5 class="file-title">Комментарии</h5>
-                <div v-if="comments.text != ''">
-                  <p>{{ comments.text }}</p>
+                <p>Комментарии отсутствуют</p>
+              </div>  
+              <div v-else class="attached-files">
+                <div class="comments-title">
+                  <h5 class="file-title">Комментарии</h5>
+                  <button class="btn-open-comments" @click="showComments">
+                    <img src="@/assets/arrow-icon.png" alt="Показать задачи">
+                  </button>
                 </div>
-                <div v-else>
-                  <p>Комментарии отсутствуют</p>
-                </div>
+                
+                <CommentsList :comments="comments" :is-visible="isCommentsVisible"></CommentsList>
               </div>
+              
             </div>
           </div>
           <div class="col-lg-4">
@@ -110,8 +116,12 @@
 
 <script>
 import axios from "axios";
+import CommentsList from "./additional_comp/CommentsList.vue";
 export default {
   name: "TaskPage",
+  components: {
+    CommentsList
+  },
   data() {
     return {
       task: {},
@@ -126,7 +136,8 @@ export default {
       },
       accessUser: null,
       accessLeader: null,
-      comments: []
+      comments: [],
+      isCommentsVisible: false
     };
   },
   mounted() {
@@ -136,19 +147,22 @@ export default {
     this.getComments();
   },
   methods: {
-    getComments() {
-      axios
-        .get("/api/task/getComments", {
+    async getComments() {
+      try {
+        // Получение списка комментариев с сервера
+        const response = await axios.get('/api/task/getComments', {
           headers: {
-            authorization: `Bearer ${localStorage.access_token}`,
-            taskid: localStorage.task_id,
-            projectid: localStorage.proj_id,
-          },
-        })
-        .then((response) => {
-          this.comments = response.data.access;
-          console.log(this.comments);
+            'authorization': `Bearer ${localStorage.access_token}`,
+            'taskid': localStorage.task_id,
+            'projectid': localStorage.proj_id,
+          }
         });
+        console.log('Комментарии, полученные с сервера:', response.data); // Отладочный вывод
+        this.comments = response.data;
+        console.log('Комментарии, сохраненные в состоянии:', this.comments); // Отладочный вывод
+      } catch (error) {
+        console.error('Ошибка загрузки комментариев:', error);
+      }
     },
     getUserAccess() {
       axios
@@ -270,6 +284,10 @@ export default {
           console.error("Error downloading file:", error);
         });
     },
+    showComments() {
+      this.isCommentsVisible = !this.isCommentsVisible;
+            
+    },
   },
 };
 </script>
@@ -367,5 +385,19 @@ select {
 
 .link-file :hover {
   background-color: #0095dffd;
+}
+
+
+.btn-open-comments{
+  background-color: transparent;
+  border: none;
+  display: flex;
+  margin-top: 3px;
+  margin-left: 5px;
+  margin-bottom: 15px;
+}
+.btn-open-comments img{
+  width: 20px;
+  height: auto;
 }
 </style>

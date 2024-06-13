@@ -104,6 +104,7 @@ export default {
           .catch((errors) => {
             console.log(errors);
           });
+          window.location.reload();
       } else {
         console.warn("Задача не выбрана");
       }

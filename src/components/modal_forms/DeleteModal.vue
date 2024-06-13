@@ -4,18 +4,8 @@
         <h3 class="name-form">Удаление организаций</h3>
         <div class="row">
           <div class="col">
-            <div class="form-group">
-              <label for="name">Организация:</label>
-              <b-input v-model="form.name" type="text" id="name" placeholder="Название организации"></b-input>
-            </div>
-            <div class="form-group">
-              <label for="description">Описание:</label>
-              <b-input v-model="form.description" type="text" id="description" placeholder="Расскажите об организации"></b-input>
-            </div>
-          </div>
-          <div class="col">
             <div class="row form-group">
-              <label>Выберете ответственного за организацию:</label>
+              <label>Выберете организацию, которую хотите удалить:</label>
               <select v-model="form.leaderId" @change="selectUser">
                 <option v-for="user in users" :key="user._id" :value="user._id">
                   {{ user.surname }} {{ user.name }} {{ user.otch }}
