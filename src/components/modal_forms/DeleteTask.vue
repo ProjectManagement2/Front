@@ -45,6 +45,9 @@ export default {
                 })
                 .then((response) => {
                     this.tasks = response.data
+                })
+                .catch((error) => {
+                    this.handleError(error);
                 });
         },
 
@@ -63,17 +66,62 @@ export default {
                         }
                     })
                     .then(() => {
-                        console.log("Задача удалена");
                         window.location.reload();
+                        this.$toast.success("Задача удалена", {
+                            position: "top-right",
+                            timeout: 7000,
+                            closeOnClick: true,
+                            pauseOnFocusLoss: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            draggablePercent: 0.6,
+                            showCloseButtonOnHover: false,
+                            hideProgressBar: true,
+                            closeButton: "button",
+                            icon: true,
+                            rtl: false
+                        });
                     })
-                    .catch((errors) => {
-                        console.log(errors);
+                    .catch((error) => {
+                        this.handleError(error);
                     });
             } else {
-                console.warn('Задача не выбрана');
+                this.$toast.error('Задача не выбрана', {
+                    position: "top-right",
+                    timeout: 7000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    draggablePercent: 0.6,
+                    showCloseButtonOnHover: false,
+                    hideProgressBar: true,
+                    closeButton: "button",
+                    icon: true,
+                    rtl: false
+                });
             }
         },
-
+        handleError(error) {
+            if (error.response && error.response.data && error.response.data.message) {
+            this.$toast.error(error.response.data.message, {
+                position: "top-right",
+                timeout: 7000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+                draggable: true,
+                draggablePercent: 0.6,
+                showCloseButtonOnHover: false,
+                hideProgressBar: true,
+                closeButton: "button",
+                icon: true,
+                rtl: false
+            });
+            } else {
+            this.$toast.error('Неизвестная ошибка');
+            }
+        },
         closeForm() {
             this.$emit('close');
         }

@@ -44,6 +44,9 @@ export default {
                 })
                 .then((response) => {
                     this.users = response.data
+                })
+                .catch((error) => {
+                    this.handleError(error);
                 });
         },
 
@@ -64,17 +67,62 @@ export default {
                         }
                     })
                     .then(() => {
-                        console.log("New empl is added");
                         window.location.reload();
+                        this.$toast.success("Новый лидер добавлен", {
+                        position: "top-right",
+                        timeout: 7000,
+                        closeOnClick: true,
+                        pauseOnFocusLoss: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        draggablePercent: 0.6,
+                        showCloseButtonOnHover: false,
+                        hideProgressBar: true,
+                        closeButton: "button",
+                        icon: true,
+                        rtl: false
+                        });
                     })
-                    .catch((errors) => {
-                        console.log(errors);
+                    .catch((error) => {
+                        this.handleError(error);
                     });
             } else {
-                console.warn('Исполнитель не выбран');
+                this.$toast.error('Лидер не выбран', {
+                    position: "top-right",
+                    timeout: 7000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    draggablePercent: 0.6,
+                    showCloseButtonOnHover: false,
+                    hideProgressBar: true,
+                    closeButton: "button",
+                    icon: true,
+                    rtl: false
+                });
             }
         },
-
+        handleError(error) {
+            if (error.response && error.response.data && error.response.data.message) {
+            this.$toast.error(error.response.data.message, {
+                position: "top-right",
+                timeout: 7000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+                draggable: true,
+                draggablePercent: 0.6,
+                showCloseButtonOnHover: false,
+                hideProgressBar: true,
+                closeButton: "button",
+                icon: true,
+                rtl: false
+            });
+            } else {
+                this.$toast.error('Неизвестная ошибка');
+            }
+        },
         closeForm() {
             this.$emit('close');
         }

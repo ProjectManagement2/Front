@@ -16,18 +16,16 @@
         </div>
         <div class="overlay" @click="closeForm"></div>
     </div>
-
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
     data() {
         return {
             users: [],
-            form:{ newMemberId: '' }
-            
+            form: { newMemberId: "" },
         };
     },
     mounted() {
@@ -36,65 +34,112 @@ export default {
     methods: {
         getUsers() {
             axios
-                .get('/api/organization/allUsers', {
+                .get("/api/organization/allUsers", {
                     headers: {
-                        'authorization': `Bearer ${localStorage.access_token}`,
-                        'organizationId': localStorage.org_id
-                    }
+                        authorization: `Bearer ${localStorage.access_token}`,
+                        organizationId: localStorage.org_id,
+                    },
                 })
                 .then((response) => {
-                    this.users = response.data
+                    this.users = response.data;
+                })
+                .catch((error) => {
+                    this.handleError(error);
                 });
         },
 
         selectUser() {
-            console.log('Выбран пользователь с ID:', this.form.newMemberId);
+            console.log("Выбран пользователь с ID:", this.form.newMemberId);
         },
 
         addEmpl() {
             let data = {
-                newMemberId: this.form.newMemberId
+                newMemberId: this.form.newMemberId,
             };
             if (this.form.newMemberId) {
                 axios
                     .post("/api/organization/addUser", data, {
                         headers: {
-                            'authorization': `Bearer ${localStorage.access_token}`,
-                            'organizationId': localStorage.org_id
-                        }
+                            authorization: `Bearer ${localStorage.access_token}`,
+                            organizationId: localStorage.org_id,
+                        },
                     })
                     .then(() => {
-                        console.log("New empl is added");
                         window.location.reload();
+                        this.$toast.success("Новый участник добавлен", {
+                        position: "top-right",
+                        timeout: 7000,
+                        closeOnClick: true,
+                        pauseOnFocusLoss: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        draggablePercent: 0.6,
+                        showCloseButtonOnHover: false,
+                        hideProgressBar: true,
+                        closeButton: "button",
+                        icon: true,
+                        rtl: false
+                        });
                     })
-                    .catch((errors) => {
-                        console.log(errors);
+                    .catch((error) => {
+                        this.handleError(error);
                     });
             } else {
-                console.warn('Исполнитель не выбран');
+                this.$toast.error('Участник не выбран', {
+                    position: "top-right",
+                    timeout: 7000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    draggablePercent: 0.6,
+                    showCloseButtonOnHover: false,
+                    hideProgressBar: true,
+                    closeButton: "button",
+                    icon: true,
+                    rtl: false
+                });
             }
         },
-
+        handleError(error) {
+            if (error.response && error.response.data && error.response.data.message) {
+            this.$toast.error(error.response.data.message, {
+                position: "top-right",
+                timeout: 7000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+                draggable: true,
+                draggablePercent: 0.6,
+                showCloseButtonOnHover: false,
+                hideProgressBar: true,
+                closeButton: "button",
+                icon: true,
+                rtl: false
+            });
+            } else {
+            this.$toast.error('Неизвестная ошибка');
+            }
+        },
         closeForm() {
-            this.$emit('close');
-        }
-
+            this.$emit("close");
+        },
     },
     props: {
         isVisible: {
             type: Boolean,
-            default: false
+            default: false,
         },
         stageId: {
             type: String,
-            required: true
-        }
+            required: true,
+        },
     },
     computed: {
         localIsVisible() {
             return this.isVisible;
-        }
-    }
+        },
+    },
 };
 </script>
 

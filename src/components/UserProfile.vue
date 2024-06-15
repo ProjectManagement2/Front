@@ -34,7 +34,7 @@
               </div>
             </form>
           </div>
-          <div class="col-lg-4">
+          <!-- <div class="col-lg-4">
             <form class="card mb-4">
               <div class="card-header">
                 <h4 class="card-heading">Проекты</h4>
@@ -54,7 +54,7 @@
                 </div>
               </div>
             </form>
-          </div>
+          </div> -->
         </div>
         <div class="row">
           <div class="col-lg-4">

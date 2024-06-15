@@ -47,7 +47,6 @@
             description: "",
             startDate: "",
             endDate: ""
-              
         }
       };
     },
@@ -66,6 +65,9 @@
         .then((response) => {
           this.stages = response.data;
           console.log(this.stages);
+        })
+        .catch((error) => {
+          this.handleError(error);
         });
       },
       selectStage() {
@@ -77,7 +79,6 @@
           description: this.form.description,
           startDate: this.form.startDate,
           endDate: this.form.endDate
-          
         };
         axios
         .post("/api/project/createStage", data , {
@@ -87,12 +88,45 @@
           }
         })    
         .then(() => {    
-          console.log("New stage is created");    
-          window.location.reload();     
+          window.location.reload();
+          this.$toast.success("Новый этап добавлен", {
+              position: "top-right",
+              timeout: 7000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+              draggable: true,
+              draggablePercent: 0.6,
+              showCloseButtonOnHover: false,
+              hideProgressBar: true,
+              closeButton: "button",
+              icon: true,
+              rtl: false
+            });       
         })    
-        .catch((errors) => {    
-          console.log(errors);    
-        }); 
+        .catch((error) => {
+          this.handleError(error);
+        });
+      },
+      handleError(error) {
+        if (error.response && error.response.data && error.response.data.message) {
+          this.$toast.error(error.response.data.message, {
+            position: "top-right",
+            timeout: 7000,
+            closeOnClick: true,
+            pauseOnFocusLoss: true,
+            pauseOnHover: true,
+            draggable: true,
+            draggablePercent: 0.6,
+            showCloseButtonOnHover: false,
+            hideProgressBar: true,
+            closeButton: "button",
+            icon: true,
+            rtl: false
+          });
+        } else {
+          this.$toast.error('Неизвестная ошибка');
+        }
       },
       closeForm() {
         this.$emit('close');

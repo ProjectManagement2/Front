@@ -6,11 +6,11 @@
           <div class="col">
             <div class="row form-group">
               <label>Выберете организацию, которую хотите удалить:</label>
-              <select v-model="form.leaderId" @change="selectUser">
-                <option v-for="user in users" :key="user._id" :value="user._id">
-                  {{ user.surname }} {{ user.name }} {{ user.otch }}
+              <select class="select-deleteorganization" v-model="form.OrgId" @change="selectOrg">
+                <option v-for="post in posts" :key="post._id" :value="post._id">
+                  {{ post.name }}
                 </option>
-              </select>
+            </select>
             </div>
           </div>
         </div>
@@ -21,26 +21,106 @@
   </template>
   
   <script>
+  import axios from 'axios';
   export default {
     data() {
       return {
+        posts: [],
         form: {
-            organization: "",
-            surname: "",
-            name: "",
-            otch: "",
+          OrgId: ""
         }
       };
     },
+    mounted() {
+      this.fetchData();
+    },
     methods: {
       deleteOrg() {
-        // Ваша логика отправки формы
-        console.log('Отправлено:', this.name);
+        if (this.form.OrgId) {
+          axios
+            .delete("/api/admin/deleteOrganization", {
+              headers: {
+                'authorization': `Bearer ${localStorage.access_token}`,
+                'organizationId': this.form.OrgId
+              }
+            })
+            .then(() => {
+              window.location.reload();
+              this.$toast.success("Организация удалена", {
+                position: "top-right",
+                timeout: 7000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+                draggable: true,
+                draggablePercent: 0.6,
+                showCloseButtonOnHover: false,
+                hideProgressBar: true,
+                closeButton: "button",
+                icon: true,
+                rtl: false
+              });
+            })
+            .catch((error) => {
+              this.handleError(error);
+            });
+        } else {
+          this.$toast.error('Организация не выбрана', {
+            position: "top-right",
+            timeout: 7000,
+            closeOnClick: true,
+            pauseOnFocusLoss: true,
+            pauseOnHover: true,
+            draggable: true,
+            draggablePercent: 0.6,
+            showCloseButtonOnHover: false,
+            hideProgressBar: true,
+            closeButton: "button",
+            icon: true,
+            rtl: false
+          });
+        }
+      },
+      selectOrg() {
+        console.log('Выбрана организация с ID:', this.form.OrgId);
+      },
+      fetchData() {
+        axios
+          .get('/api/admin/getOrganizations', {
+            headers: {
+              'authorization': `Bearer ${localStorage.access_token}`
+            }
+          })
+          .then((response) => {
+            this.posts = response.data
+          })
+          .catch((error) => {
+            this.handleError(error);
+          });
+      },
+      handleError(error) {
+        if (error.response && error.response.data && error.response.data.message) {
+          this.$toast.error(error.response.data.message, {
+            position: "top-right",
+            timeout: 7000,
+            closeOnClick: true,
+            pauseOnFocusLoss: true,
+            pauseOnHover: true,
+            draggable: true,
+            draggablePercent: 0.6,
+            showCloseButtonOnHover: false,
+            hideProgressBar: true,
+            closeButton: "button",
+            icon: true,
+            rtl: false
+          });
+        } else {
+          this.$toast.error('Неизвестная ошибка');
+        }
       },
       closeForm() {
-      // Метод для закрытия формы
-      this.$emit('close');
-    }
+        this.$emit('close');
+      }
       
     },
     props: {
@@ -84,8 +164,12 @@
       margin-top: 5px;
       margin-right: 5px;
   }
-  #organization, #surname, #name, #otch{
-    margin-bottom: 5px;
-    font-size: 13px ; 
+  .select-deleteorganization {
+    margin-right: 20px;
+    margin-bottom: 15px;
+    border-color: rgb(199, 199, 199);
+    border-radius: 5px;
+    height: 30px;
+    width: 250px;
   }
 </style>

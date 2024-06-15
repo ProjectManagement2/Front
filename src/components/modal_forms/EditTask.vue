@@ -72,6 +72,9 @@ export default {
         })
         .then((response) => {
           this.tasks = response.data;
+        })
+        .catch((error) => {
+          this.handleError(error);
         });
     },
 
@@ -81,8 +84,8 @@ export default {
 
     editTask() {
       if (this.form.TaskId) {
-        let data = {    
-          name: this.form.name,    
+        let data = {
+          name: this.form.name,
           description: this.form.description,
           startDate: this.form.startDate,
           deadline: this.form.deadline
@@ -97,19 +100,63 @@ export default {
             },
           })
           .then(() => {
-            
-            console.log("Задача обновлена");
             window.location.reload();
+            this.$toast.success("Данные задачи обновлены", {
+              position: "top-right",
+              timeout: 7000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+              draggable: true,
+              draggablePercent: 0.6,
+              showCloseButtonOnHover: false,
+              hideProgressBar: true,
+              closeButton: "button",
+              icon: true,
+              rtl: false
+            });
           })
-          .catch((errors) => {
-            console.log(errors);
+          .catch((error) => {
+            this.handleError(error);
           });
-          window.location.reload();
+        window.location.reload();
       } else {
-        console.warn("Задача не выбрана");
+        this.$toast.error('Задача не выбрана', {
+          position: "top-right",
+          timeout: 7000,
+          closeOnClick: true,
+          pauseOnFocusLoss: true,
+          pauseOnHover: true,
+          draggable: true,
+          draggablePercent: 0.6,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: true,
+          rtl: false
+        });
       }
     },
-
+    handleError(error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        this.$toast.error(error.response.data.message, {
+          position: "top-right",
+          timeout: 7000,
+          closeOnClick: true,
+          pauseOnFocusLoss: true,
+          pauseOnHover: true,
+          draggable: true,
+          draggablePercent: 0.6,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: true,
+          rtl: false
+        });
+      } else {
+        this.$toast.error('Неизвестная ошибка');
+      }
+    },
     closeForm() {
       this.$emit("close");
     },

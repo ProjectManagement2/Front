@@ -42,7 +42,7 @@
     </div>  
   </template>
     
-    <script>
+  <script>
     import axios from 'axios';
   
     export default {
@@ -73,6 +73,9 @@
           .then((response) => {
             this.stages = response.data;
             console.log(this.stages);
+          })
+          .catch((error) => {
+            this.handleError(error);
           });
         },
         selectStage() {
@@ -94,18 +97,63 @@
                 'stageid': this.form.StageId
               }
             })    
-            .then(() => {    
-              
-              console.log("Этап обновлен");    
-              window.location.reload();     
-            })    
-            .catch((errors) => {    
-              console.log(errors);    
-            }); 
+            .then(() => {
+              window.location.reload();
+              this.$toast.success("Данные этапа обновлены", {
+                position: "top-right",
+                timeout: 7000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+                draggable: true,
+                draggablePercent: 0.6,
+                showCloseButtonOnHover: false,
+                hideProgressBar: true,
+                closeButton: "button",
+                icon: true,
+                rtl: false
+              });
+            })
+            .catch((error) => {
+              this.handleError(error);
+            });
           } else {
-            console.warn("Этап не выбран");
+            this.$toast.error('Этап не выбран', {
+              position: "top-right",
+              timeout: 7000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+              draggable: true,
+              draggablePercent: 0.6,
+              showCloseButtonOnHover: false,
+              hideProgressBar: true,
+              closeButton: "button",
+              icon: true,
+              rtl: false
+            });
           }
           
+        },
+        handleError(error) {
+          if (error.response && error.response.data && error.response.data.message) {
+            this.$toast.error(error.response.data.message, {
+              position: "top-right",
+              timeout: 7000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+              draggable: true,
+              draggablePercent: 0.6,
+              showCloseButtonOnHover: false,
+              hideProgressBar: true,
+              closeButton: "button",
+              icon: true,
+              rtl: false
+            });
+          } else {
+            this.$toast.error('Неизвестная ошибка');
+          }
         },
         closeForm() {
           this.$emit('close');

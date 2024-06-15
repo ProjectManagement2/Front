@@ -17,18 +17,16 @@
         </div>
         <div class="overlay" @click="closeForm"></div>
     </div>
-
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
     data() {
         return {
             stages: [],
-            form:{ StageId: '' }
-            
+            form: { StageId: "" },
         };
     },
     mounted() {
@@ -37,19 +35,22 @@ export default {
     methods: {
         getStages() {
             axios
-                .get('/api/project/getAllStages', {
+                .get("/api/project/getAllStages", {
                     headers: {
-                        'authorization': `Bearer ${localStorage.access_token}`,
-                        'projectid': localStorage.proj_id,
-                    }
+                        authorization: `Bearer ${localStorage.access_token}`,
+                        projectid: localStorage.proj_id,
+                    },
                 })
                 .then((response) => {
-                    this.stages = response.data
+                    this.stages = response.data;
+                })
+                .catch((error) => {
+                    this.handleError(error);
                 });
         },
 
         selectStage() {
-            console.log('Выбран этап с ID:', this.form.StageId);
+            console.log("Выбран этап с ID:", this.form.StageId);
         },
 
         deleteStage() {
@@ -57,39 +58,87 @@ export default {
                 axios
                     .delete("/api/project/deleteStage", {
                         headers: {
-                            'authorization': `Bearer ${localStorage.access_token}`,
-                            'projectid': localStorage.proj_id,
-                            'stageid': this.form.StageId
-                        }
+                            authorization: `Bearer ${localStorage.access_token}`,
+                            projectid: localStorage.proj_id,
+                            stageid: this.form.StageId,
+                        },
                     })
                     .then(() => {
-                        console.log("Этап удален");
                         window.location.reload();
+                        this.$toast.success("Этап удалена", {
+                            position: "top-right",
+                            timeout: 7000,
+                            closeOnClick: true,
+                            pauseOnFocusLoss: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            draggablePercent: 0.6,
+                            showCloseButtonOnHover: false,
+                            hideProgressBar: true,
+                            closeButton: "button",
+                            icon: true,
+                            rtl: false,
+                        });
                     })
-                    .catch((errors) => {
-                        console.log(errors);
+                    .catch((error) => {
+                        this.handleError(error);
                     });
             } else {
-                console.warn('Этап не выбран');
+                this.$toast.error("Этап не выбран", {
+                    position: "top-right",
+                    timeout: 7000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    draggablePercent: 0.6,
+                    showCloseButtonOnHover: false,
+                    hideProgressBar: true,
+                    closeButton: "button",
+                    icon: true,
+                    rtl: false,
+                });
             }
         },
-
+        handleError(error) {
+            if (
+                error.response &&
+                error.response.data &&
+                error.response.data.message
+            ) {
+                this.$toast.error(error.response.data.message, {
+                    position: "top-right",
+                    timeout: 7000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    draggablePercent: 0.6,
+                    showCloseButtonOnHover: false,
+                    hideProgressBar: true,
+                    closeButton: "button",
+                    icon: true,
+                    rtl: false,
+                });
+            } else {
+                this.$toast.error("Неизвестная ошибка");
+            }
+        },
         closeForm() {
-            this.$emit('close');
-        }
-
+            this.$emit("close");
+        },
     },
     props: {
         isVisible: {
             type: Boolean,
-            default: false
-        }
+            default: false,
+        },
     },
     computed: {
         localIsVisible() {
             return this.isVisible;
-        }
-    }
+        },
+    },
 };
 </script>
 
@@ -123,7 +172,7 @@ export default {
 
 .name-form {
     font-size: 18px;
-    
+
     margin-left: 15px;
     margin-bottom: 15px;
 }
@@ -147,12 +196,12 @@ export default {
 }
 
 .select-stage {
-  margin-left: 10px;
-  margin-right: 15px;
-  margin-bottom: 15px;
-  border-color: rgb(199, 199, 199);
-  border-radius: 5px;
-  height: 30px;
-  width: 500px;
+    margin-left: 10px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    border-color: rgb(199, 199, 199);
+    border-radius: 5px;
+    height: 30px;
+    width: 500px;
 }
 </style>
