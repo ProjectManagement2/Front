@@ -30,7 +30,7 @@ export default {
         maxHeight: 300,
         title: {
           label: 'Задачи',
-          html: false,
+          html: true,
         },
         row: {
           height: 24,
@@ -65,6 +65,13 @@ export default {
               id: 2,
               label: 'Исполнитель',
               value: 'user',
+              width: 130,
+              html: true,
+            },
+            {
+              id: 3,
+              label: 'Этап',
+              value: 'stage',
               width: 130,
               html: true,
             },
@@ -113,6 +120,7 @@ export default {
               start: new Date(task.startDate).toISOString(),
               end: new Date(task.deadline).toISOString(),
               user: task.worker.surname,
+              stage: task.stage.name,
               duration: 2 * 24 * 60 * 60 * 1000,
               progress: 50,
               type: 'task',

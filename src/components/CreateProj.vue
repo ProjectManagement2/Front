@@ -66,26 +66,76 @@ export default {
       console.log('Выбран пользователь с ID:', this.form.projectLeaderId);
     },
     create() {
-      let data = {
-        name: this.form.name,
-        description: this.form.description,
-        projectLeaderId: this.form.projectLeaderId
-      };
-      axios.post("/api/organization/createProject", data, {
-        headers: {
-          'authorization': `Bearer ${localStorage.access_token}`,
-          'organizationId': localStorage.org_id
-        }
-      })
-        .then(() => {
-
-          console.log("Project created successfully")
-          router.push("/organization/:id")
+      if (this.form.projectLeaderId) {
+        let data = {
+          name: this.form.name,
+          description: this.form.description,
+          projectLeaderId: this.form.projectLeaderId
+        };
+        axios.post("/api/organization/createProject", data, {
+          headers: {
+            'authorization': `Bearer ${localStorage.access_token}`,
+            'organizationId': localStorage.org_id
+          }
         })
-        .catch((errors) => {
-          console.log(errors)
+          .then(() => {
+            this.$toast.success("Проект создан", {
+              position: "top-right",
+              timeout: 7000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+              draggable: true,
+              draggablePercent: 0.6,
+              showCloseButtonOnHover: false,
+              hideProgressBar: true,
+              closeButton: "button",
+              icon: true,
+              rtl: false
+            });
+            router.push("/organization/:id");
+          })
+          .catch((error) => {
+            this.handleError(error);
+          });
+      } else {
+        this.$toast.error('Руководитель не выбран', {
+          position: "top-right",
+          timeout: 7000,
+          closeOnClick: true,
+          pauseOnFocusLoss: true,
+          pauseOnHover: true,
+          draggable: true,
+          draggablePercent: 0.6,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: true,
+          rtl: false
         });
-    }
+      }
+
+    },
+    handleError(error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        this.$toast.error(error.response.data.message, {
+          position: "top-right",
+          timeout: 7000,
+          closeOnClick: true,
+          pauseOnFocusLoss: true,
+          pauseOnHover: true,
+          draggable: true,
+          draggablePercent: 0.6,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: true,
+          rtl: false
+        });
+      } else {
+        this.$toast.error('Неизвестная ошибка');
+      }
+    },
   }
 };
 

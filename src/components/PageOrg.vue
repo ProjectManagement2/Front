@@ -36,9 +36,12 @@
                     <b-button v-if="access === true" variant="primary" class="btn-create-proj"
                       @click="createProject">Создать проект</b-button>
                     <b-button v-if="access === true" variant="primary" class="btn-change-proj" @click="showEditProject">Редактировать
-                      проект</b-button>
+                    </b-button>
+                    <b-button v-if="access === true" variant="primary" class="btn-change-proj" @click="showDeleteProject">Удалить
+                    </b-button>
                   </div>
                   <EditProject :is-visible="isEditProjectVisible" @close="closeEditProject"></EditProject>
+                  <DeleteProject :is-visible="isDeleteProjectVisible" @close="closeDeleteProject"></DeleteProject>
                 </div>
               </div>
               <div v-else-if="currentTab === 'employees'">
@@ -87,18 +90,21 @@ import router from "@/router/index.js";
 import OrgProjectsList from "./additional_comp/OrgProjectsList.vue";
 import AddEmplOrg from "./modal_forms/AddEmplOrg.vue";
 import EditProject from "./modal_forms/EditProject.vue";
+import DeleteProject from "./modal_forms/DeleteProject.vue";
 
 export default {
   name: "PageOrg",
   components: {
     OrgProjectsList,
     AddEmplOrg,
-    EditProject
+    EditProject,
+    DeleteProject
   },
   data() {
     return {
       isAddEmplVisible: false,
       isEditProjectVisible: false,
+      isDeleteProjectVisible: false,
       currentTab: "projects",
       posts: [],
       projects: [],
@@ -192,6 +198,12 @@ export default {
     },
     closeEditProject() {
       this.isEditProjectVisible = false;
+    },
+    showDeleteProject() {
+      this.isDeleteProjectVisible = true;
+    },
+    closeDeleteProject() {
+      this.isDeleteProjectVisible = false;
     }
   },
 };

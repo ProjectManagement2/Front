@@ -1,18 +1,18 @@
 <template>
     <div v-if="localIsVisible">
         <div id="delete" class="w-75 mx-auto border p-3 rounded">
-            <b-form @submit.prevent="deleteStage">
-                <h3 class="name-form">Удаление этапа</h3>
+            <b-form @submit.prevent="deleteProject">
+                <h3 class="name-form">Удаление проекта</h3>
                 <div class="row form-group">
-                    <label>Выберете этап:</label>
-                    <select class="select-stage" v-model="form.StageId" @change="selectStage">
-                        <option v-for="stage in stages" :key="stage._id" :value="stage._id">
-                            {{ stage.name }}
+                    <label>Выберете проект:</label>
+                    <select class="select-deleteproject" v-model="form.ProjectId" @change="selectProject">
+                        <option v-for="project in projects" :key="project._id" :value="project._id">
+                        {{ project.name }}
                         </option>
                     </select>
                 </div>
-                <b-button variant="primary" class="btn-delete-deletestage" type="submit">Удалить</b-button>
-                <b-button variant="primary" class="btn-close-deletestage" @click="closeForm">Закрыть</b-button>
+                <b-button variant="primary" class="btn-delete-deleteproject" type="submit">Удалить</b-button>
+                <b-button variant="primary" class="btn-close-deleteproject" @click="closeForm">Закрыть</b-button>
             </b-form>
         </div>
         <div class="overlay" @click="closeForm"></div>
@@ -25,47 +25,46 @@ import axios from "axios";
 export default {
     data() {
         return {
-            stages: [],
-            form: { StageId: "" },
+            projects: [],
+            form: { ProjectId: "" },
         };
     },
     mounted() {
-        this.getStages();
+        this.getProjects();
     },
     methods: {
-        getStages() {
-            axios
-                .get("/api/project/getAllStages", {
-                    headers: {
-                        authorization: `Bearer ${localStorage.access_token}`,
-                        projectid: localStorage.proj_id,
-                    },
-                })
-                .then((response) => {
-                    this.stages = response.data;
-                })
-                .catch((error) => {
-                    this.handleError(error);
-                });
+        getProjects() {
+        axios
+            .get("/api/organization/getProjects", {
+            headers: {
+                authorization: `Bearer ${localStorage.access_token}`,
+                organizationId: localStorage.org_id,
+            },
+            })
+            .then((response) => {
+            this.projects = response.data;
+            console.log(this.projects);
+            })
+            .catch((error) => {
+            this.handleError(error);
+            });
         },
-
-        selectStage() {
-            console.log("Выбран этап с ID:", this.form.StageId);
+        selectProject() {
+        console.log('Выбран проект с ID:', this.form.ProjectId);
         },
-
-        deleteStage() {
-            if (this.form.StageId) {
+        deleteProject() {
+            if (this.form.ProjectId) {
                 axios
-                    .delete("/api/project/deleteStage", {
+                    .delete("/api/organization/deleteProject", {
                         headers: {
                             authorization: `Bearer ${localStorage.access_token}`,
-                            projectid: localStorage.proj_id,
-                            stageid: this.form.StageId,
+                            projectid: this.form.ProjectId,
+                            organizationId: localStorage.org_id,
                         },
                     })
                     .then(() => {
                         window.location.reload();
-                        this.$toast.success("Этап удален", {
+                        this.$toast.success("Проект удален", {
                             position: "top-right",
                             timeout: 7000,
                             closeOnClick: true,
@@ -84,7 +83,7 @@ export default {
                         this.handleError(error);
                     });
             } else {
-                this.$toast.error("Этап не выбран", {
+                this.$toast.error("Проект не выбран", {
                     position: "top-right",
                     timeout: 7000,
                     closeOnClick: true,
@@ -145,7 +144,7 @@ export default {
 <style scoped>
 #delete {
     left: 50%;
-    top: -150px;
+    top: -550px;
     background-color: white;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -172,13 +171,12 @@ export default {
 
 .name-form {
     font-size: 18px;
-
     margin-left: 15px;
     margin-bottom: 15px;
 }
 
-.btn-delete-deletestage,
-.btn-close-deletestage {
+.btn-delete-deleteproject,
+.btn-close-deleteproject {
     font-size: 15px;
     color: rgb(67, 67, 67) !important;
     background-color: rgb(168, 205, 234) !important;
@@ -195,7 +193,7 @@ export default {
     margin-right: 5px;
 }
 
-.select-stage {
+.select-deleteproject {
     margin-left: 10px;
     margin-right: 15px;
     margin-bottom: 15px;
