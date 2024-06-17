@@ -25,7 +25,7 @@
           </div>
         </div>
         <div class="card-footer text-end">
-          <b-button variant="primary" class="btn-save-editproject">Сохранить</b-button>
+          <b-button variant="primary" class="btn-save-editproject" type="submit">Сохранить</b-button>
           <b-button variant="primary" class="btn-close-editproject" @click="closeForm">Закрыть</b-button>
         </div>
       </b-form>

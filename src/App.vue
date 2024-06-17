@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <title>Project System</title>
     <Header />
     <div v-if="isHomePage">
       <MainPage />

@@ -54,9 +54,7 @@ export default {
   border-radius: 10px;
 }
 
-.task-item :hover {
-  background-color: rgba(205, 226, 234, 0.421) ;
-}
+
 
 .task-bloked {
   background-color: rgb(170, 170, 170) ;

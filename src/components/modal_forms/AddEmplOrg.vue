@@ -2,9 +2,10 @@
     <div v-if="localIsVisible">
         <div id="add" class="w-75 mx-auto border p-3 rounded">
             <b-form @submit.prevent="addEmpl">
+                <h3 class="name-form">Добавить сотрудника</h3>
                 <div class="row form-group">
                     <label>Выберете сотрудника:</label>
-                    <select v-model="form.newMemberId" @change="selectUser">
+                    <select class="select-addempl" v-model="form.newMemberId" @change="selectUser">
                         <option v-for="user in users" :key="user._id" :value="user._id">
                             {{ user.surname }} {{ user.name }} {{ user.otch }}
                         </option>
@@ -146,7 +147,7 @@ export default {
 <style scoped>
 #add {
     left: 50%;
-    top: -300px;
+    top: -350px;
     background-color: white;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -157,6 +158,7 @@ export default {
     transition: transform 0.3s ease;
     /* Анимация для открытия/закрытия меню */
     transform: translateX(-100%);
+    
 }
 
 .overlay {
@@ -203,5 +205,15 @@ export default {
 #file {
     margin-bottom: 5px;
     font-size: 13px;
+}
+
+.select-addempl {
+  margin-right: 15px;
+  margin-left: 12px;
+  margin-bottom: 15px;
+  border-color: rgb(199, 199, 199);
+  border-radius: 5px;
+  height: 30px;
+  width: 300px;
 }
 </style>

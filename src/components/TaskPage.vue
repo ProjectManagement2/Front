@@ -19,10 +19,10 @@
               <p class="mb-3">Статус: {{ task.status }}</p>
               <p class="mb-3">Исполнитель: {{ task.worker.surname }} {{ task.worker.name }} {{ task.worker.otch }}</p>
               <div class="attached-files">
-                <h5 class="file-title">Прикрепленные файлы</h5>
+                <h5 class="file-title-main">Прикрепленные файлы</h5>
                 <div v-if="task.files != ''">
                   <ul>
-                    <li v-for="file in task.files" :key="file.id">
+                    <li class="files-link" v-for="file in task.files" :key="file.id">
                       <a class="link-file" @click.prevent="downloadFile(file.filename)" href="#"
                         :download="file.filename">{{ file.filename }}</a>
                     </li>
@@ -54,16 +54,28 @@
               <div class="card-header">
                 <h4 class="card-heading">Прикрепленный отчет</h4>
               </div>
-              <div v-if="task.solution.text != '' && task.solution.files != ''" class="attached-solution">
-                <h6>Текст отчета:</h6>
-                <p>{{ task.solution.text }}</p>
-                <h6 class="file-title">Файлы отчета:</h6>
-                <ul>
-                  <li v-for="file in task.solution.files" :key="file.id">
-                    <a class="link-file" @click.prevent="downloadFile(file.filename)" href="#"
-                      :download="file.filename">{{ file.filename }}</a>
-                  </li>
-                </ul>
+              <div v-if="task.solution.text != '' || task.solution.files != ''" class="attached-solution">
+                <div v-if="task.solution.text != ''">
+                  <h6>Текст отчета:</h6>
+                  <p>{{ task.solution.text }}</p>
+                </div>
+                <div v-else>
+                  <h6>Текст отчета:</h6>
+                  <p>Текст не был добавлен</p>
+                </div>
+                <div v-if="task.solution.files != ''">
+                  <h6 class="file-title">Файлы отчета:</h6>
+                  <ul>
+                    <li class="files-link" v-for="file in task.solution.files" :key="file.id">
+                      <a class="link-file" @click.prevent="downloadFile(file.filename)" href="#"
+                        :download="file.filename">{{ file.filename }}</a>
+                    </li>
+                  </ul>
+                </div>
+                <div v-else>
+                  <h6 class="file-title">Файлы отчета:</h6>
+                  <p>Файлы не были добавлены</p>
+                </div>
               </div>
               <div v-else>
                 <h5 class="null-solution">Отчет по задаче не добавлен</h5>
@@ -81,7 +93,7 @@
                   <textarea v-model="form.solutionText" placeholder="Введите текст отчета"></textarea>
                   <p>Файлы:</p>
                   <input type="file" id="file" ref="fileInput" multiple />
-                  <b-button class="btn-addresult" type="submit">Отправить решение</b-button>
+                  <b-button class="btn-addresult" type="submit">Отправить</b-button>
                 </form>
               </div>
             </div>
@@ -354,8 +366,13 @@ export default {
   color: red;
 }
 
+.file-title-main{
+  margin-bottom: 15px;
+}
+
 .file-title {
-  margin-bottom: 25px;
+  margin-bottom: 15px;
+  margin-top: 30px;
 }
 
 textarea {
@@ -377,14 +394,29 @@ select {
   width: 45%;
 }
 
-.link-file {
-  color: rgb(64, 64, 64);
+.files-link{
+  padding-left: 0;
+  list-style-type: none;
+  margin: 5px;
+  padding: 5px;
+  width: 250px;
+  color: black;
+  text-align: center;
   text-decoration: none;
-  font-size: 12px;
+  font-size: 15px;
+  font-family: 'Avantgarde', 'TeX Gyre Adventor', 'URW Gothic L', sans-serif;
+  font-weight: 500;
+  border: 1px solid rgb(155, 155, 155);
+  border-radius: 10px;
 }
 
-.link-file :hover {
-  background-color: #0095dffd;
+.files-link :hover{
+  color: rgb(70, 141, 160);
+}
+
+.link-file{
+  text-decoration: none;
+  color: black ;
 }
 
 

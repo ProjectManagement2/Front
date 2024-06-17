@@ -13,58 +13,61 @@ import axios from 'axios';
 
 export default {
   components: {
-      'gantt-elastic': GanttElastic,
-      'gantt-elastic-header': Header
+    'gantt-elastic': GanttElastic,
+    'gantt-elastic-header': Header
   },
   data() {
     return {
       tasks: [],
       dynamicStyle: {
-          'task-list-header-label': {
-            'font-weight': 'bold',
-          },
+        'task-list-header-label': {
+          'font-weight': 'bold',
+        },
       },
       options: {
-          maxRows: 100,
-          maxHeight: 300,
-          row: {
-              height: 24,
+        
+        maxRows: 100,
+        maxHeight: 300,
+        title: {
+          label: 'Задачи',
+          html: false,
+        },
+        row: {
+          height: 24,
+        },
+        calendar: {
+          hour: {
+            display: false,
           },
-          calendar: {
-              hour: {
-                  display: false,
-              },
+        },
+        chart: {
+          progress: {
+            bar: false,
           },
-          chart: {
-              progress: {
-                  bar: false,
-              },
-              expander: {
-                  display: true,
-              },
+          expander: {
+            display: true,
           },
-          taskList: {
-              expander: {
-                  straight: false,
+        },
+        taskList: {
+          expander: {
+            straight: false,
           },
           columns: [
-              {
-                  id: 1,
-                  label: 'Название',
-                  value: 'label',
-                  width: 130,
-                  expander: true,
-                  html: true,
-              },
-              {
-                  id: 2,
-                  label: 'Исполнитель',
-                  value: 'user',
-                  width: 130,
-                  html: true,
-              
-              },
-              
+            {
+              id: 1,
+              label: 'Название',
+              value: 'label',
+              width: 130,
+              expander: true,
+              html: true,
+            },
+            {
+              id: 2,
+              label: 'Исполнитель',
+              value: 'user',
+              width: 130,
+              html: true,
+            },
           ],
         },
         locale: {
@@ -101,51 +104,60 @@ export default {
           },
         })
         .then((response) => {
-          this.tasks = response.data.map((task) => ({
-            id: task._id,
-            label: task.name,
-            dependentOn: [task.relatedTask],
-            start: new Date(task.startDate).toISOString(),
-            end: new Date(task.deadline).toISOString(),
-            user: task.worker.surname,
-            duration: 2 * 24 * 60 * 60 * 1000,
-            progress: 50,
-            type: 'task',
-            style: this.getTaskStyle(task.status)
-            
-          }));
-          //this.updateGanttDates();
+          this.tasks = response.data.map((task) => {
+            const solutionOnTime = task.solution && new Date(task.solution.createdDate) <= new Date(task.deadline);
+            return {
+              id: task._id,
+              label: task.name,
+              dependentOn: [task.relatedTask],
+              start: new Date(task.startDate).toISOString(),
+              end: new Date(task.deadline).toISOString(),
+              user: task.worker.surname,
+              duration: 2 * 24 * 60 * 60 * 1000,
+              progress: 50,
+              type: 'task',
+              solutionOnTime,
+              style: this.getTaskStyle(task.status, solutionOnTime)
+            };
+          });
           console.log(this.tasks);
+          this.updateGanttDates();
         })
         .catch((error) => {
           console.error('Error loading tasks:', error);
         });
     },
-    getTaskStyle(status) {
+    getTaskStyle(status, solutionOnTime) {
+      const baseStyle = {};
       switch (status) {
         case 'Новая':
-          return { base: {
-                fill: 'lightblue',
-                stroke: 'lightblue',
-              },};
+          baseStyle.fill = 'lightblue';
+          baseStyle.stroke = 'lightblue';
+          break;
         case 'Выполняется':
-          return { base: {
-                fill: '#ff6161',
-                stroke: '#ff6161',
-              }, };
+          baseStyle.fill = '#ff6161';
+          baseStyle.stroke = '#ff6161';
+          break;
         case 'Завершена':
-          return { base: {
-                fill: '#66ffb5',
-                stroke: '#66ffb5',
-              }, };
+          baseStyle.fill = '#66ffb5';
+          baseStyle.stroke = '#66ffb5';
+          break;
+        case 'Утверждена':
+          baseStyle.fill = '#00ADB5';
+          baseStyle.stroke = '#00ADB5';
+          break;
         case 'Недоступна':
-          return { base: {
-                fill: '#a8a8a8',
-                stroke: '#a8a8a8',
-              },};
+          baseStyle.fill = '#a8a8a8';
+          baseStyle.stroke = '#a8a8a8';
+          break;
         default:
-          return {};
+          break;
       }
+      if (status == 'Завершена' && !solutionOnTime) {
+        baseStyle.stroke = 'red';
+        baseStyle['stroke-width'] = 2;
+      }
+      return { base: baseStyle };
     },
     updateGanttDates() {
       if (this.tasks.length > 0) {
@@ -166,7 +178,6 @@ export default {
 <style>
 .gantt-container {
   width: 100%;
-  
   overflow: auto;
 }
 </style>

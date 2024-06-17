@@ -44,7 +44,7 @@
     border: 1px solid rgb(155, 155, 155);
     border-radius: 10px;
   }
-  li .orgs-list :hover{
+  .orgs-list :hover{
     background-color: rgba(205, 226, 234, 0.421);
     
   }
