@@ -8,7 +8,7 @@
       </select>
       <select class="slct-stage" v-model="selectedStage" @change="fetchMessages">
         <option value="">Все стадии</option>
-        <option v-for="stage in stages" :key="stage" :value="stage">{{ stage }}</option>
+        <option v-for="stage in stages" :key="stage._id" :value="stage._id">{{ stage.name }}</option>
       </select>
       <b-button class="btn-delete-messages" @click="deleteAllMessages">Удалить все сообщения</b-button>
     </div>
@@ -39,14 +39,14 @@ export default {
       newMessage: '',
       selectedType: '',
       selectedStage: '',
-      stages: ['Все сообщения', 'Этап 1', 'Этап 2', 'Этап 3'] // Пример этапов, их нужно загрузить из вашего источника данных
+      stages: []
     };
   },
   computed: {
     filteredMessages() {
       return this.messages.filter(message => {
         return (!this.selectedType || message.type === this.selectedType) &&
-          (!this.selectedStage || this.selectedStage === 'Все сообщения' || message.stage === this.selectedStage);
+          (!this.selectedStage || message.stage === this.selectedStage);
       });
     }
   },
@@ -80,6 +80,21 @@ export default {
           this.handleError(error);
         });
     },
+    getStages() {
+      axios
+        .get("/api/project/getAllStages", {
+          headers: {
+            authorization: `Bearer ${localStorage.access_token}`,
+            projectid: localStorage.proj_id,
+          },
+        })
+        .then((response) => {
+          this.stages = response.data;
+        })
+        .catch((error) => {
+          this.handleError(error);
+        });
+    },
     handleError(error) {
       if (
         error.response &&
@@ -105,6 +120,7 @@ export default {
       }
     },
     async sendMessage() {
+      console.log('Этап:', this.selectedStage);
       if (this.newMessage.trim() !== '') {
         try {
           await axios.post('/api/project/addMessage', {
@@ -134,6 +150,7 @@ export default {
           }
         });
         this.messages = response.data;
+        console.log('Сообщения:', this.messages);
       } catch (error) {
         console.error('Ошибка загрузки сообщений:', error);
       }
@@ -148,6 +165,7 @@ export default {
   },
   mounted() {
     this.fetchMessages();
+    this.getStages();
   }
 };
 

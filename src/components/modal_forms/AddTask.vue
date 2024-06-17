@@ -92,10 +92,11 @@ export default {
   methods: {
     getTasks() {
       axios
-        .get("/api/project/getAllTasks", {
+        .get("/api/project/getCalendarTasks", {
           headers: {
-            authorization: `Bearer ${localStorage.access_token}`,
-            stageid: this.stageId,
+            'authorization': `Bearer ${localStorage.access_token}`,
+            'stageid': this.stageId,
+            'projectid': localStorage.proj_id,
           },
         })
         .then((response) => {
